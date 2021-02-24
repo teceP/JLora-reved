@@ -1,7 +1,7 @@
 package de.teklic.mario.input;
 
 import de.teklic.mario.core.JLora;
-import de.teklic.mario.handler.protocols.Constants;
+import de.teklic.mario.handler.protocols.Constant;
 import lombok.Getter;
 import lombok.Setter;
 import purejavacomm.SerialPortEvent;
@@ -37,14 +37,11 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
         return eventListener;
     }
 
-
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
         if (inputScanner.hasNext()) {
             String msg = inputScanner.nextLine();
             if (!irrelevantMessage(msg)) {
-                System.out.println("******************NEW PROCESS*************************");
-                System.out.println("[Received Text]: " + msg);
                 setChanged();
                 notifyObservers(msg);
             }
@@ -52,7 +49,7 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
     }
 
     public boolean irrelevantMessage(String msg) {
-        if (Arrays.asList(Constants.IRRELEVANTS).contains(msg)) {
+        if (Arrays.asList(Constant.IRRELEVANTS).contains(msg)) {
             return true;
         }
         return false;

@@ -1,5 +1,6 @@
 package de.teklic.mario.model.routex;
 
+import de.teklic.mario.handler.protocols.HandlerName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class RouteX {
+public abstract class RouteX {
     private String source;
     private int timeToLive;
     private TokenizedHeader tokenizedHeader;
@@ -25,6 +26,9 @@ public class RouteX {
         this.tokenizedHeader = tokenizedHeader;
         this.incoming = incoming;
     }
+
+    public abstract String asSendable();
+    public abstract String responsibleHandler();
 
     @Override
     public String toString() {
@@ -45,9 +49,16 @@ public class RouteX {
         private boolean ack;
         private String hash;
 
+        @Override
         public String asSendable(){
             return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getDestination() + "|" + getNextNode() + "|" + getPayload() + "|";
         }
+
+        @Override
+        public String responsibleHandler() {
+            return HandlerName.MESSAGE_HANDLER;
+        }
+
         @Override
         public String toString() {
             return "Source: " + this.getSource() +
@@ -68,9 +79,16 @@ public class RouteX {
         private String destination;
         private String id;
 
+        @Override
         public String asSendable(){
             return "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getDestination() + "|" + getId() + "|";
         }
+
+        @Override
+        public String responsibleHandler() {
+            return HandlerName.ACKNOWLEDGE_HANDLER;
+        }
+
         @Override
         public String toString() {
             return  "\nTimeToLive: " + getTimeToLive() +
@@ -88,8 +106,14 @@ public class RouteX {
         private int hops;
         private long date;
 
+        @Override
         public String asSendable(){
             return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getHops() + "|" + getEndNode() + "|";
+        }
+
+        @Override
+        public String responsibleHandler() {
+            return HandlerName.REQUEST_HANDLER;
         }
 
         @Override
@@ -110,8 +134,14 @@ public class RouteX {
         private String endNode, nextNode;
         private int hops;
 
+        @Override
         public String asSendable(){
             return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getHops() + "|" + getEndNode() + "|" + getNextNode() + "|";
+        }
+
+        @Override
+        public String responsibleHandler() {
+            return HandlerName.REPLY_HANDLER;
         }
 
         @Override
@@ -132,8 +162,14 @@ public class RouteX {
     public static class RouteError extends RouteX {
         private String brokenNode;
 
+        @Override
         public String asSendable(){
             return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getBrokenNode() + "|";
+        }
+
+        @Override
+        public String responsibleHandler() {
+            return HandlerName.ERROR_HANDLER;
         }
 
         @Override
@@ -152,8 +188,14 @@ public class RouteX {
     public static class RouteUnreachable extends RouteX {
         private String unreachableNode;
 
+        @Override
         public String asSendable(){
             return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getUnreachableNode() + "|";
+        }
+
+        @Override
+        public String responsibleHandler() {
+            return HandlerName.UNREACHABLE_HANDLER;
         }
 
         @Override
