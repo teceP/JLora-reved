@@ -5,16 +5,16 @@ package de.teklic.mario.messanger;
  */
 
 import de.teklic.mario.model.routex.RouteX;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.UUID;
-
+@Getter
+@Setter
 public class MessageJob {
     private RouteX routeX;
     private int retries;
-    private String id;
 
     public MessageJob(RouteX routeX, int retries){
-        id = UUID.randomUUID().toString();
         this.routeX = routeX;
         this.retries = retries;
     }

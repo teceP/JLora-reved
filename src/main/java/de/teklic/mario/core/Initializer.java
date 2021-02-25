@@ -5,7 +5,6 @@ package de.teklic.mario.core;
  */
 
 import de.teklic.mario.handler.*;
-import de.teklic.mario.handler.protocols.Constant;
 import de.teklic.mario.input.SerialPortListener;
 import de.teklic.mario.input.UserInput;
 import de.teklic.mario.model.other.JLoraModel;
@@ -19,7 +18,8 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static de.teklic.mario.handler.protocols.Constant.CONFIG;
+import static de.teklic.mario.core.Constant.BROADCAST;
+import static de.teklic.mario.core.Constant.CONFIG;
 import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
 public class Initializer {
@@ -115,7 +115,7 @@ public class Initializer {
         SerialPortOutput.getInstance().sendConfig("AT+RST");
         SerialPortOutput.getInstance().sendConfig(CONFIG);
         SerialPortOutput.getInstance().sendConfig("AT+ADDR=" + SENDER_ADDR);
-        SerialPortOutput.getInstance().sendConfig("AT+DEST=FFFF");
+        SerialPortOutput.getInstance().sendConfig("AT+DEST=" + BROADCAST);
         SerialPortOutput.getInstance().sendConfig("AT+RX");
         SerialPortOutput.getInstance().sendConfig("AT+SAVE");
 

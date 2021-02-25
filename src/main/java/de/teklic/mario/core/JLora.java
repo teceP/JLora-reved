@@ -19,7 +19,7 @@ import java.util.TooManyListenersException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class JLora implements Observer {
+public class JLora extends Observable implements Observer {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
 
     private JLoraModel jLoraModel;
@@ -63,11 +63,20 @@ public class JLora implements Observer {
     }
 
     public void distributeToHandler(RouteX routeX){
-        jLoraModel.getHandlers()
-                .stream()
-                .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
-                .collect(Collectors.toList())
-                .get(0)
-                .handle(routeX);
+        if(hasMessengerRelevance(routeX)){
+            setChanged();
+            notifyObservers(routeX);
+        }else{
+            jLoraModel.getHandlers()
+                    .stream()
+                    .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
+                    .collect(Collectors.toList())
+                    .get(0)
+                    .handle(routeX);
+        }
+    }
+
+    public boolean hasMessengerRelevance(RouteX routeX){
+        return true;
     }
 }

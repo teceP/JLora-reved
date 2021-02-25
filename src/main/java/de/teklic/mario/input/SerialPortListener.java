@@ -1,7 +1,7 @@
 package de.teklic.mario.input;
 
 import de.teklic.mario.core.JLora;
-import de.teklic.mario.handler.protocols.Constant;
+import de.teklic.mario.core.Constant;
 import lombok.Getter;
 import lombok.Setter;
 import purejavacomm.SerialPortEvent;

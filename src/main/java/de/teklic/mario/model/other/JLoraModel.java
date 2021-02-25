@@ -18,7 +18,6 @@ public class JLoraModel {
     private Thread userInputThread;
     private SerialPort serialPort;
     public static String SENDER_ADDR;
-    private final long REQUEST_TIMEOUT = 30000;
 
     private List<RouteX.RouteRequest> requestQueue;
     private HashMap<String, RouteX.Message> forwardedMessageQueue;
