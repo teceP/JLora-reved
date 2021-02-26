@@ -22,6 +22,8 @@ public class ReplyHandler extends Handler implements Communicable {
     public void handle(RouteX routeX) {
         if (Util.isRouteXForMe(routeX)) {
             forMe(routeX);
+        }else if(Util.isRouteXForward(routeX)){
+            forward(routeX);
         }
     }
 
@@ -32,7 +34,8 @@ public class ReplyHandler extends Handler implements Communicable {
 
     @Override
     public void forward(RouteX message) {
-
+        Util.prepareToForward(message);
+        Messenger.getInstance().send(message);
     }
 
     @Override

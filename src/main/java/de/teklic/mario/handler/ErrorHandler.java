@@ -7,6 +7,7 @@ package de.teklic.mario.handler;
 import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.handler.protocols.Handler;
 import de.teklic.mario.handler.protocols.HandlerName;
+import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.Util;
 
@@ -20,6 +21,8 @@ public class ErrorHandler extends Handler implements Communicable {
     public void handle(RouteX routeX) {
         if(Util.isRouteXForMe(routeX)){
             forMe(routeX);
+        }else if(Util.isRouteXForward(routeX)){
+            forward(routeX);
         }
     }
 
@@ -30,7 +33,8 @@ public class ErrorHandler extends Handler implements Communicable {
 
     @Override
     public void forward(RouteX message) {
-
+        Util.prepareToForward(message);
+        Messenger.getInstance().send(message);
     }
 
     @Override

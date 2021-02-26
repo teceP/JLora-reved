@@ -81,7 +81,7 @@ public abstract class RouteX {
 
         @Override
         public String asSendable(){
-            return "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|" + getPayload() + "|";
+            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|" + getPayload() + "|";
         }
 
         @Override
@@ -91,7 +91,8 @@ public abstract class RouteX {
 
         @Override
         public String toString() {
-            return  "\nTimeToLive: " + getTimeToLive() +
+            return  "\nSource: " + getSource() +
+                    "\nTimeToLive: " + getTimeToLive() +
                     "\nPayload: " + payload +
                     "\nDestination: " + getEndNode() +
                     "\nTokenizedHeader: " + getTokenizedHeader() +
