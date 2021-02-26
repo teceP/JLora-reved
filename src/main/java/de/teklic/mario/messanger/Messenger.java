@@ -116,7 +116,7 @@ public class Messenger {
         while(it.hasNext()){
             MessageWorker mw = it.next();
             if(mw.getMessageJob().getRouteX() instanceof RouteX.Message){
-                String messageHash = Util.calcMd5((RouteX.Message) mw.getMessageJob().getRouteX());
+                String messageHash = Util.calcMd5((RouteX.Message) mw.getMessageJob().getRouteX()).substring(0, 5);
                 if(acknowledgeHash.equalsIgnoreCase(messageHash)){
                     it.remove();
                     JLora.logger.info("Removes MessageWorker (RouteX.Message) from list according to an matching hash for message payload '" + ((RouteX.Message) mw.getMessageJob().getRouteX()).getPayload() + "'.");
