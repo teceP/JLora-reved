@@ -206,4 +206,17 @@ public abstract class RouteX {
                     "\nFlag: " + this.getFlag().name();
         }
     }
+
+    public static class Disposable extends RouteX{
+
+        @Override
+        public String asSendable() {
+            return null;
+        }
+
+        @Override
+        public String responsibleHandler() {
+            return null;
+        }
+    }
 }

@@ -4,6 +4,7 @@ import de.teklic.mario.handler.*;
 import de.teklic.mario.handler.protocols.HandlerName;
 import de.teklic.mario.input.SerialPortListener;
 import de.teklic.mario.input.UserInput;
+import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.other.JLoraModel;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.MessageEvaluator;
@@ -20,7 +21,7 @@ import java.util.TooManyListenersException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class JLora extends Observable implements Observer {
+public class JLora implements Observer {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
 
     private JLoraModel jLoraModel;
@@ -67,20 +68,21 @@ public class JLora extends Observable implements Observer {
     }
 
     public void distributeToHandler(RouteX routeX){
+        if(routeX instanceof RouteX.Disposable){
+            logger.info("RouteX is an disposable object and will be dropped.");
+            return;
+        }
 
-        //Wenn es relevanz hat, muss es trotzdem noch an den handler geshickt werden
-
-       /* if(hasMessengerRelevance(routeX) && Util.isRouteXForMe(routeX)){
-            setChanged();
-            notifyObservers(routeX);
-        }else{*/
-        jLoraModel.getHandlers()
-                .stream()
-                .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
-                .collect(Collectors.toList())
-                .get(0)
-                .handle(routeX);
-       // }
+        if(hasMessengerRelevance(routeX) && Util.isRouteXForMe(routeX)){
+            Messenger.getInstance().update(routeX);
+        }else{
+            jLoraModel.getHandlers()
+                    .stream()
+                    .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
+                    .collect(Collectors.toList())
+                    .get(0)
+                    .handle(routeX);
+        }
     }
 
     /**

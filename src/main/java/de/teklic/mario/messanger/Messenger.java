@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
-public class Messenger implements Observer {
+public class Messenger {
     /**
      * Parameter "wie oft" wird übergeben.
      * Parameter "delay je loop" wird im executor service geregelt
@@ -39,9 +39,7 @@ public class Messenger implements Observer {
         return messenger;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        RouteX routeX = (RouteX) arg;
+    public void update(RouteX routeX) {
         JLora.logger.info("RouteX is for me. Will check for running MessageWorker...");
         jobFinished(routeX);
     }

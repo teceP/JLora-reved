@@ -43,7 +43,7 @@ public class MessageEvaluator {
         routeError.setFlag(RouteFlag.ERROR);
         routeError.setSource(infos[0]);
         routeError.setTimeToLive(Integer.parseInt(infos[2]));
-        routeError.setBrokenNode(infos[3]);
+        routeError.setEndNode(infos[3]);
         routeError.setIncoming(true);
         return routeError;
     }
@@ -53,7 +53,7 @@ public class MessageEvaluator {
         routeUnreachable.setFlag(RouteFlag.UNREACHABLE);
         routeUnreachable.setSource(infos[0]);
         routeUnreachable.setTimeToLive(Integer.parseInt(infos[2]));
-        routeUnreachable.setUnreachableNode(infos[3]);
+        routeUnreachable.setEndNode(infos[3]);
         routeUnreachable.setIncoming(true);
         return routeUnreachable;
     }
@@ -63,7 +63,7 @@ public class MessageEvaluator {
         message.setFlag(RouteFlag.MESSAGE);
         message.setSource(infos[0]);
         message.setTimeToLive(Integer.parseInt(infos[2]));
-        message.setDestination(infos[3]);
+        message.setEndNode(infos[3]);
         message.setNextNode(infos[4]);
         message.setPayload(infos[5]);
         return message;
@@ -73,7 +73,7 @@ public class MessageEvaluator {
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
         acknowledge.setTimeToLive(Integer.parseInt(infos[1]));
-        acknowledge.setDestination(infos[2]);
+        acknowledge.setEndNode(infos[2]);
         acknowledge.setPayload(infos[3]);
         acknowledge.setIncoming(true);
         return acknowledge;
@@ -86,7 +86,7 @@ public class MessageEvaluator {
         tokenizedHeader.setEmpty(true);
         tokenizedHeader.setPlain(message);
         tokenizedHeader.setOrigin(NO_LR);
-        route = new RouteX();
+        route = new RouteX.Disposable();
         route.setFlag(RouteFlag.NO_ROUTEX);
         route.setTokenizedHeader(tokenizedHeader);
         route.setIncoming(true);
