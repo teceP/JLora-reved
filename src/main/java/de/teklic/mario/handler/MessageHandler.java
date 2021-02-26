@@ -5,6 +5,7 @@ package de.teklic.mario.handler;
  */
 
 
+import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.handler.protocols.Handler;
@@ -74,6 +75,7 @@ public class MessageHandler extends Handler implements Communicable {
 
     public RouteX.RouteRequest createRequest(RouteX.Message message){
         RouteX.RouteRequest request = new RouteX.RouteRequest();
+        request.setSource(Address.getInstance().getAddr());
         request.setFlag(RouteFlag.REQUEST);
         request.setTimeToLive(INITIAL_TTL);
         request.setEndNode(message.getEndNode());
