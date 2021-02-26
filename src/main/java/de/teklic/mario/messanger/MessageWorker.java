@@ -41,20 +41,23 @@ public class MessageWorker implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            JLora.logger.info("Message Job has been finished by retries.");
             if(Messenger.getInstance().isJobFinished(this)){
                 JLora.logger.info("Message Job has been finished by condition.");
                 onSuccessfulPostExecutions();
                 return;
             }
         }
+        JLora.logger.info("Message Job has been finished by retries.");
         onFailedPostExecutions();
     }
 
     public void onSuccessfulPostExecutions(){
         if(messageJob.getRouteX() instanceof RouteX.RouteRequest){
-            ((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().setNextNode(RoutingTable.getInstance().getNextForDestination(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().getEndNode()));
-            Messenger.getInstance().sendWithWorker(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage(), 3);
+            if(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage() != null){
+                ((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().setNextNode(RoutingTable.getInstance().getNextForDestination(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().getEndNode()));
+                Messenger.getInstance().sendWithWorker(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage(), 3);
+                JLora.logger.info("Sending message after received new route information.");
+            }
         }
     }
 
