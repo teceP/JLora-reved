@@ -51,7 +51,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.mario.teklic.App</mainClass>
+                            <mainClass>de.teklic.mario.App</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
