@@ -32,6 +32,11 @@ public class RoutingTable {
         this.store();
     }
 
+    public void drop(){
+        routeList = Collections.synchronizedList(new ArrayList<>());
+        store();
+    }
+
     public String getNextForDestination(String destAddr){
         System.out.println("Routes from routing table (size " + routeList.size() + "):");
 

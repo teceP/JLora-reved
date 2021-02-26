@@ -32,10 +32,14 @@ public class UserService {
                 System.out.println(str);
                 break;
             case "help":
-                System.out.println("table, msg, help");
+                System.out.println("table, msg, help, drop, addr");
                 break;
             case "addr":
                 System.out.println("Nodes Address: " + Address.getInstance().getAddr());
+                break;
+            case "drop":
+                RoutingTable.getInstance().drop();
+                break;
             default:
                 JLora.logger.info("Dropping user message (not assignable): " + call);
                 break;
