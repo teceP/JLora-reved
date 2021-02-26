@@ -77,11 +77,11 @@ public abstract class RouteX {
     @NoArgsConstructor
     public static class Acknowledge extends RouteX {
         private String destination;
-        private String id;
+        private String payload;
 
         @Override
         public String asSendable(){
-            return "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getDestination() + "|" + getId() + "|";
+            return "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getDestination() + "|" + getPayload() + "|";
         }
 
         @Override
@@ -92,6 +92,7 @@ public abstract class RouteX {
         @Override
         public String toString() {
             return  "\nTimeToLive: " + getTimeToLive() +
+                    "\nPayload: " + payload +
                     "\nDestination: " + destination +
                     "\nTokenizedHeader: " + getTokenizedHeader() +
                     "\nFlag: " + this.getFlag().name();

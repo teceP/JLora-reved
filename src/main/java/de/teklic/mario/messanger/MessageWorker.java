@@ -32,7 +32,6 @@ public class MessageWorker implements Runnable{
     public void run() {
         for(int i = 0; i < messageJob.getRetries(); i++){
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
-            messageJob.setRetries(messageJob.getRetries() + 1);
             try {
                 Thread.sleep(TIMEOUT);
             } catch (InterruptedException e) {
@@ -44,7 +43,8 @@ public class MessageWorker implements Runnable{
                 return;
             }
         }
+        JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now.");
         //Remove node + send RouteError
-
+        //TODO both
     }
 }

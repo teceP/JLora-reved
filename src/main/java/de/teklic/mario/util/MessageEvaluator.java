@@ -74,7 +74,7 @@ public class MessageEvaluator {
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
         acknowledge.setTimeToLive(Integer.parseInt(infos[1]));
         acknowledge.setDestination(infos[2]);
-        acknowledge.setId(infos[3]);
+        acknowledge.setPayload(infos[3]);
         acknowledge.setIncoming(true);
         return acknowledge;
     }
