@@ -51,10 +51,11 @@ public class MessageHandler extends Handler implements Communicable {
         JLora.logger.info("Sending out acknowledge.");
 
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
+        acknowledge.setSource(Address.getInstance().getAddr());
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
         acknowledge.setTimeToLive(9);
         acknowledge.setEndNode(m.getSource());
-        acknowledge.setPayload(Util.calcMd5(m));
+        acknowledge.setPayload(Util.calcMd5(m).substring(0, 5));
         Messenger.getInstance().sendWithWorker(acknowledge, DEFAULT_RETRIES);
     }
 

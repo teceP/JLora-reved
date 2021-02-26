@@ -59,7 +59,7 @@ public class RequestHandler extends Handler implements Communicable {
             outgoingReply.setEndNode(message.getSource());
             outgoingReply.setNextNode(message.getTokenizedHeader().getOrigin());
             outgoingReply.setTokenizedHeader(new TokenizedHeader(true));
-            JLora.logger.info("Outgoing reply after an incoming reply which was for me: " + outgoingReply);
+            JLora.logger.info("Outgoing reply after an incoming request which was for me: " + outgoingReply);
             JLora.logger.info("Outgoing reply as sendable: " + outgoingReply.asSendable());
             Messenger.getInstance().sendWithWorker(outgoingReply, DEFAULT_RETRIES);
         }else{

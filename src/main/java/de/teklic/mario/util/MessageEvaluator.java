@@ -72,6 +72,7 @@ public class MessageEvaluator {
     private static RouteX.Acknowledge createAcknowledge(String[] infos){
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
+        acknowledge.setSource(infos[0]);
         acknowledge.setTimeToLive(Integer.parseInt(infos[1]));
         acknowledge.setEndNode(infos[2]);
         acknowledge.setPayload(infos[3]);
@@ -166,6 +167,7 @@ public class MessageEvaluator {
                     break;
                 case ACKNOWLEDGE:
                     route = createAcknowledge(tail);
+                    break;
                 default:
                     System.out.println("Route flag is not known. Flag was: " + getRouteKind(Integer.parseInt(tail[1])));
                     return handleNotLR(message);

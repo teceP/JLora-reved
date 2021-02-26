@@ -61,7 +61,6 @@ public class Util {
     public static String calcMd5(String sender, String payload){
         String hash = DigestUtils.md5Hex(sender + payload);
         System.out.println("Calculated hash: " + hash);
-        System.out.println("Shortend hash: " + hash.substring(0, 5));
         return DigestUtils.md5Hex(sender + payload);
     }
 
