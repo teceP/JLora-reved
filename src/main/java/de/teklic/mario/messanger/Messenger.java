@@ -38,6 +38,7 @@ public class Messenger {
     }
 
     public void update(RouteX routeX) {
+        Util.newRoute(routeX);
         JLora.logger.info("RouteX is for me. Will check for running MessageWorker...");
         jobFinished(routeX);
     }

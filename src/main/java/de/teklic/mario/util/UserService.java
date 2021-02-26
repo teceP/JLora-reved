@@ -7,6 +7,7 @@ package de.teklic.mario.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.routingtable.RoutingTable;
 
@@ -33,6 +34,8 @@ public class UserService {
             case "help":
                 System.out.println("table, msg, help");
                 break;
+            case "addr":
+                System.out.println("Nodes Address: " + Address.getInstance().getAddr());
             default:
                 JLora.logger.info("Dropping user message (not assignable): " + call);
                 break;
