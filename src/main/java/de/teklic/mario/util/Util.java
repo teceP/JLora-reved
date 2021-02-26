@@ -25,6 +25,8 @@ public class Util {
     private static RoutingTable.Route determineRoute(RouteX routeX){
         RoutingTable.Route route = null;
 
+        logger.info("NEW ROUTE !!!: SourceNode: " + routeX.getSource() + ", NextNode: " + routeX.getTokenizedHeader().getOrigin());
+        logger.info("MADE OUT OF: " + routeX);
         if(routeX instanceof RouteX.RouteReply){
             route = new RoutingTable.Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteReply) routeX).getHops());
         }else if(routeX instanceof RouteX.RouteRequest){
