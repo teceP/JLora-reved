@@ -4,6 +4,7 @@ package de.teklic.mario.handler;
  * @author Mario Teklic
  */
 
+import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.handler.protocols.Handler;
@@ -17,7 +18,6 @@ import de.teklic.mario.util.Util;
 
 import static de.teklic.mario.core.Constant.BROADCAST;
 import static de.teklic.mario.core.Constant.DEFAULT_RETRIES;
-import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
 public class RequestHandler extends Handler implements Communicable {
 
@@ -52,7 +52,7 @@ public class RequestHandler extends Handler implements Communicable {
         if(message.getTimeToLive() >= 0){
             RouteX.RouteReply outgoingReply = new RouteX.RouteReply();
             outgoingReply.setIncoming(false);
-            outgoingReply.setSource(SENDER_ADDR);
+            outgoingReply.setSource(Address.getInstance().getAddr());
             outgoingReply.setFlag(RouteFlag.REPLY);
             outgoingReply.setTimeToLive(9);
             outgoingReply.setHops(0);

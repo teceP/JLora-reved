@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.BROADCAST;
 import static de.teklic.mario.core.Constant.CONFIG;
-import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
 public class Initializer {
 
@@ -28,9 +27,11 @@ public class Initializer {
 
     public static JLoraModel initialize(JLora jLora, String addr) throws NoSuchPortException, PortInUseException, IOException, UnsupportedCommOperationException, TooManyListenersException {
         JLoraModel jLoraModel = new JLoraModel();
-        logger.info("Nodes Address: " + SENDER_ADDR);
+        logger.info("Set Nodes Address to " + addr);
 
         Address.getInstance().setAddr(addr);
+
+        logger.info("ADDR: " + Address.getInstance().getAddr());
 
         //Handlers
         setHandlers(jLoraModel);
@@ -55,7 +56,7 @@ public class Initializer {
         moduleConfigurations();
 
         //Restore RoutingTable
-        RoutingTable.getInstance().restore(SENDER_ADDR);
+        RoutingTable.getInstance().restore(Address.getInstance().getAddr());
 
         return jLoraModel;
     }
@@ -117,7 +118,7 @@ public class Initializer {
         SerialPortOutput.getInstance().sendConfig("AT");
         SerialPortOutput.getInstance().sendConfig("AT+RST");
         SerialPortOutput.getInstance().sendConfig(CONFIG);
-        SerialPortOutput.getInstance().sendConfig("AT+ADDR=" + SENDER_ADDR);
+        SerialPortOutput.getInstance().sendConfig("AT+ADDR=" + Address.getInstance().getAddr());
         SerialPortOutput.getInstance().sendConfig("AT+DEST=" + BROADCAST);
         SerialPortOutput.getInstance().sendConfig("AT+RX");
         SerialPortOutput.getInstance().sendConfig("AT+SAVE");

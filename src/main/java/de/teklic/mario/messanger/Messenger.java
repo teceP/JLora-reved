@@ -15,8 +15,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
-
 public class Messenger {
     /**
      * Parameter "wie oft" wird übergeben.

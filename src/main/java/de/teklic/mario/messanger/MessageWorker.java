@@ -4,6 +4,7 @@ package de.teklic.mario.messanger;
  * @author Mario Teklic
  */
 
+import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
@@ -17,7 +18,6 @@ import java.util.concurrent.ScheduledFuture;
 
 import static de.teklic.mario.core.Constant.DEFAULT_TIMEOUT;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
-import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
 @Getter
 @Setter
@@ -67,7 +67,7 @@ public class MessageWorker implements Runnable{
     public void sendError(){
         if(messageJob.getRouteX() instanceof RouteX.Message){
             RouteX.RouteError error = new RouteX.RouteError();
-            error.setSource(SENDER_ADDR);
+            error.setSource(Address.getInstance().getAddr());
             error.setFlag(RouteFlag.ERROR);
             error.setTimeToLive(INITIAL_TTL);
             error.setEndNode(messageJob.getRouteX().getEndNode());

@@ -1,5 +1,6 @@
 package de.teklic.mario.input;
 
+import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
@@ -9,8 +10,6 @@ import lombok.Setter;
 
 import java.util.Observable;
 import java.util.Scanner;
-
-import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
 public class UserInput extends Observable implements Runnable {
 
@@ -59,7 +58,7 @@ public class UserInput extends Observable implements Runnable {
 
         RouteX.Message message = new RouteX.Message();
         message.setFlag(RouteFlag.MESSAGE);
-        message.setSource(SENDER_ADDR);
+        message.setSource(Address.getInstance().getAddr());
         message.setTimeToLive(9);
         message.setEndNode(dest);
         message.setNextNode(RoutingTable.getInstance().getNextForDestination(dest));

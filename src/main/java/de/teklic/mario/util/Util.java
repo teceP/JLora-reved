@@ -4,6 +4,7 @@ package de.teklic.mario.util;
  * @author Mario Teklic
  */
 
+import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
@@ -11,7 +12,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.logging.Logger;
 
-import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 import static de.teklic.mario.routingtable.RoutingTable.NO_NEXT;
 
 public class Util {
@@ -26,9 +26,9 @@ public class Util {
         RoutingTable.Route route = null;
 
         if(routeX instanceof RouteX.RouteReply){
-            route = new RoutingTable.Route(SENDER_ADDR, routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteReply) routeX).getHops());
+            route = new RoutingTable.Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteReply) routeX).getHops());
         }else if(routeX instanceof RouteX.RouteRequest){
-            route = new RoutingTable.Route(SENDER_ADDR, routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteRequest) routeX).getHops());
+            route = new RoutingTable.Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteRequest) routeX).getHops());
         }else{
             logger.info("Add Route: No route created. RouteX object was not an instance of Reply or Request.");
         }
@@ -66,11 +66,11 @@ public class Util {
     }
 
     public static boolean isRouteXForMe(RouteX routeX){
-        return routeX.getEndNode().equalsIgnoreCase(SENDER_ADDR);
+        return routeX.getEndNode().equalsIgnoreCase(Address.getInstance().getAddr());
     }
 
     public static boolean isRouteXFromMe(RouteX routeX){
-        return routeX.getSource().equalsIgnoreCase(SENDER_ADDR);
+        return routeX.getSource().equalsIgnoreCase(Address.getInstance().getAddr());
     }
 
     public static boolean isRouteXForward(RouteX routeX){
