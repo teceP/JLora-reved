@@ -56,7 +56,7 @@ public class MessageHandler extends Handler implements Communicable {
         acknowledge.setTimeToLive(9);
         acknowledge.setEndNode(m.getSource());
         acknowledge.setPayload(Util.calcMd5(m).substring(0, 5));
-        Messenger.getInstance().sendWithWorker(acknowledge, DEFAULT_RETRIES);
+        Messenger.getInstance().send(acknowledge);
     }
 
     public void fromMe(RouteX message){
@@ -67,10 +67,10 @@ public class MessageHandler extends Handler implements Communicable {
 
         if(RoutingTable.getInstance().hasRoute(msg.getEndNode())){
             msg.setNextNode(RoutingTable.getInstance().getNextForDestination(msg.getEndNode()));
-            Messenger.getInstance().sendWithWorker(msg, 3);
+            Messenger.getInstance().sendWithWorker(msg, DEFAULT_RETRIES);
         }else{
             RouteX.RouteRequest request = createRequest(msg);
-            Messenger.getInstance().sendWithWorker(request, 3);
+            Messenger.getInstance().sendWithWorker(request, DEFAULT_RETRIES);
         }
     }
 

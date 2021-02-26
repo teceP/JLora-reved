@@ -48,7 +48,6 @@ public abstract class RouteX {
         private String payload;
         private int tries;
         private boolean ack;
-        private String hash;
 
         @Override
         public String asSendable(){
@@ -67,7 +66,6 @@ public abstract class RouteX {
                     "\nDestination: " + getEndNode() +
                     "\nNextNode: " + nextNode +
                     "\nPayload: " + payload +
-                    "\nHash: " + hash +
                     "\nTokenizedHeader: " + getTokenizedHeader() +
                     "\nFlag: " + this.getFlag().name();
         }
@@ -93,7 +91,7 @@ public abstract class RouteX {
         public String toString() {
             return  "\nSource: " + getSource() +
                     "\nTimeToLive: " + getTimeToLive() +
-                    "\nPayload: " + payload +
+                    "\nPayload/Hash: " + payload +
                     "\nDestination: " + getEndNode() +
                     "\nTokenizedHeader: " + getTokenizedHeader() +
                     "\nFlag: " + this.getFlag().name();
