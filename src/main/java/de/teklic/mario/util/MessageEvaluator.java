@@ -73,9 +73,9 @@ public class MessageEvaluator {
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
         acknowledge.setSource(infos[0]);
-        acknowledge.setTimeToLive(Integer.parseInt(infos[1]));
-        acknowledge.setEndNode(infos[2]);
-        acknowledge.setPayload(infos[3]);
+        acknowledge.setTimeToLive(Integer.parseInt(infos[2]));
+        acknowledge.setEndNode(infos[3]);
+        acknowledge.setPayload(infos[4]);
         acknowledge.setIncoming(true);
         return acknowledge;
     }
