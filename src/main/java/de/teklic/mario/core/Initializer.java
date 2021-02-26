@@ -28,6 +28,7 @@ public class Initializer {
 
     public static JLoraModel initialize(JLora jLora) throws NoSuchPortException, PortInUseException, IOException, UnsupportedCommOperationException, TooManyListenersException {
         JLoraModel jLoraModel = new JLoraModel();
+
         //Handlers
         setHandlers(jLoraModel);
 
@@ -63,7 +64,6 @@ public class Initializer {
         jLoraModel.getHandlers().add(new MessageHandler());
         jLoraModel.getHandlers().add(new ReplyHandler());
         jLoraModel.getHandlers().add(new RequestHandler());
-        jLoraModel.getHandlers().add(new UnreachableHandler());
         logger.info("Handlers (" + jLoraModel.getHandlers().size() +") where set.");
     }
 

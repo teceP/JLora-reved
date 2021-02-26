@@ -17,7 +17,7 @@ import java.util.List;
 public class JLoraModel {
     private Thread userInputThread;
     private SerialPort serialPort;
-    public static String SENDER_ADDR = "0140";
+    public static String SENDER_ADDR;
 
     private List<RouteX.RouteRequest> requestQueue;
     private HashMap<String, RouteX.Message> forwardedMessageQueue;
@@ -65,13 +65,6 @@ public class JLoraModel {
             case HandlerName.REQUEST_HANDLER:
                 for(Handler h : handlers){
                     if(h.getClass() == RequestHandler.class){
-                        return h;
-                    }
-                }
-                break;
-            case HandlerName.UNREACHABLE_HANDLER:
-                for(Handler h : handlers){
-                    if(h.getClass() == UnreachableHandler.class){
                         return h;
                     }
                 }

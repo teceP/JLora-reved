@@ -28,11 +28,6 @@ public class AcknowledgeHandler extends Handler implements Communicable {
     }
 
     @Override
-    public void send(String endNode, String message) {
-
-    }
-
-    @Override
     public void forward(RouteX message) {
         Util.prepareToForward(message);
         Messenger.getInstance().send(message);

@@ -4,6 +4,7 @@ package de.teklic.mario.handler;
  * @author Mario Teklic
  */
 
+import de.teklic.mario.core.JLora;
 import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.handler.protocols.Handler;
 import de.teklic.mario.handler.protocols.HandlerName;
@@ -27,11 +28,6 @@ public class ErrorHandler extends Handler implements Communicable {
     }
 
     @Override
-    public void send(String endNode, String message) {
-
-    }
-
-    @Override
     public void forward(RouteX message) {
         Util.prepareToForward(message);
         Messenger.getInstance().send(message);
@@ -39,6 +35,7 @@ public class ErrorHandler extends Handler implements Communicable {
 
     @Override
     public void forMe(RouteX message) {
-
+        JLora.logger.info("Error is for me. Cleaning routing table?.");
+        //TODO
     }
 }

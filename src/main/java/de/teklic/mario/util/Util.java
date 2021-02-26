@@ -9,10 +9,43 @@ import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.logging.Logger;
+
 import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 import static de.teklic.mario.routingtable.RoutingTable.NO_NEXT;
 
 public class Util {
+    public static final Logger logger = Logger.getLogger(Util.class.getName());
+
+    public static boolean newRoute(RouteX routeX){
+        RoutingTable.Route route = determineRoute(routeX);
+        return Util.addRoute(route);
+    }
+
+    private static RoutingTable.Route determineRoute(RouteX routeX){
+        RoutingTable.Route route = null;
+
+        if(routeX instanceof RouteX.RouteReply){
+            route = new RoutingTable.Route(SENDER_ADDR, routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteReply) routeX).getHops());
+        }else if(routeX instanceof RouteX.RouteRequest){
+            route = new RoutingTable.Route(SENDER_ADDR, routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteRequest) routeX).getHops());
+        }else{
+            logger.info("Add Route: No route created. RouteX object was not an instance of Reply or Request.");
+        }
+
+        return route;
+    }
+
+    private static boolean addRoute(RoutingTable.Route route) {
+        if (route != null && !RoutingTable.getInstance().hasRoute(route)) {
+            RoutingTable.getInstance().add(route);
+            System.out.println("New Route (neighbour) was added on index " + (RoutingTable.getInstance().getRouteList().size() - 1) + ": " + route);
+            return true;
+        }
+
+        System.out.println("No new route was added!");
+        return false;
+    }
 
     /**
      * Calculates the MD5-Hash with the own address and the payload
@@ -36,12 +69,12 @@ public class Util {
         return routeX.getEndNode().equalsIgnoreCase(SENDER_ADDR);
     }
 
-    public static boolean isRouteXSend(RouteX routeX){
+    public static boolean isRouteXFromMe(RouteX routeX){
         return routeX.getSource().equalsIgnoreCase(SENDER_ADDR);
     }
 
     public static boolean isRouteXForward(RouteX routeX){
-        return !isRouteXForMe(routeX) && !isRouteXSend(routeX);
+        return !isRouteXForMe(routeX) && !isRouteXFromMe(routeX);
     }
 
     public static RouteX prepareToForward(RouteX routeX){

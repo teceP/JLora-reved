@@ -108,6 +108,14 @@ public class RoutingTable {
         }
     }
 
+    /**
+     * Removes all nodes which contains this destination
+     * @param destination
+     */
+    public void removeRoute(String destination){
+        routeList.removeIf(r -> r.getDestination().equalsIgnoreCase(destination));
+    }
+
     public boolean hasRoute(Route route) {
         return routeList.stream().anyMatch(tableEntry ->
                 tableEntry.getDestination().trim().equalsIgnoreCase(route.getDestination().trim())

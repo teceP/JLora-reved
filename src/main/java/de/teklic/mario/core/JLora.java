@@ -26,6 +26,9 @@ public class JLora extends Observable implements Observer {
     private JLoraModel jLoraModel;
 
     public JLora(){
+    }
+
+    public void start(){
         try {
             this.jLoraModel = Initializer.initialize(this);
             logger.info("Software initialized. Listening for messages now.");

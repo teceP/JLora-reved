@@ -139,7 +139,7 @@ public class Messenger implements Observer {
         while (it.hasNext()){
             MessageWorker mw = it.next();
             if(mw.getMessageJob().getRouteX() instanceof RouteX.RouteRequest){
-                String requestedNode = ((RouteX.RouteRequest) mw.getMessageJob().getRouteX()).getEndNode();
+                String requestedNode = (mw.getMessageJob().getRouteX()).getEndNode();
                 if(replierNode.equalsIgnoreCase(requestedNode)){
                     it.remove();
                     JLora.logger.info("Removes MessageWorker (RouteX.Request) from list according to an matching requested/replier node.");

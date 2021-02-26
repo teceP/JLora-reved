@@ -5,6 +5,8 @@ package de.teklic.mario.messanger;
  */
 
 import de.teklic.mario.core.JLora;
+import de.teklic.mario.model.routex.RouteFlag;
+import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.output.SerialPortOutput;
 import de.teklic.mario.routingtable.RoutingTable;
 import lombok.Getter;
@@ -13,7 +15,9 @@ import lombok.Setter;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 
-import static de.teklic.mario.core.Constant.TIMEOUT;
+import static de.teklic.mario.core.Constant.DEFAULT_TIMEOUT;
+import static de.teklic.mario.core.Constant.INITIAL_TTL;
+import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
 
 @Getter
 @Setter
@@ -33,7 +37,7 @@ public class MessageWorker implements Runnable{
         for(int i = 0; i < messageJob.getRetries(); i++){
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             try {
-                Thread.sleep(TIMEOUT);
+                Thread.sleep(DEFAULT_TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -43,9 +47,28 @@ public class MessageWorker implements Runnable{
                 return;
             }
         }
+        onFailedPostExecutions();
+    }
+
+    public void onFailedPostExecutions(){
         JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now.");
         Messenger.getInstance().removeWorker(this);
-        //Remove node + send RouteError
-        //TODO both
+        RoutingTable.getInstance().removeRoute(messageJob.getRouteX().getEndNode());
+        sendError();
+    }
+
+    public void sendError(){
+        if(messageJob.getRouteX() instanceof RouteX.Message){
+            RouteX.RouteError error = new RouteX.RouteError();
+            error.setSource(SENDER_ADDR);
+            error.setFlag(RouteFlag.ERROR);
+            error.setTimeToLive(INITIAL_TTL);
+            error.setEndNode(messageJob.getRouteX().getEndNode());
+            Messenger.getInstance().send(error);
+        }
     }
 }
+
+//TODO benutzert will was senden, test erst ob es route gibt.
+//wenn nicht, route request.. neues attribute in routeRequest: saved RouteX.Message, um später, wenn route gefunden neu zu senden
+//wenn doch, senden
