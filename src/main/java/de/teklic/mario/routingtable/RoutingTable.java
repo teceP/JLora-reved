@@ -114,7 +114,8 @@ public class RoutingTable {
         return routeList
                 .stream()
                 .filter(r -> r.getDestination().equalsIgnoreCase(destination))
-                .collect(Collectors.toList()).size() > 0;
+                .findAny()
+                .isPresent();
     }
 
     public boolean hasRoute(Route route) {

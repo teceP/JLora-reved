@@ -27,6 +27,7 @@ public class MessageHandler extends Handler implements Communicable {
 
     @Override
     public void handle(RouteX routeX) {
+        JLora.logger.info("MESSAGE HANDLER.");
         if(Util.isRouteXForMe(routeX)){
             forMe(routeX);
         }else if(Util.isRouteXForward(routeX)){
@@ -57,6 +58,10 @@ public class MessageHandler extends Handler implements Communicable {
     }
 
     public void fromMe(RouteX message){
+        JLora.logger.info("FROM ME (MESSAGEHANDLER)");
+        JLora.logger.info("HasRoute: " + RoutingTable.getInstance().hasRoute(message.getEndNode()));
+        JLora.logger.info("endNOde: " + message.getEndNode());
+
         if(RoutingTable.getInstance().hasRoute(message.getEndNode()) || !message.getEndNode().equalsIgnoreCase(NO_NEXT)){
             Messenger.getInstance().sendWithWorker(message, 3);
         }else{

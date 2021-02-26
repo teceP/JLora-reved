@@ -58,6 +58,8 @@ public class Initializer {
         //Restore RoutingTable
         RoutingTable.getInstance().restore(Address.getInstance().getAddr());
 
+        logger.info("+++++ Config finished +++++");
+
         return jLoraModel;
     }
 
