@@ -63,20 +63,35 @@ public class JLora extends Observable implements Observer {
     }
 
     public void distributeToHandler(RouteX routeX){
+
+        //Wenn es relevanz hat, muss es trotzdem noch an den handler geshickt werden
+
         if(hasMessengerRelevance(routeX)){
             setChanged();
             notifyObservers(routeX);
-        }else{
-            jLoraModel.getHandlers()
-                    .stream()
-                    .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
-                    .collect(Collectors.toList())
-                    .get(0)
-                    .handle(routeX);
         }
+        
+        jLoraModel.getHandlers()
+                .stream()
+                .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
+                .collect(Collectors.toList())
+                .get(0)
+                .handle(routeX);
     }
 
+    /**
+     * Evaluates if this routeX object is releavant for the Messanger Singleton.
+     * This can be if the routeX object is an:
+     *  - RouteX.Acknowledge (answer for a RouteX.Message)
+     *  - RouteX.RouteReply (answer for a RouteX.RouteRequest)
+     * @param routeX
+     * @return true if has relevance for
+     * @return false if has no
+     */
     public boolean hasMessengerRelevance(RouteX routeX){
-        return true;
+        if(routeX instanceof RouteX.Acknowledge || routeX instanceof RouteX.RouteReply){
+            return true;
+        }
+        return false;
     }
 }

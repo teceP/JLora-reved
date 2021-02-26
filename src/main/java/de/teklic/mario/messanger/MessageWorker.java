@@ -43,7 +43,8 @@ public class MessageWorker implements Runnable{
                 return;
             }
         }
-        JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now.");
+        JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now.");
+        Messenger.getInstance().removeWorker(this);
         //Remove node + send RouteError
         //TODO both
     }

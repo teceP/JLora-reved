@@ -15,6 +15,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
+
 public class Messenger implements Observer {
     /**
      * Parameter "wie oft" wird übergeben.
@@ -40,9 +42,22 @@ public class Messenger implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         RouteX routeX = (RouteX) arg;
-        if(routeX != null){
+        if(routeX != null && isRouteXForMe(routeX)){
+            JLora.logger.info("RouteX is for me. Will check for running MessageWorker...");
             jobFinished(routeX);
         }
+    }
+
+    public boolean isRouteXForMe(RouteX routeX){
+        if(routeX instanceof RouteX.Acknowledge){
+            return ((RouteX.Acknowledge) routeX).getDestination().equalsIgnoreCase(SENDER_ADDR);
+        }
+
+        if(routeX instanceof RouteX.RouteReply){
+            return ((RouteX.RouteReply) routeX).getEndNode().equalsIgnoreCase(SENDER_ADDR);
+        }
+
+        return false;
     }
 
     /**
@@ -66,6 +81,10 @@ public class Messenger implements Observer {
 
     public void send(RouteX routeX){
         SerialPortOutput.getInstance().send(routeX);
+    }
+
+    public void removeWorker(MessageWorker messageWorker){
+        workerList.removeIf(w -> w.getId().equalsIgnoreCase(messageWorker.getId()));
     }
 
     public boolean isJobFinished(MessageWorker worker){
