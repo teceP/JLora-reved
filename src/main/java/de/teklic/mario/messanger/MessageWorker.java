@@ -53,6 +53,7 @@ public class MessageWorker implements Runnable{
 
     public void onSuccessfulPostExecutions(){
         if(messageJob.getRouteX() instanceof RouteX.RouteRequest){
+            ((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().setNextNode(RoutingTable.getInstance().getNextForDestination(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().getEndNode()));
             Messenger.getInstance().sendWithWorker(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage(), 3);
         }
     }

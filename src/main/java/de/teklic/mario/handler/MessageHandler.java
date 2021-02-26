@@ -58,14 +58,16 @@ public class MessageHandler extends Handler implements Communicable {
     }
 
     public void fromMe(RouteX message){
+        RouteX.Message msg = (RouteX.Message) message;
         JLora.logger.info("FROM ME (MESSAGEHANDLER)");
-        JLora.logger.info("HasRoute: " + RoutingTable.getInstance().hasRoute(message.getEndNode()));
-        JLora.logger.info("endNOde: " + message.getEndNode());
+        JLora.logger.info("HasRoute: " + RoutingTable.getInstance().hasRoute(msg.getEndNode()));
+        JLora.logger.info("nextNode: " + msg.getNextNode());
 
-        if(RoutingTable.getInstance().hasRoute(message.getEndNode()) || !message.getEndNode().equalsIgnoreCase(NO_NEXT)){
-            Messenger.getInstance().sendWithWorker(message, 3);
+        if(RoutingTable.getInstance().hasRoute(msg.getEndNode())){
+            msg.setNextNode(RoutingTable.getInstance().getNextForDestination(msg.getEndNode()));
+            Messenger.getInstance().sendWithWorker(msg, 3);
         }else{
-            RouteX.RouteRequest request = createRequest((RouteX.Message) message);
+            RouteX.RouteRequest request = createRequest(msg);
             Messenger.getInstance().sendWithWorker(request, 3);
         }
     }
