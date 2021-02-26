@@ -44,10 +44,17 @@ public class MessageWorker implements Runnable{
             JLora.logger.info("Message Job has been finished by retries.");
             if(Messenger.getInstance().isJobFinished(this)){
                 JLora.logger.info("Message Job has been finished by condition.");
+                onSuccessfulPostExecutions();
                 return;
             }
         }
         onFailedPostExecutions();
+    }
+
+    public void onSuccessfulPostExecutions(){
+        if(messageJob.getRouteX() instanceof RouteX.RouteRequest){
+            Messenger.getInstance().sendWithWorker(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage(), 3);
+        }
     }
 
     public void onFailedPostExecutions(){

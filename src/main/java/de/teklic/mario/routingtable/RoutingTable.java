@@ -102,18 +102,19 @@ public class RoutingTable {
         }
     }
 
-    public void removeRoute(Route r) {
-        if (hasRoute(r)) {
-            routeList.remove(r);
-        }
-    }
-
     /**
      * Removes all nodes which contains this destination
      * @param destination
      */
     public void removeRoute(String destination){
         routeList.removeIf(r -> r.getDestination().equalsIgnoreCase(destination));
+    }
+
+    public boolean hasRoute(String destination){
+        return routeList
+                .stream()
+                .filter(r -> r.getDestination().equalsIgnoreCase(destination))
+                .collect(Collectors.toList()).size() > 0;
     }
 
     public boolean hasRoute(Route route) {

@@ -1,8 +1,5 @@
 package de.teklic.mario.core;
 
-import de.teklic.mario.handler.*;
-import de.teklic.mario.handler.protocols.HandlerName;
-import de.teklic.mario.input.SerialPortListener;
 import de.teklic.mario.input.UserInput;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.other.JLoraModel;
@@ -10,28 +7,21 @@ import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.MessageEvaluator;
 import de.teklic.mario.util.UserService;
 import de.teklic.mario.util.Util;
-import purejavacomm.NoSuchPortException;
-import purejavacomm.PortInUseException;
-import purejavacomm.UnsupportedCommOperationException;
 
-import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.TooManyListenersException;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class JLora implements Observer {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
-
     private JLoraModel jLoraModel;
 
-    public JLora(){
-    }
+    public JLora(){}
 
-    public void start(){
+    public void start(String addr){
         try {
-            this.jLoraModel = Initializer.initialize(this);
+            this.jLoraModel = Initializer.initialize(this, addr);
             logger.info("Software initialized. Listening for messages now.");
             while(true){}
         } catch (Exception e) {

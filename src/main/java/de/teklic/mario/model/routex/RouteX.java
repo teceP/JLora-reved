@@ -106,6 +106,7 @@ public abstract class RouteX {
     public static class RouteRequest extends RouteX {
         private int hops;
         private long date;
+        private RouteX.Message storedMessage;
 
         @Override
         public String asSendable(){

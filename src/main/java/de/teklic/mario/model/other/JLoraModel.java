@@ -17,7 +17,7 @@ import java.util.List;
 public class JLoraModel {
     private Thread userInputThread;
     private SerialPort serialPort;
-    public static String SENDER_ADDR = "0140";
+    public static String SENDER_ADDR = "0139";
 
     private List<RouteX.RouteRequest> requestQueue;
     private HashMap<String, RouteX.Message> forwardedMessageQueue;

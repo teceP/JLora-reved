@@ -26,8 +26,11 @@ public class Initializer {
 
     public static final Logger logger = Logger.getLogger(Initializer.class.getName());
 
-    public static JLoraModel initialize(JLora jLora) throws NoSuchPortException, PortInUseException, IOException, UnsupportedCommOperationException, TooManyListenersException {
+    public static JLoraModel initialize(JLora jLora, String addr) throws NoSuchPortException, PortInUseException, IOException, UnsupportedCommOperationException, TooManyListenersException {
         JLoraModel jLoraModel = new JLoraModel();
+        logger.info("Nodes Address: " + SENDER_ADDR);
+
+        Address.getInstance().setAddr(addr);
 
         //Handlers
         setHandlers(jLoraModel);
