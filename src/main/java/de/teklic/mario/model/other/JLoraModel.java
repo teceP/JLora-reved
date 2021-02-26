@@ -55,13 +55,6 @@ public class JLoraModel {
                     }
                 }
                 break;
-            case HandlerName.MESSAGE_TRANSMITTER_HANDLER:
-                for(Handler h : handlers){
-                    if(h.getClass() == UsersMessageHandler.class){
-                        return h;
-                    }
-                }
-                break;
             case HandlerName.REPLY_HANDLER:
                 for(Handler h : handlers){
                     if(h.getClass() == ReplyHandler.class){

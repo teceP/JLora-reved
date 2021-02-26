@@ -38,6 +38,7 @@ public class UserInput extends Observable implements Runnable {
                 UserService.getInstance().handle(next);
             }else{
                 RouteX.Message message = createMessage();
+                JLora.logger.info("New User Message created: " + message);
                 setChanged();
                 notifyObservers(message);
             }
@@ -60,7 +61,7 @@ public class UserInput extends Observable implements Runnable {
         message.setFlag(RouteFlag.MESSAGE);
         message.setSource(SENDER_ADDR);
         message.setTimeToLive(9);
-        message.setDestination(dest);
+        message.setEndNode(dest);
         message.setNextNode(RoutingTable.getInstance().getNextForDestination(dest));
         message.setPayload(msg);
 

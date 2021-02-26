@@ -24,4 +24,6 @@ public interface Communicable {
      * @param message
      */
     void forward(RouteX message);
+
+    void forMe(RouteX message);
 }

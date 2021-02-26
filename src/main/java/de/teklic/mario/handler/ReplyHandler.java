@@ -4,10 +4,13 @@ package de.teklic.mario.handler;
  * @author Mario Teklic
  */
 
+import de.teklic.mario.core.JLora;
 import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.handler.protocols.Handler;
 import de.teklic.mario.handler.protocols.HandlerName;
+import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteX;
+import de.teklic.mario.util.Util;
 
 public class ReplyHandler extends Handler implements Communicable {
 
@@ -17,7 +20,9 @@ public class ReplyHandler extends Handler implements Communicable {
 
     @Override
     public void handle(RouteX routeX) {
-
+        if (Util.isRouteXForMe(routeX)) {
+            forMe(routeX);
+        }
     }
 
     @Override
@@ -28,5 +33,11 @@ public class ReplyHandler extends Handler implements Communicable {
     @Override
     public void forward(RouteX message) {
 
+    }
+
+    @Override
+    public void forMe(RouteX message) {
+        JLora.logger.info("RouteX Reply is for me. Send to Messenger.");
+        Messenger.getInstance().jobFinished(message);
     }
 }

@@ -42,10 +42,8 @@ public class Messenger implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         RouteX routeX = (RouteX) arg;
-        if(routeX != null && Util.isRouteXForMe(routeX)){
-            JLora.logger.info("RouteX is for me. Will check for running MessageWorker...");
-            jobFinished(routeX);
-        }
+        JLora.logger.info("RouteX is for me. Will check for running MessageWorker...");
+        jobFinished(routeX);
     }
 
     /**

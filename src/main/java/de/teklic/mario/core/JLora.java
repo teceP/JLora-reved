@@ -8,6 +8,7 @@ import de.teklic.mario.model.other.JLoraModel;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.MessageEvaluator;
 import de.teklic.mario.util.UserService;
+import de.teklic.mario.util.Util;
 import purejavacomm.NoSuchPortException;
 import purejavacomm.PortInUseException;
 import purejavacomm.UnsupportedCommOperationException;
@@ -66,17 +67,17 @@ public class JLora extends Observable implements Observer {
 
         //Wenn es relevanz hat, muss es trotzdem noch an den handler geshickt werden
 
-        if(hasMessengerRelevance(routeX)){
+       /* if(hasMessengerRelevance(routeX) && Util.isRouteXForMe(routeX)){
             setChanged();
             notifyObservers(routeX);
-        }
-        
+        }else{*/
         jLoraModel.getHandlers()
                 .stream()
                 .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
                 .collect(Collectors.toList())
                 .get(0)
                 .handle(routeX);
+       // }
     }
 
     /**
