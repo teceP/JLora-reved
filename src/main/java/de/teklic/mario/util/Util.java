@@ -7,6 +7,8 @@ package de.teklic.mario.util;
 import de.teklic.mario.model.routex.RouteX;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import static de.teklic.mario.model.other.JLoraModel.SENDER_ADDR;
+
 public class Util {
 
     /**
@@ -25,5 +27,9 @@ public class Util {
         System.out.println("Calculated hash: " + hash);
         System.out.println("Shortend hash: " + hash.substring(0, 5));
         return DigestUtils.md5Hex(sender + payload);
+    }
+
+    public static boolean isRouteXForMe(RouteX routeX){
+        return routeX.getEndNode().equalsIgnoreCase(SENDER_ADDR);
     }
 }

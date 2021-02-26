@@ -13,18 +13,20 @@ public abstract class RouteX {
     private int timeToLive;
     private TokenizedHeader tokenizedHeader;
     private de.teklic.mario.model.routex.RouteFlag flag;
+    private String endNode;
 
     /**
      * Determines if this RouteX objects is based on an incoming request/reply/error/unreachable
      */
     private boolean incoming;
 
-    public RouteX(de.teklic.mario.model.routex.RouteFlag flag, String source, int timeToLive, TokenizedHeader tokenizedHeader, boolean incoming) {
+    public RouteX(de.teklic.mario.model.routex.RouteFlag flag, String source, int timeToLive, TokenizedHeader tokenizedHeader, boolean incoming, String endNode) {
         this.flag = flag;
         this.source = source;
         this.timeToLive = timeToLive;
         this.tokenizedHeader = tokenizedHeader;
         this.incoming = incoming;
+        this.endNode = endNode;
     }
 
     public abstract String asSendable();
@@ -42,7 +44,6 @@ public abstract class RouteX {
     @Setter
     @NoArgsConstructor
     public static class Message extends RouteX {
-        private String destination;
         private String nextNode;
         private String payload;
         private int tries;
@@ -51,7 +52,7 @@ public abstract class RouteX {
 
         @Override
         public String asSendable(){
-            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getDestination() + "|" + getNextNode() + "|" + getPayload() + "|";
+            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|" + getNextNode() + "|" + getPayload() + "|";
         }
 
         @Override
@@ -63,7 +64,7 @@ public abstract class RouteX {
         public String toString() {
             return "Source: " + this.getSource() +
                     "\nTimeToLive: " + getTimeToLive() +
-                    "\nDestination: " + destination +
+                    "\nDestination: " + getEndNode() +
                     "\nNextNode: " + nextNode +
                     "\nPayload: " + payload +
                     "\nHash: " + hash +
@@ -76,12 +77,11 @@ public abstract class RouteX {
     @Setter
     @NoArgsConstructor
     public static class Acknowledge extends RouteX {
-        private String destination;
         private String payload;
 
         @Override
         public String asSendable(){
-            return "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getDestination() + "|" + getPayload() + "|";
+            return "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|" + getPayload() + "|";
         }
 
         @Override
@@ -93,7 +93,7 @@ public abstract class RouteX {
         public String toString() {
             return  "\nTimeToLive: " + getTimeToLive() +
                     "\nPayload: " + payload +
-                    "\nDestination: " + destination +
+                    "\nDestination: " + getEndNode() +
                     "\nTokenizedHeader: " + getTokenizedHeader() +
                     "\nFlag: " + this.getFlag().name();
         }
@@ -103,7 +103,6 @@ public abstract class RouteX {
     @Setter
     @NoArgsConstructor
     public static class RouteRequest extends RouteX {
-        private String endNode;
         private int hops;
         private long date;
 
@@ -121,7 +120,7 @@ public abstract class RouteX {
         public String toString() {
             return "Source: " + this.getSource() +
                     "\nTimeToLive: " + getTimeToLive() +
-                    "\nEndNode: " + endNode +
+                    "\nEndNode: " + getEndNode() +
                     "\nHops: " + hops +
                     "\nTokenizedHeader: " + getTokenizedHeader() +
                     "\nFlag: " + this.getFlag().name();
@@ -132,7 +131,7 @@ public abstract class RouteX {
     @Setter
     @NoArgsConstructor
     public static class RouteReply extends RouteX {
-        private String endNode, nextNode;
+        private String nextNode;
         private int hops;
 
         @Override
@@ -149,7 +148,7 @@ public abstract class RouteX {
         public String toString() {
             return "Source: " + this.getSource() +
                     "\nTimeToLive: " + getTimeToLive() +
-                    "\nEndNode: " + endNode +
+                    "\nEndNode: " + getEndNode() +
                     "\nNextNode: " + nextNode +
                     "\nHops: " + hops +
                     "\nTokenizedHeader: " + getTokenizedHeader().toString() +
@@ -161,11 +160,10 @@ public abstract class RouteX {
     @Setter
     @NoArgsConstructor
     public static class RouteError extends RouteX {
-        private String brokenNode;
 
         @Override
         public String asSendable(){
-            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getBrokenNode() + "|";
+            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|";
         }
 
         @Override
@@ -177,7 +175,7 @@ public abstract class RouteX {
         public String toString() {
             return "Source: " + this.getSource() +
                     "\nTimeToLive: " + getTimeToLive() +
-                    "\nBrokenNode: " + brokenNode +
+                    "\nBrokenNode: " + getEndNode() +
                     "\nTokenizedHeader: " + getTokenizedHeader().toString() +
                     "\nFlag: " + this.getFlag().name();
         }
@@ -187,11 +185,10 @@ public abstract class RouteX {
     @Setter
     @NoArgsConstructor
     public static class RouteUnreachable extends RouteX {
-        private String unreachableNode;
 
         @Override
         public String asSendable(){
-            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getUnreachableNode() + "|";
+            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|";
         }
 
         @Override
@@ -203,7 +200,7 @@ public abstract class RouteX {
         public String toString() {
             return "Source: " + this.getSource() +
                     "\nTimeToLive: " + getTimeToLive() +
-                    "\nUnreachableNode: " + unreachableNode +
+                    "\nUnreachableNode: " + getEndNode() +
                     "\nTokenizedHeader: " + getTokenizedHeader().toString() +
                     "\nFlag: " + this.getFlag().name();
         }
