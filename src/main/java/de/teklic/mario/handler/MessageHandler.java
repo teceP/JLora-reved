@@ -55,7 +55,7 @@ public class MessageHandler extends Handler implements Communicable {
         acknowledge.setTimeToLive(9);
         acknowledge.setEndNode(m.getSource());
         acknowledge.setPayload(Util.calcMd5(m));
-        Messenger.getInstance().sendWithWorker(m, DEFAULT_RETRIES);
+        Messenger.getInstance().sendWithWorker(acknowledge, DEFAULT_RETRIES);
     }
 
     public void fromMe(RouteX message){
