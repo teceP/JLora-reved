@@ -1,4 +1,4 @@
-package de.teklic.mario.input;
+package de.teklic.mario.io.input;
 
 import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;

@@ -8,9 +8,8 @@ import de.teklic.mario.core.Address;
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
-import de.teklic.mario.output.SerialPortOutput;
+import de.teklic.mario.io.output.SerialPortOutput;
 import de.teklic.mario.routingtable.RoutingTable;
-import de.teklic.mario.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,7 +38,7 @@ public class MessageWorker implements Runnable{
             JLora.logger.info("TRY " + i + ":");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             try {
-                Thread.sleep(DEFAULT_TIMEOUT);
+                Thread.sleep(DEFAULT_TIMEOUT/2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

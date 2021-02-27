@@ -1,6 +1,6 @@
 package de.teklic.mario.core;
 
-import de.teklic.mario.input.UserInput;
+import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.other.JLoraModel;
 import de.teklic.mario.model.routex.RouteX;

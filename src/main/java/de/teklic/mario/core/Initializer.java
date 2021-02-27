@@ -5,11 +5,11 @@ package de.teklic.mario.core;
  */
 
 import de.teklic.mario.handler.*;
-import de.teklic.mario.input.SerialPortListener;
-import de.teklic.mario.input.UserInput;
+import de.teklic.mario.io.input.SerialPortListener;
+import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.model.other.JLoraModel;
-import de.teklic.mario.output.SerialPortOutput;
-import de.teklic.mario.output.UserOutput;
+import de.teklic.mario.io.output.SerialPortOutput;
+import de.teklic.mario.io.output.UserOutput;
 import de.teklic.mario.routingtable.RoutingTable;
 import purejavacomm.*;
 

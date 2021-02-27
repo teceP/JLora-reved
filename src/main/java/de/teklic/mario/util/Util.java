@@ -25,8 +25,6 @@ public class Util {
     private static RoutingTable.Route determineRoute(RouteX routeX){
         RoutingTable.Route route = null;
 
-        logger.info("NEW ROUTE !!!: SourceNode: " + routeX.getSource() + ", NextNode: " + routeX.getTokenizedHeader().getOrigin());
-        logger.info("MADE OUT OF: " + routeX);
         if(routeX instanceof RouteX.RouteReply){
             route = new RoutingTable.Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteReply) routeX).getHops());
         }else if(routeX instanceof RouteX.RouteRequest){
@@ -41,11 +39,11 @@ public class Util {
     private static boolean addRoute(RoutingTable.Route route) {
         if (route != null && !RoutingTable.getInstance().hasRoute(route)) {
             RoutingTable.getInstance().add(route);
-            System.out.println("New Route (neighbour) was added on index " + (RoutingTable.getInstance().getRouteList().size() - 1) + ": " + route);
+            logger.info("New Route (neighbour) was added on index " + (RoutingTable.getInstance().getRouteList().size() - 1) + ": " + route);
             return true;
         }
 
-        System.out.println("No new route was added!");
+        logger.info("No new route was added!");
         return false;
     }
 
@@ -62,7 +60,7 @@ public class Util {
 
     public static String calcMd5(String sender, String payload){
         String hash = DigestUtils.md5Hex(sender + payload);
-        System.out.println("Calculated hash: " + hash);
+        logger.info("Calculated hash: " + hash);
         return DigestUtils.md5Hex(sender + payload);
     }
 

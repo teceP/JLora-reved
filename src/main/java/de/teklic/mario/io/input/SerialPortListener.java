@@ -1,4 +1,4 @@
-package de.teklic.mario.input;
+package de.teklic.mario.io.input;
 
 import de.teklic.mario.core.JLora;
 import de.teklic.mario.core.Constant;
@@ -44,7 +44,7 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
 
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
-        if (inputScanner.hasNext()) {
+        while (inputScanner.hasNext()) {
             String msg = inputScanner.nextLine();
             if (!irrelevantMessage(msg)) {
                 setChanged();

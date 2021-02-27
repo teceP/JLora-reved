@@ -1,4 +1,4 @@
-package de.teklic.mario.output;
+package de.teklic.mario.io.output;
 /*
  *
  * @author Mario Teklic
