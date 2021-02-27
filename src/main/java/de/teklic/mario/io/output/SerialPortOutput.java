@@ -13,45 +13,45 @@ public class SerialPortOutput {
     private static SerialPortOutput serialPortOutput;
     private static PrintWriter printWriter;
 
-    private SerialPortOutput(){}
+    private SerialPortOutput() {
+    }
 
-    public static SerialPortOutput getInstance(){
-        if(serialPortOutput == null){
+    public static SerialPortOutput getInstance() {
+        if (serialPortOutput == null) {
             serialPortOutput = new SerialPortOutput();
         }
 
-        if(printWriter == null){
+        if (printWriter == null) {
             JLora.logger.info("PrintWriter (SerialPortOutput) is null! Invoce setPrintWriter first.");
         }
 
         return serialPortOutput;
     }
 
-    public void setPrintWriter(PrintWriter printWriter){
+    public void setPrintWriter(PrintWriter printWriter) {
         this.printWriter = printWriter;
         this.printWriter.flush();
     }
 
-    public void send(RouteX routeX){
+    public void send(RouteX routeX) {
         send(routeX.asSendable());
     }
 
-    public void send(String message){
+    public void send(String message) {
         JLora.logger.info("SerialOutput will send: " + message);
-        try {
-            int b = message.length();
-            printWriter.println("AT+SEND=" + b + "\r\n");
-            printWriter.flush();
-            printWriter.println(message + "\r\n");
-            printWriter.flush();
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        int b = message.length();
+        JLora.logger.info("########## AT+SEND=" + b + " ##########");
+        JLora.logger.info("########## " + message + " ##########");
+        printWriter.println("AT+SEND=" + b + "\r\n");
+        printWriter.flush();
+        printWriter.println(message + "\r\n");
+        printWriter.flush();
+        //Thread.sleep(2000);
+
         JLora.logger.info(printWriter.checkError() ? "Has Error in PrintWriter!" : "");
     }
 
-    public void sendConfig(String config){
+    public void sendConfig(String config) {
         JLora.logger.info("SerialOutput sending config: " + config);
         try {
             printWriter.println(config + "\r\n");

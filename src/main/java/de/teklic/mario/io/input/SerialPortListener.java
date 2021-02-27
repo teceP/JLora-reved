@@ -43,7 +43,6 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
             if (inputScanner.hasNext()) {
                 String msg = inputScanner.nextLine();
                 if (!irrelevantMessage(msg)) {
-                    JLora.logger.info("------------->>> IRRELEVANT: " + msg);
                     setChanged();
                     notifyObservers(msg);
                 }
