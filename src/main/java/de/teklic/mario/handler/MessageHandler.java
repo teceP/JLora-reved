@@ -25,7 +25,6 @@ import static de.teklic.mario.routingtable.RoutingTable.NO_NEXT;
 public class MessageHandler extends Handler implements Communicable {
 
     public static final Logger logger = Logger.getLogger(MessageHandler.class.getName());
-    public static final Logger msgLogger = Logger.getLogger(MessageHandler.class.getName());
 
     public MessageHandler(){
         this.setHandlerName(HandlerName.MESSAGE_HANDLER);
@@ -54,7 +53,7 @@ public class MessageHandler extends Handler implements Communicable {
     public void forMe(RouteX message) {
         RoutingTable.getInstance().add(message);
         RouteX.Message m = (RouteX.Message) message;
-        msgLogger.info("New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource());
+        logger.info("New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource());
         logger.info("Sending out acknowledge.");
 
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();

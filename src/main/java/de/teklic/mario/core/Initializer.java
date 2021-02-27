@@ -140,11 +140,10 @@ public class Initializer {
 
         //Handlers
         configureLogger(AcknowledgeHandler.logger, GREEN);
-        configureLogger(ErrorHandler.logger, GREEN);
-        configureLogger(MessageHandler.logger, GREEN);
-        configureLogger(MessageHandler.msgLogger, GREEN_BRIGHT);
-        configureLogger(ReplyHandler.logger, GREEN);
-        configureLogger(RequestHandler.logger, GREEN);
+        configureLogger(MessageHandler.logger, GREEN_BRIGHT);
+        configureLogger(ReplyHandler.logger, YELLOW_BRIGHT);
+        configureLogger(RequestHandler.logger, YELLOW);
+        configureLogger(ErrorHandler.logger, BLUE);
 
         //Input
         configureLogger(SerialPortInput.logger, CYAN_BRIGHT);

@@ -51,15 +51,19 @@ public class UserService {
                 UserInput.getInstance().exit();
                 SerialPortOutput.getInstance().exit();
                 UserOutput.getInstance().exit();
-                logger.info("Closed all streams. Goodbye.");
+                System.out.println("Closed all streams. Goodbye.");
+                System.exit(0);
                 break;
             case "colors":
                 logger.info("White Bright: JLora");
                 logger.info("White: Utils, Routing Table");
-                logger.info("Green: Handlers");
+                logger.info("Green: Acknowledge Handler");
+                logger.info("Green Bright: Message Handler");
+                logger.info("Yellow: Reply, Initializer");
+                logger.info("Yellow Bright: Request");
+                logger.info("Blue: Error Handler");
                 logger.info("Cyan Bright: Input");
                 logger.info("Cyan: Output");
-                logger.info("Yellow: Initializer");
                 logger.info("Purple: Messenger");
                 break;
             default:
