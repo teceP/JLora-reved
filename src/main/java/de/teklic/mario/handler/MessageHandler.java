@@ -28,7 +28,7 @@ public class MessageHandler extends Handler implements Communicable {
 
     @Override
     public void handle(RouteX routeX) {
-        RoutingTable.getInstance().add(routeX);
+        //TODO decrement ttl?
         if(Util.isRouteXForMe(routeX)){
             forMe(routeX);
         }else if(Util.isRouteXForward(routeX)){
@@ -40,12 +40,14 @@ public class MessageHandler extends Handler implements Communicable {
 
     @Override
     public void forward(RouteX message) {
+        RoutingTable.getInstance().add(message);
         Util.prepareToForward(message);
         Messenger.getInstance().send(message);
     }
 
     @Override
     public void forMe(RouteX message) {
+        RoutingTable.getInstance().add(message);
         RouteX.Message m = (RouteX.Message) message;
         JLora.logger.info("New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource());
         JLora.logger.info("Sending out acknowledge.");
