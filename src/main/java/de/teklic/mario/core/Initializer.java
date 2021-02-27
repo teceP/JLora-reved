@@ -136,7 +136,7 @@ public class Initializer {
         configureLogger(Initializer.logger, YELLOW);
 
         //JLora
-        configureLogger(JLora.logger, CYAN_BOLD_BRIGHT);
+        configureLogger(JLora.logger, WHITE);
 
         //Handlers
         configureLogger(AcknowledgeHandler.logger, GREEN);

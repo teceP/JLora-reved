@@ -51,7 +51,7 @@ public class RoutingTable {
     }
 
     public String getNextForDestination(String destAddr){
-        System.out.println("Routes from routing table (size " + routeList.size() + "):");
+        logger.info("Routes from routing table (size " + routeList.size() + "):");
 
         Optional<Route> routeOptional = routeList.stream()
                 .filter(r -> r.getDestination().equals(destAddr)).collect(Collectors.toList())
@@ -60,10 +60,10 @@ public class RoutingTable {
         Route route;
         if(routeOptional.isPresent()){
             route = routeOptional.get();
-            System.out.println("Next route for destination with address '" + destAddr + "': " + route);
+            logger.info("Next route for destination with address '" + destAddr + "': " + route);
             return route.getNeighbour();
         }else{
-            System.out.println("No next route found in routingtable.");
+            logger.info("No next route found in routingtable.");
             return NO_NEXT;
         }
     }
@@ -88,7 +88,7 @@ public class RoutingTable {
         try (Writer writer = new FileWriter(FILE)) {
             new Gson().toJson(routeList, writer);
         } catch (IOException e) {
-            System.out.println("Failed to Store Routelist.");
+            logger.info("Failed to Store Routelist.");
             e.printStackTrace();
         }
     }
@@ -108,13 +108,13 @@ public class RoutingTable {
                         this.routeList.add(r);
                     }
                 });
-                System.out.println("Restored " + routeList.size() + " routes.");
+                logger.info("Restored " + routeList.size() + " routes.");
             }
         } catch (FileNotFoundException fnf) {
-            System.out.println("Restore file does not exist yet. Returning empty list.");
+            logger.info("Restore file does not exist yet. Returning empty list.");
             this.routeList = Collections.synchronizedList(new ArrayList<>());
         } catch (Exception e){
-            System.out.println("Some error occured while restoring. List will be empty but can be used.");
+            logger.info("Some error occured while restoring. List will be empty but can be used.");
             this.routeList = Collections.synchronizedList(new ArrayList<>());
             e.printStackTrace();
         }

@@ -102,11 +102,8 @@ public class CustomFormatter extends Formatter {
         builder.append("]");
 
         builder.append(" [");
-        builder.append(record.getSourceClassName());
-        builder.append("]");
-
-        builder.append(" [");
-        builder.append(record.getLevel().getName());
+        String className[] = record.getSourceClassName().split("\\.");
+        builder.append(className[className.length-1]);
         builder.append("]");
 
         builder.append(color);
@@ -132,7 +129,7 @@ public class CustomFormatter extends Formatter {
     }
 
     private String calcDate(long millisecs) {
-        SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss");
         Date resultdate = new Date(millisecs);
         return date_format.format(resultdate);
     }

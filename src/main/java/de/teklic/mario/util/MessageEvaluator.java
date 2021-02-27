@@ -126,7 +126,7 @@ public class MessageEvaluator {
 
         try{
             if(!message.contains("LR,")){
-                System.out.println("Does not contains LR.");
+                logger.info("Does not contains LR.");
                 return handleNotLR(message);
             }
 
@@ -147,9 +147,9 @@ public class MessageEvaluator {
             Arrays.asList(tail).stream().forEach(x -> logger.log(Level.FINE, "Tail: " + x));
 
             if(tail.length < 2){
-                System.out.println("Tail not long enough. Needs to contain more than 2 informations." + tail.length);
-                System.out.println("Length: " + tail.length);
-                System.out.println("Tail: " + (head[head.length-1]));
+                logger.info("Tail not long enough. Needs to contain more than 2 informations." + tail.length);
+                logger.info("Length: " + tail.length);
+                logger.info("Tail: " + (head[head.length-1]));
                 return handleNotLR(message);
             }
             switch (getRouteKind(Integer.parseInt(tail[1]))) {
@@ -172,7 +172,7 @@ public class MessageEvaluator {
                     route = createAcknowledge(tail);
                     break;
                 default:
-                    System.out.println("Route flag is not known. Flag was: " + getRouteKind(Integer.parseInt(tail[1])));
+                    logger.info("Route flag is not known. Flag was: " + getRouteKind(Integer.parseInt(tail[1])));
                     return handleNotLR(message);
             }
             route.setTokenizedHeader(tokenizedHeader);

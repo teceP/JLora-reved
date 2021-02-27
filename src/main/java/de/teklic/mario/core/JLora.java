@@ -33,9 +33,9 @@ public class JLora implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if(arg instanceof String && arg != null && !((String) arg).isEmpty() || arg instanceof RouteX.Message && arg != null){
-            System.out.println("******************NEW PROCESS*************************");
+            logger.info("******************NEW PROCESS*************************");
             logger.info("Object class: " + arg.getClass() +  ", from " + (o instanceof UserInput ? "UserInput" : "SerialInput"));
-            System.out.println("[Received Text]: " + arg);
+            logger.info("[Received Text]: " + arg);
 
             if(o instanceof UserInput && arg instanceof String){
                 UserService.getInstance().handle((String) arg);

@@ -32,16 +32,16 @@ public class UserService {
     public void handle(String call){
         switch(call){
             case "table":
-                System.out.println("Routing Table:");
+                logger.info("Routing Table:");
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String str = gson.toJson(JsonParser.parseString(new Gson().toJson(RoutingTable.getInstance().getRouteList())));
-                System.out.println(str);
+                logger.info(str);
                 break;
             case "help":
-                System.out.println("table, msg, help, drop, addr, exit");
+                logger.info("table, msg, help, drop, addr, exit");
                 break;
             case "addr":
-                System.out.println("Nodes Address: " + Address.getInstance().getAddr());
+                logger.info("Nodes Address: " + Address.getInstance().getAddr());
                 break;
             case "drop":
                 RoutingTable.getInstance().drop();

@@ -52,11 +52,11 @@ public class UserInput extends Observable implements Runnable {
         String msg = "";
 
         while(!isInteger(dest)){
-            System.out.print("Destination Address: ");
+            logger.info("Destination Address: ");
             dest = scanner.nextLine();
         }
 
-        System.out.print("Insert message: ");
+        logger.info("Insert message: ");
         msg = scanner.nextLine();
 
         RouteX.Message message = new RouteX.Message();
@@ -67,7 +67,7 @@ public class UserInput extends Observable implements Runnable {
         message.setNextNode(RoutingTable.getInstance().getNextForDestination(dest));
         message.setPayload(msg);
 
-        System.out.println("Message was created: " + message.toString());
+        logger.info("Message was created: " + message.toString());
 
         return message;
     }
