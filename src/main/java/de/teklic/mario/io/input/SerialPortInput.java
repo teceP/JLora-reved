@@ -1,6 +1,5 @@
 package de.teklic.mario.io.input;
 
-import de.teklic.mario.core.JLora;
 import de.teklic.mario.core.Constant;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,28 +9,32 @@ import purejavacomm.SerialPortEventListener;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
-public class SerialPortListener extends Observable implements SerialPortEventListener, Runnable {
-    private static SerialPortListener eventListener;
+public class SerialPortInput extends Observable implements SerialPortEventListener, Runnable {
+
+    public static final Logger logger = Logger.getLogger(SerialPortInput.class.getName());
+
+    private static SerialPortInput eventListener;
 
     @Getter
     @Setter
     private Scanner inputScanner;
 
-    private SerialPortListener(){}
+    private SerialPortInput(){}
 
     /**
      *
      * @return
      */
-    public static synchronized SerialPortListener getInstance(){
+    public static synchronized SerialPortInput getInstance(){
         if(eventListener == null){
-            JLora.logger.info("New Event listener gets initialized.");
-            eventListener = new SerialPortListener();
+            logger.info("New Event listener gets initialized.");
+            eventListener = new SerialPortInput();
         }
 
         if(eventListener.getInputScanner() == null){
-            JLora.logger.warning("Input scanner was not set yet!");
+            logger.warning("Input scanner was not set yet!");
         }
 
         return eventListener;
@@ -65,5 +68,9 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
             return true;
         }
         return false;
+    }
+
+    public void exit(){
+        inputScanner.close();
     }
 }

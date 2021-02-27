@@ -18,7 +18,7 @@ import static de.teklic.mario.core.Constant.INITIAL_TTL;
 
 public class RoutingTable {
 
-    private final static Logger logger = Logger.getLogger(RoutingTable.class.getName());
+    public final static Logger logger = Logger.getLogger(RoutingTable.class.getName());
 
     private static RoutingTable routingTable;
     private List<Route> routeList;
@@ -32,8 +32,10 @@ public class RoutingTable {
     }
 
     public void add(Route r) {
-        this.routeList.add(r);
-        this.store();
+        if(!hasRoute(r)){
+            this.routeList.add(r);
+            this.store();
+        }
     }
 
     public void add(RouteX routeX){

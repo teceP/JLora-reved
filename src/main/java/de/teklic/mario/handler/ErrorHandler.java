@@ -12,7 +12,11 @@ import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.Util;
 
+import java.util.logging.Logger;
+
 public class ErrorHandler extends Handler implements Communicable {
+
+    public static final Logger logger = Logger.getLogger(ErrorHandler.class.getName());
 
     public ErrorHandler(){
         this.setHandlerName(HandlerName.ERROR_HANDLER);
@@ -35,7 +39,7 @@ public class ErrorHandler extends Handler implements Communicable {
 
     @Override
     public void forMe(RouteX message) {
-        JLora.logger.info("Error is for me. Cleaning routing table?.");
+        logger.info("Error is for me. Cleaning routing table?.");
         //TODO
     }
 }

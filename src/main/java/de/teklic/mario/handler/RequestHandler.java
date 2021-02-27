@@ -16,10 +16,14 @@ import de.teklic.mario.model.routex.TokenizedHeader;
 import de.teklic.mario.routingtable.RoutingTable;
 import de.teklic.mario.util.Util;
 
+import java.util.logging.Logger;
+
 import static de.teklic.mario.core.Constant.BROADCAST;
 import static de.teklic.mario.core.Constant.DEFAULT_RETRIES;
 
 public class RequestHandler extends Handler implements Communicable {
+
+    public static final Logger logger = Logger.getLogger(RequestHandler.class.getName());
 
     public RequestHandler(){
         this.setHandlerName(HandlerName.REQUEST_HANDLER);
@@ -48,7 +52,7 @@ public class RequestHandler extends Handler implements Communicable {
      */
     @Override
     public void forMe(RouteX message) {
-        JLora.logger.info("Request is for me. Sending out reply.");
+        logger.info("Request is for me. Sending out reply.");
         if(message.getTimeToLive() >= 0){
             RouteX.RouteReply outgoingReply = new RouteX.RouteReply();
             outgoingReply.setIncoming(false);
@@ -59,11 +63,11 @@ public class RequestHandler extends Handler implements Communicable {
             outgoingReply.setEndNode(message.getSource());
             outgoingReply.setNextNode(message.getTokenizedHeader().getOrigin());
             outgoingReply.setTokenizedHeader(new TokenizedHeader(true));
-            JLora.logger.info("Outgoing reply after an incoming request which was for me: " + outgoingReply);
-            JLora.logger.info("Outgoing reply as sendable: " + outgoingReply.asSendable());
+            logger.info("Outgoing reply after an incoming request which was for me: " + outgoingReply);
+            logger.info("Outgoing reply as sendable: " + outgoingReply.asSendable());
             Messenger.getInstance().send(outgoingReply);
         }else{
-            JLora.logger.info("Request was dropped because time to life is on " + message.getTimeToLive() + ". Minimum is 0.");
+            logger.info("Request was dropped because time to life is on " + message.getTimeToLive() + ". Minimum is 0.");
         }
     }
 }

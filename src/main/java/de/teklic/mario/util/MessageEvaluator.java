@@ -1,14 +1,17 @@
 package de.teklic.mario.util;
 
 import de.teklic.mario.core.JLora;
+import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.model.routex.TokenizedHeader;
 
 import java.util.Arrays;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MessageEvaluator {
+    public static final Logger logger = Logger.getLogger(MessageEvaluator.class.getName());
 
     private static RouteFlag getRouteKind(int flag){
         return RouteFlag.valueOf(flag).get();
@@ -141,7 +144,7 @@ public class MessageEvaluator {
 
             //-> From|Flag|...|To
             String[] tail = head[head.length-1].split("\\|");
-            Arrays.asList(tail).stream().forEach(x -> JLora.logger.log(Level.FINE, "Tail: " + x));
+            Arrays.asList(tail).stream().forEach(x -> logger.log(Level.FINE, "Tail: " + x));
 
             if(tail.length < 2){
                 System.out.println("Tail not long enough. Needs to contain more than 2 informations." + tail.length);

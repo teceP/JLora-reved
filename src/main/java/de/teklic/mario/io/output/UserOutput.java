@@ -5,8 +5,11 @@ package de.teklic.mario.io.output;
  */
 
 import java.io.PrintStream;
+import java.util.logging.Logger;
 
 public class UserOutput {
+
+    public static final Logger logger = Logger.getLogger(UserOutput.class.getName());
     private static UserOutput userOutput;
     private PrintStream printStream;
 
@@ -28,5 +31,9 @@ public class UserOutput {
 
     public void write(String message){
         printStream.println(message);
+    }
+
+    public void exit(){
+        printStream.close();
     }
 }

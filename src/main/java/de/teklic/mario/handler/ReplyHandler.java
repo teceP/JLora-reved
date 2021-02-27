@@ -12,7 +12,11 @@ import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.Util;
 
+import java.util.logging.Logger;
+
 public class ReplyHandler extends Handler implements Communicable {
+
+    public static final Logger logger = Logger.getLogger(ReplyHandler.class.getName());
 
     public ReplyHandler(){
         this.setHandlerName(HandlerName.REPLY_HANDLER);
@@ -37,7 +41,7 @@ public class ReplyHandler extends Handler implements Communicable {
 
     @Override
     public void forMe(RouteX message) {
-        JLora.logger.info("RouteX Reply is for me. Send to Messenger.");
+        logger.info("RouteX Reply is for me. Send to Messenger.");
         Messenger.getInstance().jobFinished(message);
     }
 }

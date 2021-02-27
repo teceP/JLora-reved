@@ -5,17 +5,24 @@ package de.teklic.mario.core;
  */
 
 import de.teklic.mario.handler.*;
-import de.teklic.mario.io.input.SerialPortListener;
+import de.teklic.mario.io.input.SerialPortInput;
 import de.teklic.mario.io.input.UserInput;
+import de.teklic.mario.messanger.MessageWorker;
+import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.other.JLoraModel;
 import de.teklic.mario.io.output.SerialPortOutput;
 import de.teklic.mario.io.output.UserOutput;
 import de.teklic.mario.routingtable.RoutingTable;
+import de.teklic.mario.util.CustomFormatter;
+import de.teklic.mario.util.MessageEvaluator;
+import de.teklic.mario.util.UserService;
+import de.teklic.mario.util.Util;
 import purejavacomm.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.BROADCAST;
@@ -50,13 +57,16 @@ public class Initializer {
         initLists(jLoraModel);
 
         //Event Listener (System Input)
-        jLoraModel.getSerialPort().addEventListener(SerialPortListener.getInstance());
+        jLoraModel.getSerialPort().addEventListener(SerialPortInput.getInstance());
 
         //Module configurations
         moduleConfigurations();
 
         //Restore RoutingTable
         RoutingTable.getInstance().restore(Address.getInstance().getAddr());
+
+        //Configure loggers
+        configureLoggers();
 
         logger.info("+++++ Config finished +++++");
 
@@ -75,8 +85,8 @@ public class Initializer {
 
     private static void setIO(JLora jLora, JLoraModel jLoraModel) throws IOException {
         //Read
-        SerialPortListener.getInstance().setInputScanner(new Scanner(jLoraModel.getSerialPort().getInputStream()));
-        new Thread(SerialPortListener.getInstance()).start();
+        SerialPortInput.getInstance().setInputScanner(new Scanner(jLoraModel.getSerialPort().getInputStream()));
+        new Thread(SerialPortInput.getInstance()).start();
         UserInput.getInstance().setScanner(new Scanner(System.in));
         jLoraModel.setUserInputThread(new Thread(UserInput.getInstance()));
         jLoraModel.getUserInputThread().start();
@@ -86,7 +96,7 @@ public class Initializer {
         UserOutput.getInstance().setPrintStream(System.out);
 
         //Register for update central
-        SerialPortListener.getInstance().addObserver(jLora);
+        SerialPortInput.getInstance().addObserver(jLora);
         UserInput.getInstance().addObserver(jLora);
 
         logger.info("Finished initializing read and write.");
@@ -95,20 +105,6 @@ public class Initializer {
     private static void setPort(SerialPort serialPort) throws UnsupportedCommOperationException {
         serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
-        /*
-        serialPort.notifyOnBreakInterrupt(true);
-        serialPort.notifyOnCarrierDetect(true);
-        serialPort.notifyOnCTS(true);
-        serialPort.notifyOnDataAvailable(true);
-        */
-        /*
-        serialPort.notifyOnDSR(true);
-        serialPort.notifyOnFramingError(true);
-        serialPort.notifyOnOutputEmpty(true);
-        serialPort.notifyOnOverrunError(true);
-        serialPort.notifyOnParityError(true);
-        serialPort.notifyOnRingIndicator(true);
-         */
         serialPort.disableReceiveTimeout();
         serialPort.disableReceiveFraming();
         serialPort.disableReceiveThreshold();
@@ -134,5 +130,33 @@ public class Initializer {
         SerialPortOutput.getInstance().sendConfig("AT+SAVE");
 
         logger.info("Finished sending module configurations.");
+    }
+
+    private static void configureLoggers(){
+        Initializer.logger.setUseParentHandlers(false);
+        ConsoleHandler handler = new ConsoleHandler();
+        CustomFormatter formatter = new CustomFormatter();
+        handler.setFormatter(formatter);
+        Initializer.logger.addHandler(handler);
+
+        AcknowledgeHandler.logger.setUseParentHandlers(false);
+        ErrorHandler.logger.setUseParentHandlers(false);
+        MessageHandler.logger.setUseParentHandlers(false);
+        ReplyHandler.logger.setUseParentHandlers(false);
+        RequestHandler.logger.setUseParentHandlers(false);
+
+        SerialPortInput.logger.setUseParentHandlers(false);
+        UserInput.logger.setUseParentHandlers(false);
+
+        SerialPortOutput.logger.setUseParentHandlers(false);
+        UserOutput.logger.setUseParentHandlers(false);
+
+        Messenger.logger.setUseParentHandlers(false);
+        MessageWorker.logger.setUseParentHandlers(false);
+
+        RoutingTable.logger.setUseParentHandlers(false);
+        MessageEvaluator.logger.setUseParentHandlers(false);
+        UserService.logger.setUseParentHandlers(false);
+        Util.logger.setUseParentHandlers(false);
     }
 }

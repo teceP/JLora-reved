@@ -10,8 +10,11 @@ import lombok.Setter;
 
 import java.util.Observable;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class UserInput extends Observable implements Runnable {
+
+    public static final Logger logger = Logger.getLogger(UserInput.class.getName());
 
     private static UserInput userInput;
     @Setter
@@ -23,7 +26,7 @@ public class UserInput extends Observable implements Runnable {
 
     public static UserInput getInstance(){
         if(userInput == null){
-            JLora.logger.info("UserInput or Scanner object was null. Create new instance.");
+            logger.info("UserInput or Scanner object was null. Create new instance.");
             userInput = new UserInput();
         }
         return userInput;
@@ -37,7 +40,7 @@ public class UserInput extends Observable implements Runnable {
                 UserService.getInstance().handle(next);
             }else{
                 RouteX.Message message = createMessage();
-                JLora.logger.info("New User Message created: " + message);
+                logger.info("New User Message created: " + message);
                 setChanged();
                 notifyObservers(message);
             }
@@ -80,5 +83,9 @@ public class UserInput extends Observable implements Runnable {
 
     public boolean isServiceCall(String message){
         return !message.equalsIgnoreCase("msg");
+    }
+
+    public void exit(){
+        scanner.close();
     }
 }

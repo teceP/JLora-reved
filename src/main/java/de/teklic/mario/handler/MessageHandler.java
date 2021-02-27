@@ -16,11 +16,15 @@ import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
 import de.teklic.mario.util.Util;
 
+import java.util.logging.Logger;
+
 import static de.teklic.mario.core.Constant.DEFAULT_RETRIES;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
 import static de.teklic.mario.routingtable.RoutingTable.NO_NEXT;
 
 public class MessageHandler extends Handler implements Communicable {
+
+    public static final Logger logger = Logger.getLogger(MessageHandler.class.getName());
 
     public MessageHandler(){
         this.setHandlerName(HandlerName.MESSAGE_HANDLER);
@@ -49,8 +53,8 @@ public class MessageHandler extends Handler implements Communicable {
     public void forMe(RouteX message) {
         RoutingTable.getInstance().add(message);
         RouteX.Message m = (RouteX.Message) message;
-        JLora.logger.info("New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource());
-        JLora.logger.info("Sending out acknowledge.");
+        logger.info("New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource());
+        logger.info("Sending out acknowledge.");
 
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
         acknowledge.setSource(Address.getInstance().getAddr());
@@ -67,7 +71,7 @@ public class MessageHandler extends Handler implements Communicable {
             msg.setNextNode(RoutingTable.getInstance().getNextForDestination(msg.getEndNode()));
             Messenger.getInstance().sendWithWorker(msg, DEFAULT_RETRIES);
         }else{
-            JLora.logger.info("Will send out request before sending message.");
+            logger.info("Will send out request before sending message.");
             RouteX.RouteRequest request = createRequest(msg);
             Messenger.getInstance().sendWithWorker(request, DEFAULT_RETRIES);
         }

@@ -84,14 +84,14 @@ public class Util {
         if(routeX instanceof RouteX.RouteReply) {
             ((RouteX.RouteReply) routeX).setHops(((RouteX.RouteReply) routeX).getHops() + 1);
             if (knowsNext) {
-                JLora.logger.info("Changed next node to " + RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()) + ".");
+                logger.info("Changed next node to " + RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()) + ".");
                 ((RouteX.RouteReply) routeX).setNextNode(RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()));
             }
         }
 
         if(routeX instanceof RouteX.Message) {
             if (knowsNext) {
-                JLora.logger.info("Changed next node to " + RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()) + ".");
+                logger.info("Changed next node to " + RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()) + ".");
                 ((RouteX.Message) routeX).setNextNode(RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()));
             }
         }

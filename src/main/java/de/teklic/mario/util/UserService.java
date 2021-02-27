@@ -8,10 +8,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import de.teklic.mario.core.Address;
-import de.teklic.mario.core.JLora;
+import de.teklic.mario.io.input.SerialPortInput;
+import de.teklic.mario.io.input.UserInput;
+import de.teklic.mario.io.output.SerialPortOutput;
+import de.teklic.mario.io.output.UserOutput;
 import de.teklic.mario.routingtable.RoutingTable;
 
+import java.util.logging.Logger;
+
 public class UserService {
+    public static final Logger logger = Logger.getLogger(UserService.class.getName());
     private static UserService userService;
 
     private UserService(){}
@@ -32,7 +38,7 @@ public class UserService {
                 System.out.println(str);
                 break;
             case "help":
-                System.out.println("table, msg, help, drop, addr");
+                System.out.println("table, msg, help, drop, addr, exit");
                 break;
             case "addr":
                 System.out.println("Nodes Address: " + Address.getInstance().getAddr());
@@ -40,8 +46,15 @@ public class UserService {
             case "drop":
                 RoutingTable.getInstance().drop();
                 break;
+            case "exit":
+                SerialPortInput.getInstance().exit();
+                UserInput.getInstance().exit();
+                SerialPortOutput.getInstance().exit();
+                UserOutput.getInstance().exit();
+                logger.info("Closed all streams. Goodbye.");
+                break;
             default:
-                JLora.logger.info("Dropping user message (not assignable): " + call);
+                logger.info("Dropping user message (not assignable): " + call);
                 break;
         }
     }

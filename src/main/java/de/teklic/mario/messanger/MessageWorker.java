@@ -5,7 +5,6 @@ package de.teklic.mario.messanger;
  */
 
 import de.teklic.mario.core.Address;
-import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.io.output.SerialPortOutput;
@@ -15,6 +14,7 @@ import lombok.Setter;
 
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.DEFAULT_TIMEOUT;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
@@ -23,6 +23,7 @@ import static de.teklic.mario.core.Constant.INITIAL_TTL;
 @Setter
 public class MessageWorker implements Runnable{
 
+    public static final Logger logger = Logger.getLogger(MessageWorker.class.getName());
     private MessageJob messageJob;
     private ScheduledFuture<?> future;
     private String id;
@@ -36,13 +37,13 @@ public class MessageWorker implements Runnable{
     @Override
     public void run() {
         for(int i = 0; i < messageJob.getRetries(); i++){
-            JLora.logger.info("TRY " + i + ":");
+            logger.info("TRY " + i + ":");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             if(sleepAndCheck(3)){
                 return;
             }
         }
-        JLora.logger.info("Message Job has been finished by retries.");
+        logger.info("Message Job has been finished by retries.");
         onFailedPostExecutions();
     }
 
@@ -54,7 +55,7 @@ public class MessageWorker implements Runnable{
                 e.printStackTrace();
             }
             if(Messenger.getInstance().isJobFinished(this)){
-                JLora.logger.info("Message Job has been finished by condition.");
+                logger.info("Message Job has been finished by condition.");
                 onSuccessfulPostExecutions();
                 return true;
             }
@@ -67,13 +68,13 @@ public class MessageWorker implements Runnable{
             if(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage() != null){
                 ((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().setNextNode(RoutingTable.getInstance().getNextForDestination(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().getEndNode()));
                 Messenger.getInstance().sendWithWorker(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage(), 3);
-                JLora.logger.info("Sending message after received new route information.");
+                logger.info("Sending message after received new route information.");
             }
         }
     }
 
     public void onFailedPostExecutions(){
-        JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now. Sending Error.");
+        logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now. Sending Error.");
         Messenger.getInstance().removeWorker(this);
         RoutingTable.getInstance().removeRoute(messageJob.getRouteX().getEndNode());
         sendError();

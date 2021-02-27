@@ -4,12 +4,14 @@ package de.teklic.mario.io.output;
  * @author Mario Teklic
  */
 
-import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteX;
 
 import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 public class SerialPortOutput {
+    public static final Logger logger = Logger.getLogger(SerialPortOutput.class.getName());
+
     private static SerialPortOutput serialPortOutput;
     private static PrintWriter printWriter;
 
@@ -22,7 +24,7 @@ public class SerialPortOutput {
         }
 
         if (printWriter == null) {
-            JLora.logger.info("PrintWriter (SerialPortOutput) is null! Invoce setPrintWriter first.");
+            logger.info("PrintWriter (SerialPortOutput) is null! Invoce setPrintWriter first.");
         }
 
         return serialPortOutput;
@@ -38,21 +40,20 @@ public class SerialPortOutput {
     }
 
     public void send(String message) {
-        JLora.logger.info("SerialOutput will send: " + message);
+        logger.info("SerialOutput will send: " + message);
         int b = message.length();
-        JLora.logger.info("########## AT+SEND=" + b + " ##########");
-        JLora.logger.info("########## " + message + " ##########");
+        logger.info("########## AT+SEND=" + b + " ##########");
+        logger.info("########## " + message + " ##########");
         printWriter.println("AT+SEND=" + b + "\r\n");
         printWriter.flush();
         printWriter.println(message + "\r\n");
         printWriter.flush();
-        //Thread.sleep(2000);
 
-        JLora.logger.info(printWriter.checkError() ? "Has Error in PrintWriter!" : "");
+        logger.info(printWriter.checkError() ? "Has Error in PrintWriter!" : "");
     }
 
     public void sendConfig(String config) {
-        JLora.logger.info("SerialOutput sending config: " + config);
+        logger.info("SerialOutput sending config: " + config);
         try {
             printWriter.println(config + "\r\n");
             printWriter.flush();
@@ -60,6 +61,10 @@ public class SerialPortOutput {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        JLora.logger.info(printWriter.checkError() ? "Has Error in PrintWriter!" : "");
+        logger.info(printWriter.checkError() ? "Has Error in PrintWriter!" : "");
+    }
+
+    public void exit(){
+        printWriter.close();
     }
 }
