@@ -76,6 +76,7 @@ public class Initializer {
     private static void setIO(JLora jLora, JLoraModel jLoraModel) throws IOException {
         //Read
         SerialPortListener.getInstance().setInputScanner(new Scanner(jLoraModel.getSerialPort().getInputStream()));
+        new Thread(SerialPortListener.getInstance()).start();
         UserInput.getInstance().setScanner(new Scanner(System.in));
         jLoraModel.setUserInputThread(new Thread(UserInput.getInstance()));
         jLoraModel.getUserInputThread().start();

@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Scanner;
 
-public class SerialPortListener extends Observable implements SerialPortEventListener {
+public class SerialPortListener extends Observable implements SerialPortEventListener, Runnable {
     private static SerialPortListener eventListener;
 
     @Getter
@@ -24,7 +24,7 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
      *
      * @return
      */
-    public static SerialPortListener getInstance(){
+    public static synchronized SerialPortListener getInstance(){
         if(eventListener == null){
             JLora.logger.info("New Event listener gets initialized.");
             eventListener = new SerialPortListener();
@@ -37,6 +37,20 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
         return eventListener;
     }
 
+    @Override
+    public void run() {
+        while (true){
+            if (inputScanner.hasNext()) {
+                String msg = inputScanner.nextLine();
+                if (!irrelevantMessage(msg)) {
+                    JLora.logger.info("------------->>> IRRELEVANT: " + msg);
+                    setChanged();
+                    notifyObservers(msg);
+                }
+            }
+        }
+    }
+
     /**
      * TODO: Nachrichten kommen seit dem letzten, vorletzten commit nicht mehr immer an
      *
@@ -44,14 +58,7 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
 
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
-        if (inputScanner.hasNext()) {
-            String msg = inputScanner.nextLine();
-            if (!irrelevantMessage(msg)) {
-                JLora.logger.info("------------->>> IRRELEVANT: " + msg);
-                setChanged();
-                notifyObservers(msg);
-            }
-        }
+
     }
 
     public boolean irrelevantMessage(String msg) {
