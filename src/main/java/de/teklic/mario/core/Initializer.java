@@ -142,12 +142,13 @@ public class Initializer {
         configureLogger(AcknowledgeHandler.logger, GREEN);
         configureLogger(ErrorHandler.logger, GREEN);
         configureLogger(MessageHandler.logger, GREEN);
+        configureLogger(MessageHandler.msgLogger, GREEN_BRIGHT);
         configureLogger(ReplyHandler.logger, GREEN);
         configureLogger(RequestHandler.logger, GREEN);
 
         //Input
-        configureLogger(SerialPortInput.logger, BLUE);
-        configureLogger(UserInput.logger, BLUE);
+        configureLogger(SerialPortInput.logger, CYAN_BRIGHT);
+        configureLogger(UserInput.logger, CYAN_BRIGHT);
 
         //Output
         configureLogger(SerialPortOutput.logger, CYAN);

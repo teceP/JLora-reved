@@ -54,9 +54,10 @@ public class UserService {
                 logger.info("Closed all streams. Goodbye.");
                 break;
             case "colors":
-                logger.info("White: JLora, Utils, Routing Table");
-                logger.info("Green: ");
-                logger.info("Blue: Input");
+                logger.info("White Bright: JLora");
+                logger.info("White: Utils, Routing Table");
+                logger.info("Green: Handlers");
+                logger.info("Cyan Bright: Input");
                 logger.info("Cyan: Output");
                 logger.info("Yellow: Initializer");
                 logger.info("Purple: Messenger");
