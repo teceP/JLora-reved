@@ -95,16 +95,23 @@ public class Initializer {
     private static void setPort(SerialPort serialPort) throws UnsupportedCommOperationException {
         serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
+        /*
         serialPort.notifyOnBreakInterrupt(true);
         serialPort.notifyOnCarrierDetect(true);
         serialPort.notifyOnCTS(true);
         serialPort.notifyOnDataAvailable(true);
+        */
+        /*
         serialPort.notifyOnDSR(true);
         serialPort.notifyOnFramingError(true);
         serialPort.notifyOnOutputEmpty(true);
         serialPort.notifyOnOverrunError(true);
         serialPort.notifyOnParityError(true);
         serialPort.notifyOnRingIndicator(true);
+         */
+        serialPort.disableReceiveTimeout();
+        serialPort.disableReceiveFraming();
+        serialPort.disableReceiveThreshold();
 
         logger.info("Finished configuring serial port.");
     }
