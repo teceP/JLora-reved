@@ -36,6 +36,7 @@ public class MessageWorker implements Runnable{
     @Override
     public void run() {
         for(int i = 0; i < messageJob.getRetries(); i++){
+            JLora.logger.info("TRY " + i + ":");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             try {
                 Thread.sleep(DEFAULT_TIMEOUT);
