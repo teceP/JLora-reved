@@ -38,7 +38,7 @@ public class MessageWorker implements Runnable{
             JLora.logger.info("TRY " + i + ":");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             try {
-                Thread.sleep(DEFAULT_TIMEOUT/2);
+                Thread.sleep(DEFAULT_TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

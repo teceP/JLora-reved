@@ -3,6 +3,8 @@ package de.teklic.mario.routingtable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import de.teklic.mario.core.Address;
+import de.teklic.mario.model.routex.RouteX;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +13,8 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import static de.teklic.mario.core.Constant.INITIAL_TTL;
 
 public class RoutingTable {
 
@@ -30,6 +34,13 @@ public class RoutingTable {
     public void add(Route r) {
         this.routeList.add(r);
         this.store();
+    }
+
+    public void add(RouteX routeX){
+        if(routeX instanceof RouteX.Message){
+            Route route = new Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), (INITIAL_TTL - routeX.getTimeToLive()));
+            add(route);
+        }
     }
 
     public void drop(){

@@ -44,7 +44,7 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
 
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
-        while (inputScanner.hasNext()) {
+        if (inputScanner.hasNext()) {
             String msg = inputScanner.nextLine();
             if (!irrelevantMessage(msg)) {
                 setChanged();
