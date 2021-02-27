@@ -172,7 +172,7 @@ public class Initializer {
         CustomFormatter formatter = new CustomFormatter();
         formatter.setColor(color);
         handler.setFormatter(formatter);
-        Initializer.logger.addHandler(handler);
+        logger.addHandler(handler);
         logger.info(logger.getName() + " got set.");
     }
 }
