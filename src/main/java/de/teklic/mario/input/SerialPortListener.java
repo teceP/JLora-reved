@@ -37,6 +37,11 @@ public class SerialPortListener extends Observable implements SerialPortEventLis
         return eventListener;
     }
 
+    /**
+     * TODO: Nachrichten kommen seit dem letzten, vorletzten commit nicht mehr immer an
+     *
+     */
+
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
         if (inputScanner.hasNext()) {
