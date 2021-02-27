@@ -38,7 +38,7 @@ public class UserService {
                 logger.info(str);
                 break;
             case "help":
-                logger.info("table, msg, help, drop, addr, exit");
+                logger.info("table, msg, help, drop, addr, colors, exit");
                 break;
             case "addr":
                 logger.info("Nodes Address: " + Address.getInstance().getAddr());
@@ -52,6 +52,14 @@ public class UserService {
                 SerialPortOutput.getInstance().exit();
                 UserOutput.getInstance().exit();
                 logger.info("Closed all streams. Goodbye.");
+                break;
+            case "colors":
+                logger.info("White: JLora, Utils, Routing Table");
+                logger.info("Green: ");
+                logger.info("Blue: Input");
+                logger.info("Cyan: Output");
+                logger.info("Yellow: Initializer");
+                logger.info("Purple: Messenger");
                 break;
             default:
                 logger.info("Dropping user message (not assignable): " + call);
