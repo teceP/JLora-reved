@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.BROADCAST;
 import static de.teklic.mario.core.Constant.CONFIG;
+import static de.teklic.mario.util.CustomFormatter.*;
 
 public class Initializer {
 
@@ -34,11 +35,13 @@ public class Initializer {
 
     public static JLoraModel initialize(JLora jLora, String addr) throws NoSuchPortException, PortInUseException, IOException, UnsupportedCommOperationException, TooManyListenersException {
         JLoraModel jLoraModel = new JLoraModel();
-        logger.info("Set Nodes Address to " + addr);
 
+        //Configure loggers
+        configureLoggers();
+
+        //Nodes Address
         Address.getInstance().setAddr(addr);
-
-        logger.info("ADDR: " + Address.getInstance().getAddr());
+        logger.info("Nodes Address: " + addr);
 
         //Handlers
         setHandlers(jLoraModel);
@@ -64,9 +67,6 @@ public class Initializer {
 
         //Restore RoutingTable
         RoutingTable.getInstance().restore(Address.getInstance().getAddr());
-
-        //Configure loggers
-        configureLoggers();
 
         logger.info("+++++ Config finished +++++");
 
@@ -133,30 +133,46 @@ public class Initializer {
     }
 
     private static void configureLoggers(){
-        Initializer.logger.setUseParentHandlers(false);
+        configureLogger(Initializer.logger, YELLOW);
+
+        //JLora
+        configureLogger(JLora.logger, CYAN_BOLD_BRIGHT);
+
+        //Handlers
+        configureLogger(AcknowledgeHandler.logger, GREEN);
+        configureLogger(ErrorHandler.logger, GREEN);
+        configureLogger(MessageHandler.logger, GREEN);
+        configureLogger(ReplyHandler.logger, GREEN);
+        configureLogger(RequestHandler.logger, GREEN);
+
+        //Input
+        configureLogger(SerialPortInput.logger, BLUE);
+        configureLogger(UserInput.logger, BLUE);
+
+        //Output
+        configureLogger(SerialPortOutput.logger, CYAN);
+        configureLogger(UserOutput.logger, CYAN);
+
+        //Messenger
+        configureLogger(Messenger.logger, PURPLE);
+        configureLogger(MessageWorker.logger, PURPLE);
+
+        //Routing Table
+        configureLogger(RoutingTable.logger, WHITE);
+
+        //Utils
+        configureLogger(MessageEvaluator.logger, WHITE);
+        configureLogger(UserService.logger, WHITE);
+        configureLogger(Util.logger, WHITE);
+    }
+
+    private static void configureLogger(Logger logger, String color){
+        logger.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         CustomFormatter formatter = new CustomFormatter();
+        formatter.setColor(color);
         handler.setFormatter(formatter);
         Initializer.logger.addHandler(handler);
-
-        AcknowledgeHandler.logger.setUseParentHandlers(false);
-        ErrorHandler.logger.setUseParentHandlers(false);
-        MessageHandler.logger.setUseParentHandlers(false);
-        ReplyHandler.logger.setUseParentHandlers(false);
-        RequestHandler.logger.setUseParentHandlers(false);
-
-        SerialPortInput.logger.setUseParentHandlers(false);
-        UserInput.logger.setUseParentHandlers(false);
-
-        SerialPortOutput.logger.setUseParentHandlers(false);
-        UserOutput.logger.setUseParentHandlers(false);
-
-        Messenger.logger.setUseParentHandlers(false);
-        MessageWorker.logger.setUseParentHandlers(false);
-
-        RoutingTable.logger.setUseParentHandlers(false);
-        MessageEvaluator.logger.setUseParentHandlers(false);
-        UserService.logger.setUseParentHandlers(false);
-        Util.logger.setUseParentHandlers(false);
+        logger.info(logger.getName() + " got set.");
     }
 }
