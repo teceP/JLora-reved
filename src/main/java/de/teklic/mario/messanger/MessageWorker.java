@@ -32,24 +32,34 @@ public class MessageWorker implements Runnable{
         id = UUID.randomUUID().toString();
     }
 
+    //TODO timeouts
     @Override
     public void run() {
         for(int i = 0; i < messageJob.getRetries(); i++){
             JLora.logger.info("TRY " + i + ":");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
+            if(sleepAndCheck(3)){
+                return;
+            }
+        }
+        JLora.logger.info("Message Job has been finished by retries.");
+        onFailedPostExecutions();
+    }
+
+    public boolean sleepAndCheck(Integer times){
+        for(int i = 0; i < times; i++){
             try {
-                Thread.sleep(DEFAULT_TIMEOUT);
+                Thread.sleep(DEFAULT_TIMEOUT/3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if(Messenger.getInstance().isJobFinished(this)){
                 JLora.logger.info("Message Job has been finished by condition.");
                 onSuccessfulPostExecutions();
-                return;
+                return true;
             }
         }
-        JLora.logger.info("Message Job has been finished by retries.");
-        onFailedPostExecutions();
+        return false;
     }
 
     public void onSuccessfulPostExecutions(){
@@ -63,7 +73,7 @@ public class MessageWorker implements Runnable{
     }
 
     public void onFailedPostExecutions(){
-        JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now.");
+        JLora.logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now. Sending Error.");
         Messenger.getInstance().removeWorker(this);
         RoutingTable.getInstance().removeRoute(messageJob.getRouteX().getEndNode());
         sendError();
