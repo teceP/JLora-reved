@@ -36,8 +36,8 @@ public class MessageWorker implements Runnable{
     //TODO timeouts
     @Override
     public void run() {
-        for(int i = 0; i < messageJob.getRetries(); i++){
-            logger.info("TRY " + i + ":");
+        for(int i = 0; i < messageJob.getRetries()-1; i++){
+            logger.info("TRY " + (i+1) + ":");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             if(sleepAndCheck(3)){
                 return;

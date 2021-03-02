@@ -70,7 +70,8 @@ public class Messenger {
             return true;
         }
 
-        logger.info("Found one or more MessageWorker.");
+        logger.info("Job " + worker.getMessageJob().getRouteX().getFlag() + " to " + worker.getMessageJob().getRouteX().getEndNode() + " not finished.");
+        printWorkerList();
         return false;
     }
 
