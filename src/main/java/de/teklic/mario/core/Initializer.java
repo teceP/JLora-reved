@@ -44,9 +44,6 @@ public class Initializer {
         Address.getInstance().setAddr(addr);
         logger.info("Nodes Address: " + addr);
 
-        //Read & Write
-        setIO(jLora, jLoraModel);
-
         //Handlers
         setHandlers(jLoraModel);
 
@@ -56,6 +53,9 @@ public class Initializer {
 
         //Port configurations
         setPort(jLoraModel.getSerialPort());
+
+        //Read & Write
+        setIO(jLora, jLoraModel);
 
         //Initialize lists
         initLists(jLoraModel);
