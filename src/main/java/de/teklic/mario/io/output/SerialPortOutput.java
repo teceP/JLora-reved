@@ -44,9 +44,9 @@ public class SerialPortOutput {
         int b = message.length();
         logger.info("########## AT+SEND=" + b + " ##########");
         logger.info("########## " + message + " ##########");
-        printWriter.println("AT+SEND=" + b + "\r\n");
+        printWriter.println("AT+SEND=" + b + System.lineSeparator());
         printWriter.flush();
-        printWriter.println(message + "\r\n");
+        printWriter.println(message + System.lineSeparator());
         printWriter.flush();
 
         logger.info(printWriter.checkError() ? "Has Error in PrintWriter!" : "");
@@ -55,7 +55,7 @@ public class SerialPortOutput {
     public void sendConfig(String config) {
         logger.info("SerialOutput sending config: " + config);
         try {
-            printWriter.println(config + "\r\n");
+            printWriter.println(config + System.lineSeparator());
             printWriter.flush();
             Thread.sleep(2000);
         } catch (InterruptedException e) {
