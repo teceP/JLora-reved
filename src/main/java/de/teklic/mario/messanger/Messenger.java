@@ -105,6 +105,7 @@ public class Messenger {
             }
         }
         logger.info("No matching MessageWorker was found for acknowledge: " + acknowledge);
+        printWorkerList();
         return false;
     }
 
@@ -128,7 +129,13 @@ public class Messenger {
     }
 
     public void printWorkerList() {
-        workerList.stream().forEach(w -> logger.info("Worker: " + w.getMessageJob().getRouteX() + ", with currently " + w.getMessageJob().getRetries()));
+        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+        workerList.stream().forEach(w -> {
+            if(w.getMessageJob().getRouteX() instanceof RouteX.Message){
+            logger.info("Worker: " + w.getMessageJob().getRouteX() + ", with awaited hash " + Util.calcMd5((RouteX.Message) w.getMessageJob().getRouteX()).substring(0, 5));
+        }
+        });
+        System.out.println("++++++++++++++++++++--------++++++++++++");
     }
 }
 
