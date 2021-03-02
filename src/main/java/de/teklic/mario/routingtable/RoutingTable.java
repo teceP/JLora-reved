@@ -131,17 +131,11 @@ public class RoutingTable {
     public boolean hasRoute(String destination){
         return routeList
                 .stream()
-                .filter(r -> r.getDestination().equalsIgnoreCase(destination))
-                .findAny()
-                .isPresent();
+                .anyMatch(r -> r.getDestination().equalsIgnoreCase(destination));
     }
 
     public boolean hasRoute(Route route) {
-        return routeList.stream().anyMatch(tableEntry ->
-                tableEntry.getDestination().trim().equalsIgnoreCase(route.getDestination().trim())
-                        && tableEntry.getNeighbour().trim().equalsIgnoreCase(route.getNeighbour().trim())
-                        && tableEntry.getHops() == route.getHops()
-        );
+        return hasRoute(route.getDestination());
     }
 
     @Getter
