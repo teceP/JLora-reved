@@ -43,6 +43,11 @@ public class SerialPortOutput {
         logger.info("SerialOutput will send: " + message);
         int b = message.length();
         logger.info("########## AT+SEND=" + b + " ##########");
+        try {
+            Thread.sleep(250);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         logger.info("########## " + message + " ##########");
         printWriter.println("AT+SEND=" + b + System.lineSeparator());
         printWriter.flush();

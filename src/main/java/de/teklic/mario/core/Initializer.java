@@ -51,9 +51,6 @@ public class Initializer {
         jLoraModel.setSerialPort((SerialPort) CommPortIdentifier.getPortIdentifier(Constant.PORT).open(
                 JLora.class.getName(), 0));
 
-        //Read & Write
-        setIO(jLora, jLoraModel);
-
         //Port configurations
         setPort(jLoraModel.getSerialPort());
 
@@ -68,6 +65,9 @@ public class Initializer {
 
         //Restore RoutingTable
         RoutingTable.getInstance().restore(Address.getInstance().getAddr());
+
+        //Read & Write
+        setIO(jLora, jLoraModel);
 
         logger.info("+++++ Config finished +++++");
 
