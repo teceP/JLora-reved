@@ -33,7 +33,9 @@ public class ErrorHandler extends Handler implements Communicable {
 
     @Override
     public void forward(RouteX message) {
-        Util.prepareToForward(message);
+        if(message.getTimeToLive() > 0) {
+            Util.prepareToForward(message);
+        }
         Messenger.getInstance().send(message);
     }
 

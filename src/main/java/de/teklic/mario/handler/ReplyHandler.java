@@ -36,7 +36,9 @@ public class ReplyHandler extends Handler implements Communicable {
     @Override
     public void forward(RouteX message) {
         message = Util.prepareToForward(message);
-        Messenger.getInstance().send(message);
+        if(message.getTimeToLive() > 0){
+            Messenger.getInstance().send(message);
+        }
     }
 
     @Override
