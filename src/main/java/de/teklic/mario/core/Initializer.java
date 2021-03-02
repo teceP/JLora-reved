@@ -68,10 +68,6 @@ public class Initializer {
 
         //Restore RoutingTable
         RoutingTable.getInstance().restore(Address.getInstance().getAddr());
-        
-        //Register for update central
-        SerialPortInput.getInstance().addObserver(jLora);
-        UserInput.getInstance().addObserver(jLora);
 
         logger.info("+++++ Config finished +++++");
 
@@ -99,6 +95,10 @@ public class Initializer {
         //Write
         SerialPortOutput.getInstance().setPrintWriter(new PrintWriter(jLoraModel.getSerialPort().getOutputStream()));
         UserOutput.getInstance().setPrintStream(System.out);
+
+        //Register for update central
+        SerialPortInput.getInstance().addObserver(jLora);
+        UserInput.getInstance().addObserver(jLora);
 
         logger.info("Finished initializing read and write.");
     }
