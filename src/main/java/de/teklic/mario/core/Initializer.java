@@ -211,7 +211,7 @@ public class Initializer {
             logger.addHandler(fileHandler);
             logger.info("Outputfile has been set.");
         }catch (Exception e){
-            logger.info("Logger Outputfile could not be created.");
+            logger.info("Logger Outputfile could not be created for '" + logger.getName() + "' and file '" + filename + "' due to " + e.getClass().getSimpleName() + ".");
         }
     }
 }
