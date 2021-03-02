@@ -71,7 +71,6 @@ public class Messenger {
         }
 
         logger.info("Job " + worker.getMessageJob().getRouteX().getFlag() + " to " + worker.getMessageJob().getRouteX().getEndNode() + " not finished.");
-        printWorkerList();
         return false;
     }
 
