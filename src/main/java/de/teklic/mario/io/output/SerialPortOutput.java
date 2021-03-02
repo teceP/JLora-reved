@@ -6,7 +6,9 @@ package de.teklic.mario.io.output;
 
 import de.teklic.mario.model.routex.RouteX;
 
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class SerialPortOutput {
@@ -40,7 +42,14 @@ public class SerialPortOutput {
     }
 
     public void send(String message) {
-        logger.info("SerialOutput will send: " + message);
+        int randomTimeout = new Random().nextInt( 1000);
+        try {
+            Thread.sleep(randomTimeout);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        logger.info("Waited + " + randomTimeout + "ms. SerialOutput will send: " + message);
         int b = message.length();
         logger.info("########## AT+SEND=" + b + " ##########");
         try {
