@@ -71,6 +71,10 @@ public class Initializer {
 
         logger.info("+++++ Config finished +++++");
 
+        //Register for update central
+        SerialPortInput.getInstance().addObserver(jLora);
+        UserInput.getInstance().addObserver(jLora);
+
         return jLoraModel;
     }
 
@@ -95,10 +99,6 @@ public class Initializer {
         //Write
         SerialPortOutput.getInstance().setPrintWriter(new PrintWriter(jLoraModel.getSerialPort().getOutputStream()));
         UserOutput.getInstance().setPrintStream(System.out);
-
-        //Register for update central
-        SerialPortInput.getInstance().addObserver(jLora);
-        UserInput.getInstance().addObserver(jLora);
 
         logger.info("Finished initializing read and write.");
     }
