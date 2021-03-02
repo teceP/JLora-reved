@@ -208,6 +208,7 @@ public class Initializer {
                 f.createNewFile();
             }
             FileHandler fileHandler = new FileHandler(pathname);
+            fileHandler.setFormatter(logger.getHandlers()[0].getFormatter());
             logger.addHandler(fileHandler);
             logger.info("Outputfile has been set.");
         }catch (Exception e){
