@@ -202,12 +202,12 @@ public class Initializer {
 
     private static void setLoggerOutputfile(Logger logger, String filename){
         String pathname = LOG_FOLDER + "/" + filename;
-
+        File f = new File(pathname);
         try{
-            if(!new File(pathname).exists()){
-                new File(pathname).createNewFile();
+            if(!f.exists()){
+                f.createNewFile();
             }
-            FileHandler fileHandler = new FileHandler("log/file.log");
+            FileHandler fileHandler = new FileHandler(pathname);
             logger.addHandler(fileHandler);
             logger.info("Outputfile has been set.");
         }catch (Exception e){
