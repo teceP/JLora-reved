@@ -16,56 +16,65 @@ import java.util.stream.Collectors;
 public class JLora implements Observer {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
     private JLoraModel jLoraModel;
+    private boolean listening;
 
-    public JLora(){}
+    public JLora() {
+    }
 
-    public void start(String addr){
+    public void start(String addr) {
         try {
             this.jLoraModel = Initializer.initialize(this, addr);
             logger.info("Software initialized. Listening for messages now.");
-            while(true){}
+            while (true) {
+            }
         } catch (Exception e) {
             logger.info("Failed to initialize software.");
             e.printStackTrace();
         }
     }
 
+    public void setListening(boolean listen){
+        listening = listen;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
-        if(arg instanceof String && arg != null && !((String) arg).isEmpty() || arg instanceof RouteX.Message && arg != null){
-            logger.info("******************NEW PROCESS*************************");
-            logger.info("Object class: " + arg.getClass() +  ", from " + (o instanceof UserInput ? "UserInput" : "SerialInput"));
-            logger.info("[Received Text]: " + arg);
+        if (listening) {
+            if (arg instanceof String && arg != null && !((String) arg).isEmpty() || arg instanceof RouteX.Message && arg != null) {
+                logger.info("******************NEW PROCESS*************************");
+                logger.info("Object class: " + arg.getClass() + ", from " + (o instanceof UserInput ? "UserInput" : "SerialInput"));
+                logger.info("[Received Text]: " + arg);
 
-            if(o instanceof UserInput && arg instanceof String){
-                UserService.getInstance().handle((String) arg);
-            }else{
-                RouteX routeX;
-                if(arg instanceof String){
-                    routeX = MessageEvaluator.evaluate((String) arg);
-                }else{
-                    routeX = (RouteX.Message) arg;
+                if (o instanceof UserInput && arg instanceof String) {
+                    UserService.getInstance().handle((String) arg);
+                } else {
+                    RouteX routeX;
+                    if (arg instanceof String) {
+                        routeX = MessageEvaluator.evaluate((String) arg);
+                    } else {
+                        routeX = (RouteX.Message) arg;
+                    }
+                    logger.info("RouteX after evaluation: " + routeX.toString());
+                    distributeToHandler(routeX);
                 }
-                logger.info("RouteX after evaluation: " + routeX.toString());
-                distributeToHandler(routeX);
+            } else {
+                logger.info("Error: wont be send to message evaluator.");
+                logger.info((arg instanceof String ? "Was instance of String." : "Was no instance of String: " + arg.getClass().getSimpleName()));
+                logger.info((arg == null ? "Was not null." : "Was null."));
+                logger.info((((String) arg).isEmpty() ? "Was empty." : "Was not empty."));
             }
-        }else{
-            logger.info("Error: wont be send to message evaluator.");
-            logger.info((arg instanceof String ? "Was instance of String.":"Was no instance of String: " + arg.getClass().getSimpleName()));
-            logger.info((arg == null ? "Was not null.":"Was null."));
-            logger.info((((String) arg).isEmpty() ? "Was empty.":"Was not empty."));
         }
     }
 
-    public void distributeToHandler(RouteX routeX){
-        if(routeX instanceof RouteX.Disposable){
+    public void distributeToHandler(RouteX routeX) {
+        if (routeX instanceof RouteX.Disposable) {
             logger.info("RouteX is an disposable object and will be dropped.");
             return;
         }
 
-        if(hasMessengerRelevance(routeX) && Util.isRouteXForMe(routeX)){
+        if (hasMessengerRelevance(routeX) && Util.isRouteXForMe(routeX)) {
             Messenger.getInstance().update(routeX);
-        }else{
+        } else {
             jLoraModel.getHandlers()
                     .stream()
                     .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
@@ -78,14 +87,14 @@ public class JLora implements Observer {
     /**
      * Evaluates if this routeX object is releavant for the Messanger Singleton.
      * This can be if the routeX object is an:
-     *  - RouteX.Acknowledge (answer for a RouteX.Message)
-     *  - RouteX.RouteReply (answer for a RouteX.RouteRequest)
+     * - RouteX.Acknowledge (answer for a RouteX.Message)
+     * - RouteX.RouteReply (answer for a RouteX.RouteRequest)
+     *
      * @param routeX
-     * @return true if has relevance for
      * @return false if has no
      */
-    public boolean hasMessengerRelevance(RouteX routeX){
-        if(routeX instanceof RouteX.Acknowledge || routeX instanceof RouteX.RouteReply){
+    public boolean hasMessengerRelevance(RouteX routeX) {
+        if (routeX instanceof RouteX.Acknowledge || routeX instanceof RouteX.RouteReply) {
             return true;
         }
         return false;
