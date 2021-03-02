@@ -13,6 +13,9 @@ public interface Constant {
     int DEFAULT_RETRIES = 3;
     int INITIAL_TTL = 9;
 
+    String LOG_FOLDER = "logs";
+    String JLR_LOG = "jlora.log";
+    String INIT_LOG = "initializer.log";
     String ACK_H_LOG = "acknowledge_handler.log";
     String ERR_H_LOG = "error_handler.log";
     String MSG_H_LOG = "message_handler.log";
@@ -27,4 +30,5 @@ public interface Constant {
     String ROUT_TBL_LOG = "routing_table.log";
     String MSG_EVLTR_LOG = "message_evaluator.log";
     String USR_SRVC_LOG = "user_service.log";
+    String UTL_LOG = "util.log";
 }

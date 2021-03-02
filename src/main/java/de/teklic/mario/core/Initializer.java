@@ -19,14 +19,15 @@ import de.teklic.mario.util.UserService;
 import de.teklic.mario.util.Util;
 import purejavacomm.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-import static de.teklic.mario.core.Constant.BROADCAST;
-import static de.teklic.mario.core.Constant.CONFIG;
+import static de.teklic.mario.core.Constant.*;
 import static de.teklic.mario.util.CustomFormatter.*;
 
 public class Initializer {
@@ -133,40 +134,63 @@ public class Initializer {
     }
 
     private static void configureLoggers(){
-        configureLogger(Initializer.logger, YELLOW);
+        File folder = new File(LOG_FOLDER);
+
+        if(!folder.exists()){
+            folder.mkdir();
+        }
+
+        formatLogger(Initializer.logger, YELLOW);
+        setLoggerOutputfile(Initializer.logger, INIT_LOG);
 
         //JLora
-        configureLogger(JLora.logger, WHITE_BRIGHT);
+        formatLogger(JLora.logger, WHITE_BRIGHT);
+        setLoggerOutputfile(JLora.logger, JLR_LOG);
 
         //Handlers
-        configureLogger(AcknowledgeHandler.logger, GREEN);
-        configureLogger(MessageHandler.logger, GREEN_BRIGHT);
-        configureLogger(ReplyHandler.logger, YELLOW_BRIGHT);
-        configureLogger(RequestHandler.logger, YELLOW);
-        configureLogger(ErrorHandler.logger, BLUE);
+        formatLogger(AcknowledgeHandler.logger, GREEN);
+        formatLogger(MessageHandler.logger, GREEN_BRIGHT);
+        formatLogger(ReplyHandler.logger, YELLOW_BRIGHT);
+        formatLogger(RequestHandler.logger, YELLOW);
+        formatLogger(ErrorHandler.logger, BLUE);
+        setLoggerOutputfile(AcknowledgeHandler.logger, ACK_H_LOG);
+        setLoggerOutputfile(MessageHandler.logger, MSG_H_LOG);
+        setLoggerOutputfile(ReplyHandler.logger, REPL_H_LOG);
+        setLoggerOutputfile(RequestHandler.logger, REQ_H_LOG);
+        setLoggerOutputfile(ErrorHandler.logger, ERR_H_LOG);
 
         //Input
-        configureLogger(SerialPortInput.logger, CYAN_BRIGHT);
-        configureLogger(UserInput.logger, CYAN_BRIGHT);
+        formatLogger(SerialPortInput.logger, CYAN_BRIGHT);
+        formatLogger(UserInput.logger, CYAN_BRIGHT);
+        setLoggerOutputfile(SerialPortInput.logger, SER_INP_LOG);
+        setLoggerOutputfile(UserInput.logger, USR_INP_LOG);
 
         //Output
-        configureLogger(SerialPortOutput.logger, CYAN);
-        configureLogger(UserOutput.logger, CYAN);
+        formatLogger(SerialPortOutput.logger, CYAN);
+        formatLogger(UserOutput.logger, CYAN);
+        setLoggerOutputfile(SerialPortOutput.logger, SER_OUT_LOG);
+        setLoggerOutputfile(UserOutput.logger, USR_OUT_LOG);
 
         //Messenger
-        configureLogger(Messenger.logger, PURPLE);
-        configureLogger(MessageWorker.logger, PURPLE);
+        formatLogger(Messenger.logger, PURPLE);
+        formatLogger(MessageWorker.logger, PURPLE);
+        setLoggerOutputfile(Messenger.logger, MSG_MSNGR_LOG);
+        setLoggerOutputfile(MessageWorker.logger, MSG_WRKR_LOG);
 
         //Routing Table
-        configureLogger(RoutingTable.logger, WHITE);
+        formatLogger(RoutingTable.logger, WHITE);
+        setLoggerOutputfile(RoutingTable.logger, ROUT_TBL_LOG);
 
         //Utils
-        configureLogger(MessageEvaluator.logger, WHITE);
-        configureLogger(UserService.logger, WHITE);
-        configureLogger(Util.logger, WHITE);
+        formatLogger(MessageEvaluator.logger, WHITE);
+        formatLogger(UserService.logger, WHITE);
+        formatLogger(Util.logger, WHITE);
+        setLoggerOutputfile(MessageEvaluator.logger, MSG_EVLTR_LOG);
+        setLoggerOutputfile(UserService.logger, USR_SRVC_LOG);
+        setLoggerOutputfile(Util.logger, UTL_LOG);
     }
 
-    private static void configureLogger(Logger logger, String color){
+    private static void formatLogger(Logger logger, String color){
         logger.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         CustomFormatter formatter = new CustomFormatter();
@@ -174,5 +198,20 @@ public class Initializer {
         handler.setFormatter(formatter);
         logger.addHandler(handler);
         logger.info(logger.getName() + " got set.");
+    }
+
+    private static void setLoggerOutputfile(Logger logger, String filename){
+        String pathname = LOG_FOLDER + "/" + filename;
+
+        try{
+            if(!new File(pathname).exists()){
+                new File(pathname).createNewFile();
+            }
+            FileHandler fileHandler = new FileHandler("log/file.log");
+            logger.addHandler(fileHandler);
+            logger.info("Outputfile has been set.");
+        }catch (Exception e){
+            logger.info("Logger Outputfile could not be created.");
+        }
     }
 }
