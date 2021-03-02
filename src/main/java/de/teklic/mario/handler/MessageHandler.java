@@ -63,7 +63,7 @@ public class MessageHandler extends Handler implements Communicable {
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
         acknowledge.setTimeToLive(9);
         acknowledge.setEndNode(m.getSource());
-        acknowledge.setPayload(Util.calcMd5(m).substring(0, 5));
+        acknowledge.setPayload(Util.calcMd5(m).substring(0, 6));
         Messenger.getInstance().send(acknowledge);
     }
 

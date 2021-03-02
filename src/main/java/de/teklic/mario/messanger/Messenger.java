@@ -96,7 +96,7 @@ public class Messenger {
         while (it.hasNext()) {
             MessageWorker mw = it.next();
             if (mw.getMessageJob().getRouteX() instanceof RouteX.Message) {
-                String messageHash = Util.calcMd5((RouteX.Message) mw.getMessageJob().getRouteX()).substring(0, 5);
+                String messageHash = Util.calcMd5((RouteX.Message) mw.getMessageJob().getRouteX()).substring(0, 6);
                 if (acknowledgeHash.equalsIgnoreCase(messageHash)) {
                     it.remove();
                     logger.info("Removes MessageWorker (RouteX.Message) from list according to an matching hash for message payload '" + ((RouteX.Message) mw.getMessageJob().getRouteX()).getPayload() + "'.");
@@ -132,7 +132,7 @@ public class Messenger {
         System.out.println("++++++++++++++++++++++++++++++++++++++++");
         workerList.stream().forEach(w -> {
             if(w.getMessageJob().getRouteX() instanceof RouteX.Message){
-            logger.info("Worker: " + w.getMessageJob().getRouteX() + ", with awaited hash " + Util.calcMd5((RouteX.Message) w.getMessageJob().getRouteX()).substring(0, 5));
+            logger.info("Worker: " + w.getMessageJob().getRouteX() + ", with awaited hash " + Util.calcMd5((RouteX.Message) w.getMessageJob().getRouteX()).substring(0, 6));
         }
         });
         System.out.println("++++++++++++++++++++--------++++++++++++");
