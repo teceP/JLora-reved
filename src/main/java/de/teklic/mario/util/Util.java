@@ -79,7 +79,9 @@ public class Util {
     public static RouteX prepareToForward(RouteX routeX){
         boolean knowsNext = !RoutingTable.getInstance().getNextForDestination(routeX.getEndNode()).equalsIgnoreCase(NO_NEXT);
 
-        routeX.setTimeToLive(routeX.getTimeToLive() - 1);
+        if(routeX.getTimeToLive() > 0){
+            routeX.setTimeToLive(routeX.getTimeToLive() - 1);
+        }
 
         if(routeX instanceof RouteX.RouteReply) {
             ((RouteX.RouteReply) routeX).setHops(((RouteX.RouteReply) routeX).getHops() + 1);
