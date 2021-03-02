@@ -44,6 +44,9 @@ public class Initializer {
         Address.getInstance().setAddr(addr);
         logger.info("Nodes Address: " + addr);
 
+        //Read & Write
+        setIO(jLora, jLoraModel);
+
         //Handlers
         setHandlers(jLoraModel);
 
@@ -65,10 +68,7 @@ public class Initializer {
 
         //Restore RoutingTable
         RoutingTable.getInstance().restore(Address.getInstance().getAddr());
-
-        //Read & Write
-        setIO(jLora, jLoraModel);
-
+        
         //Register for update central
         SerialPortInput.getInstance().addObserver(jLora);
         UserInput.getInstance().addObserver(jLora);
