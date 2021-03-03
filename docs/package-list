@@ -1,0 +1,11 @@
+de.teklic.mario
+de.teklic.mario.core
+de.teklic.mario.handler
+de.teklic.mario.handler.protocols
+de.teklic.mario.io.input
+de.teklic.mario.io.output
+de.teklic.mario.messanger
+de.teklic.mario.model.other
+de.teklic.mario.model.routex
+de.teklic.mario.routingtable
+de.teklic.mario.util
