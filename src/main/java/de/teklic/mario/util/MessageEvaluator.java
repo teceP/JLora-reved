@@ -1,7 +1,5 @@
 package de.teklic.mario.util;
 
-import de.teklic.mario.core.JLora;
-import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.model.routex.TokenizedHeader;
@@ -10,14 +8,26 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * MessageEvaluator
+ */
 public class MessageEvaluator {
     public static final Logger logger = Logger.getLogger(MessageEvaluator.class.getName());
 
+    /**
+     * Returns the RouteFlag for a integer value (Route value)
+     * @param flag value
+     * @return RouteFlag with this flag value
+     */
     private static RouteFlag getRouteKind(int flag){
         return RouteFlag.valueOf(flag).get();
     }
     public static final String NO_LR = "no_lr";
 
+    /**
+     * Creates a RouteReply based on received information
+     * @return RouteX.RouteReply
+     */
     private static RouteX.RouteReply createRouteReply(String[] infos){
         RouteX.RouteReply routeReply = new RouteX.RouteReply();
         routeReply.setFlag(RouteFlag.REPLY);
@@ -30,6 +40,10 @@ public class MessageEvaluator {
         return routeReply;
     }
 
+    /**
+     * Creates a RouteRequest based on received information
+     * @return RouteX.RouteRequest
+     */
     private static RouteX.RouteRequest createRouteRequest(String[] infos){
         RouteX.RouteRequest routeRequest = new RouteX.RouteRequest();
         routeRequest.setFlag(RouteFlag.REQUEST);
@@ -41,6 +55,10 @@ public class MessageEvaluator {
         return routeRequest;
     }
 
+    /**
+     * Creates a Error based on received information
+     * @return RouteX.Error
+     */
     private static RouteX.RouteError createRouteError(String[] infos){
         RouteX.RouteError routeError = new RouteX.RouteError();
         routeError.setFlag(RouteFlag.ERROR);
@@ -51,16 +69,10 @@ public class MessageEvaluator {
         return routeError;
     }
 
-    private static RouteX.RouteUnreachable createRouteUnreacheable(String[] infos){
-        RouteX.RouteUnreachable routeUnreachable = new RouteX.RouteUnreachable();
-        routeUnreachable.setFlag(RouteFlag.UNREACHABLE);
-        routeUnreachable.setSource(infos[0]);
-        routeUnreachable.setTimeToLive(Integer.parseInt(infos[2]));
-        routeUnreachable.setEndNode(infos[3]);
-        routeUnreachable.setIncoming(true);
-        return routeUnreachable;
-    }
-
+    /**
+     * Creates a Message based on received information
+     * @return RouteX.Message
+     */
     private static RouteX.Message createMessage(String[] infos){
         RouteX.Message message = new RouteX.Message();
         message.setFlag(RouteFlag.MESSAGE);
@@ -72,6 +84,10 @@ public class MessageEvaluator {
         return message;
     }
 
+    /**
+     * Creates a Acknowledge based on received information
+     * @return RouteX.Acknowledge
+     */
     private static RouteX.Acknowledge createAcknowledge(String[] infos){
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
@@ -83,10 +99,13 @@ public class MessageEvaluator {
         return acknowledge;
     }
 
+    /**
+     * Creates a RouteX based on received information
+     * @return RouteX with empty tokenized header value/boolean
+     */
     private static RouteX handleNotLR(String message){
         RouteX route;
         TokenizedHeader tokenizedHeader = new TokenizedHeader();
-        //logger.log(Level.WARNING, "Not a Peer Message.");
         tokenizedHeader.setEmpty(true);
         tokenizedHeader.setPlain(message);
         tokenizedHeader.setOrigin(NO_LR);
@@ -97,6 +116,10 @@ public class MessageEvaluator {
         return route;
     }
 
+    /**
+     * Creates a TokenizedHeader based on received information
+     * @return TokenizedHeader
+     */
     private static TokenizedHeader createHeader(String[] head){
         TokenizedHeader tokenizedHeader = new TokenizedHeader();
         tokenizedHeader.setLr(head[0]);
@@ -105,21 +128,30 @@ public class MessageEvaluator {
         return tokenizedHeader;
     }
 
+    /**
+     * Removes unnecessary "|" characters which where implemented by other protocol users
+     * and which was described in a older version of the used protocol.
+     * @param message Received message
+     * @return Modified string without unnecessary characters
+     */
     private static String removeUnnecessary(String message){
         StringBuilder builder = new StringBuilder(message);
         if(message.length() > 2){
             if(message.charAt(message.length()-1) == '|'){
                 builder.deleteCharAt(message.length()-1);
             }
-
             if(message.charAt(0) == '|'){
                 builder.deleteCharAt(0);
             }
         }
-
         return builder.toString();
     }
 
+    /**
+     * Evaluates, which kind of RouteX object a received String message is
+     * @param message Plain input string
+     * @return the created RouteX object, based on the message parameter
+     */
     public static RouteX evaluate(String message) {
         RouteX route;
         TokenizedHeader tokenizedHeader;
@@ -161,9 +193,6 @@ public class MessageEvaluator {
                     break;
                 case REQUEST:
                     route = createRouteRequest(tail);
-                    break;
-                case UNREACHABLE:
-                    route = createRouteUnreacheable(tail);
                     break;
                 case MESSAGE:
                     route = createMessage(tail);

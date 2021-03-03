@@ -139,3 +139,8 @@ public class Messenger {
     }
 }
 
+/**
+ * Id which is for:
+ * RouteX.Request: EndNode -> RouteX.Reply: SourceNode
+ * RouteX.Message: md5.hash(source+payload).substring(0,6) -> RouteX.Acknowledge: payload
+ */

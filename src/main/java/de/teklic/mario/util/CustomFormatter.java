@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
+/**
+ * CustomFormatter for Loggers
+ */
 public class CustomFormatter extends Formatter {
 
     @Setter
@@ -89,6 +92,11 @@ public class CustomFormatter extends Formatter {
     public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m";  // CYAN
     public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
 
+    /**
+     * Formats a LogRecord
+     * @param record LogRecord
+     * @return formatted LogRecord
+     */
     @Override
     public String format(LogRecord record)
     {
@@ -128,6 +136,11 @@ public class CustomFormatter extends Formatter {
         return builder.toString();
     }
 
+    /**
+     * Calculates and formats the current date as a String
+     * @param millisecs
+     * @return
+     */
     private String calcDate(long millisecs) {
         SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss");
         Date resultdate = new Date(millisecs);

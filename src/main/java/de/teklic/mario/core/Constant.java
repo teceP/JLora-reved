@@ -5,15 +5,63 @@ package de.teklic.mario.core;
  */
 
 public interface Constant {
+    /**
+     * The RaspberryPi-Port for the LoRa-Module
+     */
     String PORT = "/dev/ttyS0";
+
+    /**
+     * The broadcast address which is used for every outgoing message
+     */
     String BROADCAST = "FFFF";
+
+    /**
+     * LoRa-Module Config String which consists out of several information.
+     * 433500000:
+     * 5:
+     * 9:
+     * 7:
+     * 1:
+     * 1:
+     * 0:
+     * 0:
+     * 0:
+     * 0:
+     * 3000:
+     * 8:
+     * 4:
+     */
     String CONFIG = "AT+CFG=433500000,5,9,7,1,1,0,0,0,0,3000,8,4";
+
+    /**
+     * Irrelevant message types, which gets filtered out if they got received.
+     * All kind of these messages wont be proceed by the software.
+     */
     String[] IRRELEVANTS = {"AT,OK", "AT,SENDED", "SENDING","AT,SENDING", "T,OK", "ERR:CPU_BUSY", "AERR:CPU_BUSY"};
+
+    /**
+     * Default timeout between the MessageWorker's retries
+     */
     long DEFAULT_TIMEOUT = 5000;
+
+    /**
+     * Default retries for a MessageWorker's flow
+     */
     int DEFAULT_RETRIES = 3;
+
+    /**
+     * Initial TimeToLife parameter for self-created message, request, reply objects
+     */
     int INITIAL_TTL = 9;
 
+    /**
+     * Logfile folder
+     */
     String LOG_FOLDER = "logs";
+
+    /**
+     * Logfile name's for each class
+     */
     String JLR_LOG = "jlora.log";
     String INIT_LOG = "initializer.log";
     String ACK_H_LOG = "acknowledge_handler.log";

@@ -13,19 +13,30 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
-import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.DEFAULT_TIMEOUT;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
 
+/**
+ * A MessageWorker is responsible for a MessageJob.
+ * It reruns a Job, based on the MessageJobs information.
+ * It also checks for conditions if a job has finished
+ */
 @Getter
 @Setter
 public class MessageWorker implements Runnable{
 
     public static final Logger logger = Logger.getLogger(MessageWorker.class.getName());
+
+    /**
+     * MessageJob
+     */
     private MessageJob messageJob;
-    private ScheduledFuture<?> future;
+
+    /**
+     * A random ID recognition and matching
+     */
     private String id;
 
     public MessageWorker(MessageJob messageJob){
@@ -33,7 +44,12 @@ public class MessageWorker implements Runnable{
         id = UUID.randomUUID().toString();
     }
 
-    //TODO timeouts
+    /**
+     * Runs in an extra thread and tries to send out a RouteX, based on the MessageJobs information.
+     * Checks several times (retries * 3) if condition matches. If so, the MessageWorker will stop his work.
+     * If not and all retries have been tried, the worker stops and makes other actions, based on which kind of
+     * RouteX instance it is.
+     */
     @Override
     public void run() {
         for(int i = 0; i < messageJob.getRetries()-1; i++){
@@ -47,6 +63,13 @@ public class MessageWorker implements Runnable{
         onFailedPostExecutions();
     }
 
+    /**
+     * Checks if cancellation condition have met.
+     * Example: An acknowledge has been registered after an message was sent out.
+     * @param times Retries to check for condition.
+     * @return true if MessageWorker can stop.
+     * @return false if MessageWorker should try again.
+     */
     public boolean sleepAndCheck(Integer times){
         for(int i = 0; i < times; i++){
             try {
@@ -63,6 +86,13 @@ public class MessageWorker implements Runnable{
         return false;
     }
 
+    /**
+     * Bases on the MessageJob's RouteX instance, other work will be done.
+     *
+     * Example: A Message must be sent to 0134. No Route for 0134 is stored.
+     * Make a RouteX.Request first. After a reply was registered, fire a new RouteX.Message Job to the Messenger.
+     * For this situation, the initial RouteX.Message must and can be stored inside of a RouteX.Request object.
+     */
     public void onSuccessfulPostExecutions(){
         if(messageJob.getRouteX() instanceof RouteX.RouteRequest){
             if(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage() != null){
@@ -73,6 +103,10 @@ public class MessageWorker implements Runnable{
         }
     }
 
+    /*
+     * If a job fails, the worker and also the route has to be removed.
+     * After that, an error gets sent out.
+     */
     public void onFailedPostExecutions(){
         logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now. Sending Error.");
         Messenger.getInstance().removeWorker(this);
@@ -80,6 +114,10 @@ public class MessageWorker implements Runnable{
         sendError();
     }
 
+    /**
+     * An error message gets created and gets sent out.
+     * The Error is based on the MessageJobs information.
+     */
     public void sendError(){
         if(messageJob.getRouteX() instanceof RouteX.Message){
             RouteX.RouteError error = new RouteX.RouteError();
@@ -91,7 +129,3 @@ public class MessageWorker implements Runnable{
         }
     }
 }
-
-//TODO benutzert will was senden, test erst ob es route gibt.
-//wenn nicht, route request.. neues attribute in routeRequest: saved RouteX.Message, um später, wenn route gefunden neu zu senden
-//wenn doch, senden

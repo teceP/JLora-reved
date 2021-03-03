@@ -16,13 +16,31 @@ import java.util.stream.Collectors;
 
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
 
+/**
+ * RoutingTable-Singelton
+ */
 public class RoutingTable {
 
     public final static Logger logger = Logger.getLogger(RoutingTable.class.getName());
 
+    /**
+     * Singleton instance
+     */
     private static RoutingTable routingTable;
+
+    /**
+     * RouteList
+     */
     private List<Route> routeList;
+
+    /**
+     * Storing file for the RoutingList
+     */
     public static final String FILE = "routes.json";
+
+    /**
+     * Defines the return value, if there was no next (neighbour) was found, or no route for a specific route.
+     */
     public static final String NO_NEXT = "no_next";
 
     private RoutingTable() {
@@ -31,6 +49,10 @@ public class RoutingTable {
         }
     }
 
+    /**
+     * Adds a route to the table if it not exist already.
+     * @param r Route
+     */
     public void add(Route r) {
         if(!hasRoute(r)){
             this.routeList.add(r);
@@ -38,6 +60,11 @@ public class RoutingTable {
         }
     }
 
+    /**
+     * Adds a new Rout, based on a RouteX object.
+     * Takes the routeX's source and routeX's and tokenizedHeader's origin as values.
+     * @param routeX RouteX
+     */
     public void add(RouteX routeX){
         if(routeX instanceof RouteX.Message){
             Route route = new Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), (INITIAL_TTL - routeX.getTimeToLive()));
@@ -45,11 +72,21 @@ public class RoutingTable {
         }
     }
 
+    /**
+     * Drops the whole list as creates a new List.
+     * Stores the empty list immediately and overrides old records.
+     */
     public void drop(){
         routeList = Collections.synchronizedList(new ArrayList<>());
         store();
     }
 
+    /**
+     * Checks if there is a route for a given destination address.
+     * @param destAddr
+     * @return Returns the nearest and best routes "neighbour" variable. (Check class Route for more information).
+     * @return Returns "no_next", if there was no route found for this destination.
+     */
     public String getNextForDestination(String destAddr){
         logger.info("Routes from routing table (size " + routeList.size() + "):");
 
@@ -71,7 +108,7 @@ public class RoutingTable {
     /**
      * Must run restore in first contact with this object.
      *
-     * @return
+     * @return RoutingTable instance
      */
     public static RoutingTable getInstance() {
         if (routingTable == null) {
@@ -80,10 +117,17 @@ public class RoutingTable {
         return routingTable;
     }
 
+    /**
+     * Returns the RouteList
+     * @return
+     */
     public List<Route> getRouteList() {
         return this.routeList;
     }
 
+    /**
+     * Persists the RouteList
+     */
     public void store() {
         try (Writer writer = new FileWriter(FILE)) {
             new Gson().toJson(routeList, writer);
@@ -93,6 +137,10 @@ public class RoutingTable {
         }
     }
 
+    /**
+     * Restores the RouteList for a specific owner.
+     * @param owner The owner represents the nodes address.
+     */
     public void restore(String owner) {
         try (JsonReader reader = new JsonReader(new FileReader(FILE))) {
             List<Route> tmp = new Gson().fromJson(reader, new TypeToken<ArrayList<Route>>() {
@@ -128,25 +176,60 @@ public class RoutingTable {
         routeList.removeIf(r -> r.getDestination().equalsIgnoreCase(destination));
     }
 
+    /**
+     * Proofs if there is any route for this destination
+     * @param destination Destinations address
+     * @return true if any route was found, false if no route was found
+     */
     public boolean hasRoute(String destination){
         return routeList
                 .stream()
                 .anyMatch(r -> r.getDestination().equalsIgnoreCase(destination));
     }
 
+    /**
+     * Proofs if there is any route for this destination
+     * See hasRoute(String destination) for more information
+     * @param route
+     * @return true if has found any route
+     */
     public boolean hasRoute(Route route) {
         return hasRoute(route.getDestination());
     }
 
+    /**
+     * Route
+     */
     @Getter
     @Setter
     @AllArgsConstructor
     public static class Route implements Serializable {
+
+        /**
+         * The owner represents the nodes address, which made contact with this node earlier
+         */
         private String owner;
+
+        /**
+         * Destinations node address
+         */
         private String destination;
+
+        /**
+         * Neighbours address: Next nodes, on the way to the destination node
+         */
         private String neighbour;
+
+        /**
+         * Hops needed for this route
+         */
         private int hops;
 
+        /**
+         * Checks if two Routes are same
+         * @param obj
+         * @return true if every variable (owner, destination, hops, neighbour) are same
+         */
         @Override
         public boolean equals(Object obj) {
             if (obj == null || obj.getClass() != Route.class) {

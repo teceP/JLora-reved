@@ -14,7 +14,11 @@ import de.teklic.mario.util.Util;
 
 import java.util.logging.Logger;
 
-public class AcknowledgeHandler extends Handler implements Communicable {
+/**
+ * The AcknowledgeHandler can handle objects which are an instance of
+ * RouteX.Acknowledge.
+ */
+public class AcknowledgeHandler extends Handler {
 
     public static final Logger logger = Logger.getLogger(AcknowledgeHandler.class.getName());
 
@@ -39,6 +43,13 @@ public class AcknowledgeHandler extends Handler implements Communicable {
         Messenger.getInstance().send(message);
     }
 
+    /**
+     * If an incoming acknowledge is for me, the possibility exists, that
+     * the node is currently waiting for an acknowledge object, because the node
+     * send a message earlier.
+     * It will be sent to the Messenger.
+     * @param message An RouteX Object
+     */
     @Override
     public void forMe(RouteX message) {
         logger.info("RouteX Acknowledge is for me. Send to Messenger.");

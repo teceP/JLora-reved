@@ -5,23 +5,21 @@ package de.teklic.mario.handler;
  */
 
 import de.teklic.mario.core.Address;
-import de.teklic.mario.core.JLora;
-import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.handler.protocols.Handler;
 import de.teklic.mario.handler.protocols.HandlerName;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.model.routex.TokenizedHeader;
-import de.teklic.mario.routingtable.RoutingTable;
 import de.teklic.mario.util.Util;
 
 import java.util.logging.Logger;
 
-import static de.teklic.mario.core.Constant.BROADCAST;
-import static de.teklic.mario.core.Constant.DEFAULT_RETRIES;
-
-public class RequestHandler extends Handler implements Communicable {
+/**
+ * The RequestHandler can handle objects which are an instance of
+ * RouteX.Request.
+ */
+public class RequestHandler extends Handler {
 
     public static final Logger logger = Logger.getLogger(RequestHandler.class.getName());
 

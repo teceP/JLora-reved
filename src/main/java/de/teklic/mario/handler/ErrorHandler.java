@@ -14,7 +14,11 @@ import de.teklic.mario.util.Util;
 
 import java.util.logging.Logger;
 
-public class ErrorHandler extends Handler implements Communicable {
+/**
+ * The ErrorHandler can handle objects which are an instance of
+ * RouteX.Error.
+ */
+public class ErrorHandler extends Handler {
 
     public static final Logger logger = Logger.getLogger(ErrorHandler.class.getName());
 
@@ -39,6 +43,11 @@ public class ErrorHandler extends Handler implements Communicable {
         Messenger.getInstance().send(message);
     }
 
+    /**
+     * An incoming error can occur, when another node could not reach me.
+     * The RoutingTable gets cleaned for this unreachable node.
+     * @param message An RouteX Object
+     */
     @Override
     public void forMe(RouteX message) {
         logger.info("Error is for me. Cleaning routing table?.");

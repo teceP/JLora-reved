@@ -5,14 +5,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * RouteX abstract class, which contains all specific kind of object types.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 public abstract class RouteX {
+
+    /**
+     * Source node
+     */
     private String source;
+
+    /**
+     * Time to live, till expiration
+     */
     private int timeToLive;
+
+    /**
+     * Tokenized Header
+     */
     private TokenizedHeader tokenizedHeader;
+
+    /**
+     * RouteFlag
+     */
     private de.teklic.mario.model.routex.RouteFlag flag;
+
+    /**
+     * EndNode
+     */
     private String endNode;
 
     /**
@@ -29,7 +52,14 @@ public abstract class RouteX {
         this.endNode = endNode;
     }
 
+    /**
+     * Returns this object as a sendable string, which matches the protocol
+     */
     public abstract String asSendable();
+
+    /**
+     * A String which determines which Handler is responsible for this object
+     */
     public abstract String responsibleHandler();
 
     @Override
@@ -40,6 +70,9 @@ public abstract class RouteX {
                 "\nFlag: " + this.getFlag().name();
     }
 
+    /**
+     * Specific implementation for an Message object
+     */
     @Getter
     @Setter
     @NoArgsConstructor
@@ -71,6 +104,9 @@ public abstract class RouteX {
         }
     }
 
+    /**
+     * Specific implementation for an Acknowledge object
+     */
     @Getter
     @Setter
     @NoArgsConstructor
@@ -98,6 +134,9 @@ public abstract class RouteX {
         }
     }
 
+    /**
+     * Specific implementation for an Request object
+     */
     @Getter
     @Setter
     @NoArgsConstructor
@@ -127,6 +166,9 @@ public abstract class RouteX {
         }
     }
 
+    /**
+     * Specific implementation for an Reply object
+     */
     @Getter
     @Setter
     @NoArgsConstructor
@@ -156,6 +198,9 @@ public abstract class RouteX {
         }
     }
 
+    /**
+     * Specific implementation for an Error object
+     */
     @Getter
     @Setter
     @NoArgsConstructor
@@ -181,31 +226,10 @@ public abstract class RouteX {
         }
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class RouteUnreachable extends RouteX {
-
-        @Override
-        public String asSendable(){
-            return "|" + getSource() + "|" + getFlag().flag + "|" + getTimeToLive() + "|" + getEndNode() + "|";
-        }
-
-        @Override
-        public String responsibleHandler() {
-            return HandlerName.UNREACHABLE_HANDLER;
-        }
-
-        @Override
-        public String toString() {
-            return "Source: " + this.getSource() +
-                    "\nTimeToLive: " + getTimeToLive() +
-                    "\nUnreachableNode: " + getEndNode() +
-                    "\nTokenizedHeader: " + getTokenizedHeader().toString() +
-                    "\nFlag: " + this.getFlag().name();
-        }
-    }
-
+    /**
+     * Specific implementation for an Disposable object.
+     * This kind of objects get immediately dropped by JLora
+     */
     public static class Disposable extends RouteX{
 
         @Override

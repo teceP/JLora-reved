@@ -14,7 +14,11 @@ import de.teklic.mario.util.Util;
 
 import java.util.logging.Logger;
 
-public class ReplyHandler extends Handler implements Communicable {
+/**
+ * The ReplyHandler can handle objects which are an instance of
+ * RouteX.Reply.
+ */
+public class ReplyHandler extends Handler {
 
     public static final Logger logger = Logger.getLogger(ReplyHandler.class.getName());
 
@@ -41,6 +45,13 @@ public class ReplyHandler extends Handler implements Communicable {
         }
     }
 
+    /**
+     * If an incoming reply is for me, the possibility exists, that
+     * the node is currently waiting for an reply object, because the node
+     * send a request earlier.
+     * It will be sent to the Messenger.
+     * @param message An RouteX Object
+     */
     @Override
     public void forMe(RouteX message) {
         logger.info("RouteX Reply is for me. Send to Messenger.");

@@ -11,12 +11,22 @@ import java.util.Observable;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+/**
+ * SerialPortInput-Singleton
+ * A input source, which deliveres new content, which the LoRa-Module received.
+ */
 public class SerialPortInput extends Observable implements SerialPortEventListener, Runnable {
 
     public static final Logger logger = Logger.getLogger(SerialPortInput.class.getName());
 
+    /**
+     * SerialPortInput from LoRa-Module
+     */
     private static SerialPortInput eventListener;
 
+    /**
+     * Scanner for SerialPortInput
+     */
     @Getter
     @Setter
     private Scanner inputScanner;
@@ -24,8 +34,7 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
     private SerialPortInput(){}
 
     /**
-     *
-     * @return
+     * @return The SerialPortInput Singleton instance
      */
     public static synchronized SerialPortInput getInstance(){
         if(eventListener == null){
@@ -40,6 +49,10 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
         return eventListener;
     }
 
+    /**
+     * Runs the SerialPortInput in a Thread and constantly reads new received data.
+     * Notifies the JLora instance, if there are new data available.
+     */
     @Override
     public void run() {
         while (true){
@@ -53,16 +66,16 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
         }
     }
 
-    /**
-     * TODO: Nachrichten kommen seit dem letzten, vorletzten commit nicht mehr immer an
-     *
-     */
-
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
-
+        //TODO remove?
     }
 
+    /**
+     * Filters a message for unnecessary data.
+     * @param msg A received data as String.
+     * @return true if unnecessary, false if useful
+     */
     public boolean irrelevantMessage(String msg) {
         if (Arrays.asList(Constant.IRRELEVANTS).contains(msg)) {
             return true;
@@ -70,6 +83,9 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
         return false;
     }
 
+    /**
+     * Closes the Input Scanner Stream.
+     */
     public void exit(){
         inputScanner.close();
     }

@@ -20,9 +20,12 @@ import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.DEFAULT_RETRIES;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
-import static de.teklic.mario.routingtable.RoutingTable.NO_NEXT;
 
-public class MessageHandler extends Handler implements Communicable {
+/**
+ * The MessageHandler can handle objects which are an instance of
+ * RouteX.Message.
+ */
+public class MessageHandler extends Handler {
 
     public static final Logger logger = Logger.getLogger(MessageHandler.class.getName());
 
@@ -32,7 +35,6 @@ public class MessageHandler extends Handler implements Communicable {
 
     @Override
     public void handle(RouteX routeX) {
-        //TODO decrement ttl?
         if(Util.isRouteXForMe(routeX)){
             forMe(routeX);
         }else if(Util.isRouteXForward(routeX)){
@@ -51,6 +53,11 @@ public class MessageHandler extends Handler implements Communicable {
         Messenger.getInstance().send(message);
     }
 
+    /**
+     * An incoming Message has to be acknowledged.
+     * An Acknowledge will be sent out to the source node of the Message object (the initial creator).
+     * @param message An RouteX Object
+     */
     @Override
     public void forMe(RouteX message) {
         RoutingTable.getInstance().add(message);
@@ -67,6 +74,12 @@ public class MessageHandler extends Handler implements Communicable {
         Messenger.getInstance().send(acknowledge);
     }
 
+    /**
+     * A Message gets sent out, if a Route to the destination node exists in the Routing table.
+     * If not, a request gets sent out first. When a route was found, the Messenger sends out
+     * automatically the Message object to the destination.
+     * @param message
+     */
     public void fromMe(RouteX message){
         RouteX.Message msg = (RouteX.Message) message;
         if(RoutingTable.getInstance().hasRoute(msg.getEndNode())){
@@ -79,6 +92,11 @@ public class MessageHandler extends Handler implements Communicable {
         }
     }
 
+    /**
+     * Creates an Request, based on the information out of a Message object.
+     * @param message Message object with a concrete destination.
+     * @return Route Request with Message information.
+     */
     public RouteX.RouteRequest createRequest(RouteX.Message message){
         RouteX.RouteRequest request = new RouteX.RouteRequest();
         request.setSource(Address.getInstance().getAddr());

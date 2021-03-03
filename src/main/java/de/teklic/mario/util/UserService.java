@@ -11,17 +11,26 @@ import de.teklic.mario.core.Address;
 import de.teklic.mario.io.input.SerialPortInput;
 import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.io.output.SerialPortOutput;
-import de.teklic.mario.io.output.UserOutput;
 import de.teklic.mario.routingtable.RoutingTable;
 
 import java.util.logging.Logger;
 
+/**
+ * UserService-Singleton
+ */
 public class UserService {
     public static final Logger logger = Logger.getLogger(UserService.class.getName());
+
+    /**
+     * Singleton instance
+     */
     private static UserService userService;
 
     private UserService(){}
 
+    /**
+     * @return UserService singleton instance
+     */
     public static UserService getInstance(){
         if(userService == null){
             userService = new UserService();
@@ -29,6 +38,10 @@ public class UserService {
         return userService;
     }
 
+    /**
+     * Handles a message and tries to print out information for the user.
+     * @param call String which must match any of the service strings.
+     */
     public void handle(String call){
         switch(call){
             case "table":
@@ -50,7 +63,6 @@ public class UserService {
                 SerialPortInput.getInstance().exit();
                 UserInput.getInstance().exit();
                 SerialPortOutput.getInstance().exit();
-                UserOutput.getInstance().exit();
                 System.out.println("Closed all streams. Goodbye.");
                 System.exit(0);
                 break;
