@@ -13,14 +13,29 @@ import java.util.Observer;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * The central/main entrance point for this software.
+ */
 public class JLora implements Observer {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
+
+    /**
+     * Holds several information, such as the handler references and the serial port.
+     */
     private JLoraModel jLoraModel;
+
+    /**
+     * Specifies, if JLora is currently allowed to listen for new messages.
+     */
     private boolean listening;
 
     public JLora() {
     }
 
+    /**
+     * Starts the initialization and an endless loop to listen for new events
+     * @param addr The nodes address
+     */
     public void start(String addr) {
         try {
             this.jLoraModel = Initializer.initialize(this, addr);
@@ -33,10 +48,20 @@ public class JLora implements Observer {
         }
     }
 
+    /**
+     * Sets if the central is allowed to hear from new events or not
+     * @param listen Listen is allowed
+     */
     public void setListening(boolean listen){
         listening = listen;
     }
 
+    /**
+     * An new event has happend and the event gets evaluated and
+     * distributed to the correct handler.
+     * @param o Instance of observable
+     * @param arg Event (always as String!)
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (listening) {
@@ -66,6 +91,10 @@ public class JLora implements Observer {
         }
     }
 
+    /**
+     * Distributes to the handlers based on the RouteX instance
+     * @param routeX RouteX
+     */
     public void distributeToHandler(RouteX routeX) {
         if (routeX instanceof RouteX.Disposable) {
             logger.info("RouteX is an disposable object and will be dropped.");
