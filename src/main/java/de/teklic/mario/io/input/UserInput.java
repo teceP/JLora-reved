@@ -86,6 +86,7 @@ public class UserInput extends Observable implements Runnable {
 
         logger.info("Insert message: ");
         msg = scanner.nextLine();
+        msg = replaceUmlauts(msg);
 
         RouteX.Message message = new RouteX.Message();
         message.setFlag(RouteFlag.MESSAGE);
@@ -98,6 +99,21 @@ public class UserInput extends Observable implements Runnable {
         logger.info("Message was created: " + message.toString());
 
         return message;
+    }
+
+    /**
+     * Replaces all german umlauts in a String into ASCII conform format.
+     * Example: "Hören" -> "Hoeren"
+     * @param message with umlauts
+     * @return message without umlauts
+     */
+    public String replaceUmlauts(String message){
+        return message.replace("Ü", "Ue")
+                .replace("Ö", "Oe")
+                .replace("Ä", "Ae")
+                .replace("ü", "ue")
+                .replace("ö", "oe")
+                .replace("ä", "ae");
     }
 
     /**
