@@ -15,6 +15,8 @@ import de.teklic.mario.util.Util;
 
 import java.util.logging.Logger;
 
+import static de.teklic.mario.core.Constant.INITIAL_TTL;
+
 /**
  * The RequestHandler can handle objects which are an instance of
  * RouteX.Request.
@@ -50,7 +52,7 @@ public class RequestHandler extends Handler {
             outgoingReply.setIncoming(false);
             outgoingReply.setSource(Address.getInstance().getAddr());
             outgoingReply.setFlag(RouteFlag.REPLY);
-            outgoingReply.setTimeToLive(9);
+            outgoingReply.setTimeToLive(INITIAL_TTL);
             outgoingReply.setHops(0);
             outgoingReply.setEndNode(message.getSource());
             outgoingReply.setNextNode(message.getTokenizedHeader().getOrigin());

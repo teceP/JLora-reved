@@ -61,7 +61,7 @@ public class MessageHandler extends Handler {
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
         acknowledge.setSource(Address.getInstance().getAddr());
         acknowledge.setFlag(RouteFlag.ACKNOWLEDGE);
-        acknowledge.setTimeToLive(9);
+        acknowledge.setTimeToLive(INITIAL_TTL);
         acknowledge.setEndNode(m.getSource());
         acknowledge.setPayload(Util.calcMd5(m).substring(0, 6));
         Messenger.getInstance().send(acknowledge);

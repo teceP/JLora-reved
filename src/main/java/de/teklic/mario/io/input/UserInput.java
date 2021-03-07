@@ -12,6 +12,8 @@ import java.util.Observable;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+import static de.teklic.mario.core.Constant.INITIAL_TTL;
+
 /**
  * UserInput-Singleton
  * Scans the standard user input from command line with System.in
@@ -88,7 +90,7 @@ public class UserInput extends Observable implements Runnable {
         RouteX.Message message = new RouteX.Message();
         message.setFlag(RouteFlag.MESSAGE);
         message.setSource(Address.getInstance().getAddr());
-        message.setTimeToLive(9);
+        message.setTimeToLive(INITIAL_TTL);
         message.setEndNode(dest);
         message.setNextNode(RoutingTable.getInstance().getNextForDestination(dest));
         message.setPayload(msg);
