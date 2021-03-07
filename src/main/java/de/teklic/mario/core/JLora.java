@@ -17,6 +17,10 @@ import java.util.stream.Collectors;
  * TODO Telegram bot?
  */
 
+/*
+TODO wenn kein acknowledge, dann request, dann nochmal message
+ */
+
 /**
  * The central/main entrance point for this software.
  */

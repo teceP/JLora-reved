@@ -168,7 +168,7 @@ public class MessageEvaluator {
             //-> 0F
             //-> |0139|...|0140|
 
-            String[] head = message.split(",", 2);
+            String[] head = message.split(",", 4);
             tokenizedHeader = createHeader(head);
 
             //Remove | at begin and ending
