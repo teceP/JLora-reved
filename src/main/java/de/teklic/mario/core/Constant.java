@@ -52,7 +52,7 @@ public interface Constant {
     /**
      * Initial TimeToLife parameter for self-created message, request, reply objects
      */
-    int INITIAL_TTL = 9;
+    int INITIAL_TTL = 5;
 
     /**
      * Logfile folder
