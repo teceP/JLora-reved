@@ -35,14 +35,6 @@ public class ErrorHandler extends Handler {
         }
     }
 
-    @Override
-    public void forward(RouteX message) {
-        if(message.getTimeToLive() > 0) {
-            Util.prepareToForward(message);
-        }
-        Messenger.getInstance().send(message);
-    }
-
     /**
      * An incoming error can occur, when another node could not reach me.
      * The RoutingTable gets cleaned for this unreachable node.

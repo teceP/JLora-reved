@@ -168,7 +168,7 @@ public class MessageEvaluator {
             //-> 0F
             //-> |0139|...|0140|
 
-            String[] head = message.split(",");
+            String[] head = message.split(",", 2);
             tokenizedHeader = createHeader(head);
 
             //Remove | at begin and ending
@@ -179,7 +179,7 @@ public class MessageEvaluator {
             Arrays.asList(tail).stream().forEach(x -> logger.log(Level.FINE, "Tail: " + x));
 
             if(tail.length < 2){
-                logger.info("Tail not long enough. Needs to contain more than 2 informations." + tail.length);
+                logger.info("Tail not long enough. Needs to contain more than 2 informations. Tail length: " + tail.length);
                 logger.info("Length: " + tail.length);
                 logger.info("Tail: " + (head[head.length-1]));
                 return handleNotLR(message);

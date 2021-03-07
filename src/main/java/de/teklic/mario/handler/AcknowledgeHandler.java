@@ -35,14 +35,6 @@ public class AcknowledgeHandler extends Handler {
         }
     }
 
-    @Override
-    public void forward(RouteX message) {
-        if(message.getTimeToLive() > 0) {
-            Util.prepareToForward(message);
-        }
-        Messenger.getInstance().send(message);
-    }
-
     /**
      * If an incoming acknowledge is for me, the possibility exists, that
      * the node is currently waiting for an acknowledge object, because the node

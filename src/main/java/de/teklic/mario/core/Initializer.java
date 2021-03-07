@@ -36,6 +36,8 @@ public class Initializer {
 
     public static final Logger logger = Logger.getLogger(Initializer.class.getName());
 
+    private Initializer(){}
+
     /**
      * Makes following initializing:
      *  - configure loggers

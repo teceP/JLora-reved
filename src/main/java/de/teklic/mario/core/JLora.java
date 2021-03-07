@@ -14,6 +14,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
+ * TODO Telegram bot?
+ */
+
+/**
  * The central/main entrance point for this software.
  */
 public class JLora implements Observer {

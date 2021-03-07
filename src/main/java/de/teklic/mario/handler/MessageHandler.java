@@ -44,14 +44,7 @@ public class MessageHandler extends Handler {
         }
     }
 
-    @Override
-    public void forward(RouteX message) {
-        RoutingTable.getInstance().add(message);
-        if(message.getTimeToLive() > 0) {
-            Util.prepareToForward(message);
-        }
-        Messenger.getInstance().send(message);
-    }
+
 
     /**
      * An incoming Message has to be acknowledged.

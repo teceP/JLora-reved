@@ -38,12 +38,6 @@ public class RequestHandler extends Handler {
         }
     }
 
-    @Override
-    public void forward(RouteX message) {
-        message = Util.prepareToForward(message);
-        Messenger.getInstance().send(message);
-    }
-
     /**
      * Sends a reply to the source node of the request.
      * @param message

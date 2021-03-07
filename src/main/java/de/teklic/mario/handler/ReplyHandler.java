@@ -37,14 +37,6 @@ public class ReplyHandler extends Handler {
         }
     }
 
-    @Override
-    public void forward(RouteX message) {
-        message = Util.prepareToForward(message);
-        if(message.getTimeToLive() > 0){
-            Messenger.getInstance().send(message);
-        }
-    }
-
     /**
      * If an incoming reply is for me, the possibility exists, that
      * the node is currently waiting for an reply object, because the node
