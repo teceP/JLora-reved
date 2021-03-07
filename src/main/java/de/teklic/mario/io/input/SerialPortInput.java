@@ -6,10 +6,11 @@ import lombok.Setter;
 import purejavacomm.SerialPortEvent;
 import purejavacomm.SerialPortEventListener;
 
-import java.util.Arrays;
-import java.util.Observable;
-import java.util.Scanner;
+import java.util.*;
+import java.util.logging.Filter;
 import java.util.logging.Logger;
+
+import static de.teklic.mario.io.input.Filterable.SHOULD_NOT;
 
 /**
  * SerialPortInput-Singleton
@@ -24,6 +25,8 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
      */
     private static SerialPortInput eventListener;
 
+    private List<Filterable> filters;
+
     /**
      * Scanner for SerialPortInput
      */
@@ -31,7 +34,9 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
     @Setter
     private Scanner inputScanner;
 
-    private SerialPortInput(){}
+    private SerialPortInput(){
+        filters = new ArrayList<>();
+    }
 
     /**
      * @return The SerialPortInput Singleton instance
@@ -58,7 +63,12 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
         while (true){
             if (inputScanner.hasNext()) {
                 String msg = inputScanner.nextLine();
-                if (!irrelevantMessage(msg)) {
+
+                for(Filterable f : filters){
+                    msg = f.filter(msg);
+                }
+
+                if (!msg.equalsIgnoreCase(SHOULD_NOT) && !irrelevantMessage(msg)) {
                     setChanged();
                     notifyObservers(msg);
                 }
@@ -81,6 +91,14 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
             return true;
         }
         return false;
+    }
+
+    /**
+     * Adds a filter which will be applied before a Message will be forwarded to JLora
+     * @param filterable Filter
+     */
+    public void addFilter(Filterable filterable){
+        filters.add(filterable);
     }
 
     /**

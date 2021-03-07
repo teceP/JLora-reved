@@ -5,6 +5,7 @@ package de.teklic.mario.core;
  */
 
 import de.teklic.mario.handler.*;
+import de.teklic.mario.io.input.MultiTimeFilter;
 import de.teklic.mario.io.input.SerialPortInput;
 import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.messanger.MessageWorker;
@@ -119,6 +120,7 @@ public class Initializer {
     private static void setIO(JLora jLora, JLoraModel jLoraModel) throws IOException {
         //Read
         SerialPortInput.getInstance().setInputScanner(new Scanner(jLoraModel.getSerialPort().getInputStream()));
+        SerialPortInput.getInstance().addFilter(new MultiTimeFilter());
         new Thread(SerialPortInput.getInstance()).start();
         UserInput.getInstance().setScanner(new Scanner(System.in));
         jLoraModel.setUserInputThread(new Thread(UserInput.getInstance()));
