@@ -4,7 +4,6 @@ package de.teklic.mario.messanger;
  * @author Mario Teklic
  */
 
-import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.io.output.SerialPortOutput;
 import de.teklic.mario.util.Util;
@@ -14,16 +13,17 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Messenger {
+
     public static final Logger logger = Logger.getLogger(Messenger.class.getName());
 
     /**
-     * Parameter "wie oft" wird übergeben.
-     * Parameter "delay je loop" wird im executor service geregelt
-     * <p>
-     * Dies könnte die Oberklasse sein, welche den Executor Service hält.
-     * Es gibt dann noch eine Subklasse, die Runnable ist.
+     * Singleton Object
      */
     private static Messenger messenger;
+
+    /**
+     * List of all current workers
+     */
     private List<MessageWorker> workerList;
 
     private Messenger() {
@@ -37,12 +37,23 @@ public class Messenger {
         return messenger;
     }
 
+    /**
+     * Checks if this incoming routeX object has any connection to a running worker
+     * @param routeX Incoming routeX
+     */
     public void update(RouteX routeX) {
         Util.newRoute(routeX);
         logger.info("RouteX is for me. Will check for running MessageWorker...");
         jobFinished(routeX);
     }
 
+    /**
+     * Sends a routeX with a worker in another thread.
+     * Checks retries * 3 times if any incoming RouteX matches this routeX (like: Message -> Acknowledge)
+     *
+     * @param routeX Any RouteX
+     * @param retries How often should this routeX be sent
+     */
     public void sendWithWorker(RouteX routeX, int retries) {
         MessageJob job = new MessageJob(routeX, retries);
         MessageWorker worker = new MessageWorker(job);
@@ -50,14 +61,27 @@ public class Messenger {
         workerList.add(worker);
     }
 
+    /**
+     * Sends an routeX object only once without a worker
+     * @param routeX
+     */
     public void send(RouteX routeX) {
         SerialPortOutput.getInstance().send(routeX);
     }
 
+    /**
+     * Removes a MessageWorker
+     * @param messageWorker
+     */
     public void removeWorker(MessageWorker messageWorker) {
         workerList.removeIf(w -> w.getId().equalsIgnoreCase(messageWorker.getId()));
     }
 
+    /**
+     * Validates if a job has been finished
+     * @param worker Worker
+     * @return true if finished
+     */
     public boolean isJobFinished(MessageWorker worker) {
         List<Object> list = workerList
                 .stream()
@@ -74,7 +98,9 @@ public class Messenger {
         return false;
     }
 
-    //Wenn imn workerList passendes objekt vorhanden, dann true zurück und aus workerlist raus
+    /**
+     * Validates if this is an answer for a running MessageWorker like an Acknowledge for a Message
+     */
     public boolean jobFinished(RouteX routeX) {
 
         //When acknowledge arrives, according to a message from before
@@ -89,6 +115,11 @@ public class Messenger {
         return false;
     }
 
+    /**
+     * Validates if any of the Workers has a connection to this acknowledge
+     * @param acknowledge
+     * @return true if a running MessageWorker is affected to this Acknowledge
+     */
     public boolean messageJobFinished(RouteX.Acknowledge acknowledge) {
         String acknowledgeHash = acknowledge.getPayload();
         Iterator<MessageWorker> it = workerList.iterator();
@@ -109,6 +140,11 @@ public class Messenger {
         return false;
     }
 
+    /**
+     * Validates if any of the Workers has a connection to this reply
+     * @param reply
+     * @return true if a running MessageWorker is affected to this Reply
+     */
     public boolean requestJobFinished(RouteX.RouteReply reply) {
         String replierNode = reply.getSource();
         Iterator<MessageWorker> it = workerList.iterator();
@@ -128,19 +164,16 @@ public class Messenger {
         return false;
     }
 
+    /**
+     * Prints all workers
+     */
     public void printWorkerList() {
-        System.out.println("++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("+++++++++++ WORKERLIST +++++++++++");
         workerList.stream().forEach(w -> {
             if(w.getMessageJob().getRouteX() instanceof RouteX.Message){
             logger.info("Worker: " + w.getMessageJob().getRouteX() + ", with awaited hash " + Util.calcMd5((RouteX.Message) w.getMessageJob().getRouteX()).substring(0, 6));
         }
         });
-        System.out.println("++++++++++++++++++++--------++++++++++++");
+        System.out.println("++++++++ WORKERLIST END ++++++++");
     }
 }
-
-/**
- * Id which is for:
- * RouteX.Request: EndNode -> RouteX.Reply: SourceNode
- * RouteX.Message: md5.hash(source+payload).substring(0,6) -> RouteX.Acknowledge: payload
- */
