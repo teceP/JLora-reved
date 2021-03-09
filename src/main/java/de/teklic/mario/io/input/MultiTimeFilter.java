@@ -19,7 +19,7 @@ public class MultiTimeFilter implements Filterable {
 
     private List<MessageItem> messageList;
 
-    private long minTimeDiff = 5000;
+    private long minTimeDiff = 10000;
 
     public MultiTimeFilter() {
         messageList = new ArrayList<>();

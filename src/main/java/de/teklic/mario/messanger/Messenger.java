@@ -94,7 +94,7 @@ public class Messenger {
             return true;
         }
 
-        logger.info("Job " + worker.getMessageJob().getRouteX().getFlag() + " to " + worker.getMessageJob().getRouteX().getEndNode() + " not finished.");
+        logger.info("Job " + worker.getMessageJob().getRouteX().getFlag() + " to " + worker.getMessageJob().getRouteX().getEndNode() + " not finished. ID: " + worker.getId());
         return false;
     }
 
