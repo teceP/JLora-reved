@@ -33,7 +33,7 @@ public class MessageEvaluator {
         routeReply.setFlag(RouteFlag.REPLY);
         routeReply.setSource(infos[0]);
         routeReply.setTimeToLive(Integer.parseInt(infos[2]));
-        routeReply.setHops(Integer.parseInt(infos[3]));
+        routeReply.setHops(Integer.parseInt(infos[3]) + 1);
         routeReply.setEndNode(infos[4]);
         routeReply.setNextNode(infos[5]);
         routeReply.setIncoming(true);
@@ -49,7 +49,7 @@ public class MessageEvaluator {
         routeRequest.setFlag(RouteFlag.REQUEST);
         routeRequest.setSource(infos[0]);
         routeRequest.setTimeToLive(Integer.parseInt(infos[2]));
-        routeRequest.setHops(Integer.parseInt(infos[3]));
+        routeRequest.setHops(Integer.parseInt(infos[3] + 1));
         routeRequest.setEndNode(infos[4]);
         routeRequest.setIncoming(true);
         return routeRequest;
