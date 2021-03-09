@@ -45,7 +45,6 @@ public class UserInput extends Observable implements Runnable {
      */
     public static UserInput getInstance(){
         if(userInput == null){
-            logger.info("UserInput or Scanner object was null. Create new instance.");
             userInput = new UserInput();
         }
         return userInput;
