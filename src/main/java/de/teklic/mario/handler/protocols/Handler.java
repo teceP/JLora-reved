@@ -39,7 +39,7 @@ public abstract class Handler implements Communicable{
         RoutingTable.getInstance().add(message);
         if(message.getTimeToLive() > 0) {
             Util.prepareToForward(message);
+            Messenger.getInstance().send(message);
         }
-        Messenger.getInstance().send(message);
     }
 }
