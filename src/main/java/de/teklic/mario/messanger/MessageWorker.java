@@ -34,6 +34,8 @@ public class MessageWorker implements Runnable{
      */
     private MessageJob messageJob;
 
+    private boolean inactive;
+
     /**
      * A random ID recognition and matching
      */
@@ -108,8 +110,9 @@ public class MessageWorker implements Runnable{
      * After that, an error gets sent out.
      */
     public void onFailedPostExecutions(){
-        logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Removing from worker list now. Sending Error.");
-        Messenger.getInstance().removeWorker(this);
+        logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Setting worker to inactive state. Sending Error.");
+        //Messenger.getInstance().removeWorker(this); //comment out. try without to make action if answer comes in later
+        Messenger.getInstance().setInactive(this);
         RoutingTable.getInstance().removeRoute(messageJob.getRouteX().getEndNode());
         sendError();
     }

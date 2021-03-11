@@ -77,6 +77,14 @@ public class Messenger {
         workerList.removeIf(w -> w.getId().equalsIgnoreCase(messageWorker.getId()));
     }
 
+    public void setInactive(MessageWorker messageWorker){
+        workerList
+                .stream()
+                .filter(w -> w.getId().equalsIgnoreCase(messageWorker.getId()))
+                .collect(Collectors.toList())
+                .forEach(w -> w.setInactive(true));
+    }
+
     /**
      * Validates if a job has been finished
      * @param worker Worker
