@@ -207,7 +207,7 @@ public class MessageEvaluator {
             route.setTokenizedHeader(tokenizedHeader);
             return route;
         }catch (Exception e){
-            e.printStackTrace();
+            logger.info("Error while evaluating String '" + message + "'.");
             return handleNotLR(message);
         }
     }
