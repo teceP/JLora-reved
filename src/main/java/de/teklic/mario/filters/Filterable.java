@@ -1,8 +1,10 @@
-package de.teklic.mario.io.input;
+package de.teklic.mario.filters;
 /*
  *
  * @author Mario Teklic
  */
+
+import de.teklic.mario.model.routex.RouteX;
 
 public interface Filterable {
     /**
@@ -16,5 +18,5 @@ public interface Filterable {
      * @return The same string if no action has be made,
      * SHOULD_NOT final String if the String should not be forwarded because of any condition from the filter
      */
-    String filter(String msg);
+    RouteX filter(RouteX msg);
 }

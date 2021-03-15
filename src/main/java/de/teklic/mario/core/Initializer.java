@@ -5,7 +5,7 @@ package de.teklic.mario.core;
  */
 
 import de.teklic.mario.handler.*;
-import de.teklic.mario.io.input.MultiTimeFilter;
+import de.teklic.mario.filters.MultiTimeFilter;
 import de.teklic.mario.io.input.SerialPortInput;
 import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.messanger.MessageWorker;
@@ -70,6 +70,9 @@ public class Initializer {
         //Handlers
         setHandlers(jLoraModel);
 
+        //Filters
+        setFilters(jLoraModel);
+
         //Serial Port
         jLoraModel.setSerialPort((SerialPort) CommPortIdentifier.getPortIdentifier(Constant.PORT).open(
                 JLora.class.getName(), 0));
@@ -110,6 +113,12 @@ public class Initializer {
         logger.info("Handlers (" + jLoraModel.getHandlers().size() +") where set.");
     }
 
+    private static void setFilters(JLoraModel jLoraModel){
+        jLoraModel.setFilters(new ArrayList<>());
+        jLoraModel.getFilters().add(new MultiTimeFilter());
+        logger.info("Filters (" + jLoraModel.getFilters().size() +") has been applied.");
+    }
+
     /**
      * Sets the inputs and outputs, based on the SerialPort and System.in and System.out
      *
@@ -120,7 +129,6 @@ public class Initializer {
     private static void setIO(JLora jLora, JLoraModel jLoraModel) throws IOException {
         //Read
         SerialPortInput.getInstance().setInputScanner(new Scanner(jLoraModel.getSerialPort().getInputStream()));
-        SerialPortInput.getInstance().addFilter(new MultiTimeFilter());
         new Thread(SerialPortInput.getInstance()).start();
         UserInput.getInstance().setScanner(new Scanner(System.in));
         jLoraModel.setUserInputThread(new Thread(UserInput.getInstance()));

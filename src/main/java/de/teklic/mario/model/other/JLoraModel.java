@@ -1,6 +1,7 @@
 package de.teklic.mario.model.other;
 
 import de.teklic.mario.handler.protocols.Handler;
+import de.teklic.mario.filters.Filterable;
 import lombok.Getter;
 import lombok.Setter;
 import purejavacomm.SerialPort;
@@ -28,4 +29,9 @@ public class JLoraModel {
      * All specific handlers
      */
     private List<Handler> handlers;
+
+    /**
+     * All filters which are applied before JLora forwards to the specific handlers
+     */
+    private List<Filterable> filters;
 }

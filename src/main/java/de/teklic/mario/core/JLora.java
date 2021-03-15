@@ -1,5 +1,6 @@
 package de.teklic.mario.core;
 
+import de.teklic.mario.filters.Filterable;
 import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.other.JLoraModel;
@@ -84,6 +85,9 @@ public class JLora implements Observer {
                     RouteX routeX;
                     if (arg instanceof String) {
                         routeX = MessageEvaluator.evaluate((String) arg);
+                        for(Filterable f : jLoraModel.getFilters()){
+                            routeX = f.filter(routeX);
+                        }
                     } else {
                         routeX = (RouteX.Message) arg;
                     }

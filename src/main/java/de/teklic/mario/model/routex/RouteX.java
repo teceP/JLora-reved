@@ -43,6 +43,11 @@ public abstract class RouteX {
      */
     private boolean incoming;
 
+    /**
+     * Arriving timestamp
+     */
+    private long timestamp;
+
     public RouteX(de.teklic.mario.model.routex.RouteFlag flag, String source, int timeToLive, TokenizedHeader tokenizedHeader, boolean incoming, String endNode) {
         this.flag = flag;
         this.source = source;
