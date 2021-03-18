@@ -62,7 +62,6 @@ public class MultiTimeFilter implements Filterable {
                         && r.getEndNode().equals(routeX.getEndNode())
                         && r.getFlag().flag == routeX.getFlag().flag)){
             logger.info("----> filter ---> IS instance of disposable");
-
             return new RouteX.Disposable();
         }
 

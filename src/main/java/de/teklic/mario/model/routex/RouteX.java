@@ -246,5 +246,10 @@ public abstract class RouteX {
         public String responsibleHandler() {
             return null;
         }
+
+        @Override
+        public String toString() {
+            return "Disposable object.";
+        }
     }
 }
