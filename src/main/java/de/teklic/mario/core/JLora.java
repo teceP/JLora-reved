@@ -85,9 +85,11 @@ public class JLora implements Observer {
                     RouteX routeX;
                     if (arg instanceof String) {
                         routeX = MessageEvaluator.evaluate((String) arg);
+                        logger.info("-----------> msg evaluator ----> "  + routeX.getClass().getSimpleName());
                         for(Filterable f : jLoraModel.getFilters()){
                             routeX = f.filter(routeX);
                         }
+                        logger.info("-----------> msg evaluator after filter ----> "  + routeX.getClass().getSimpleName());
                     } else {
                         routeX = (RouteX.Message) arg;
                     }
