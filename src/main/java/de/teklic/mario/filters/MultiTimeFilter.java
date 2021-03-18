@@ -42,7 +42,6 @@ public class MultiTimeFilter implements Filterable {
 
         //If routeX is not a disposable, the message should be forwarded by JLora
         if(!(msg instanceof RouteX.Disposable)){
-            logger.info("----> filter ---> is NOT instance of disposable");
             //This msg was not found in the list. Will be added to the list
             msg.setTimestamp(currentTime);
             messageList.add(msg);
@@ -61,7 +60,6 @@ public class MultiTimeFilter implements Filterable {
                 r.getSource().equals(routeX.getSource())
                         && r.getEndNode().equals(routeX.getEndNode())
                         && r.getFlag().flag == routeX.getFlag().flag)){
-            logger.info("----> filter ---> IS instance of disposable");
             return new RouteX.Disposable();
         }
 
