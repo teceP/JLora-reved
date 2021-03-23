@@ -8,15 +8,13 @@ import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.MessageEvaluator;
 import de.teklic.mario.util.UserService;
 import de.teklic.mario.util.Util;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-/**
- * TODO Telegram bot?
- */
 
 /*
 TODO wenn kein acknowledge, dann request, dann nochmal message
@@ -27,6 +25,13 @@ TODO wenn kein acknowledge, dann request, dann nochmal message
  */
 public class JLora implements Observer {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
+
+    /**
+     * Should show logging output
+     */
+    @Getter
+    @Setter
+    private boolean hideLoggerOutput;
 
     /**
      * Holds several information, such as the handler references and the serial port.

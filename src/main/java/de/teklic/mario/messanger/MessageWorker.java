@@ -34,6 +34,9 @@ public class MessageWorker implements Runnable{
      */
     private MessageJob messageJob;
 
+    /**
+     * If this is true, the message could not be delivered to the endNode.
+     */
     private boolean inactive;
 
     /**
@@ -95,7 +98,7 @@ public class MessageWorker implements Runnable{
      * Make a RouteX.Request first. After a reply was registered, fire a new RouteX.Message Job to the Messenger.
      * For this situation, the initial RouteX.Message must and can be stored inside of a RouteX.Request object.
      */
-    public void onSuccessfulPostExecutions(){
+    private void onSuccessfulPostExecutions(){
         if(messageJob.getRouteX() instanceof RouteX.RouteRequest){
             if(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage() != null){
                 ((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().setNextNode(RoutingTable.getInstance().getNextForDestination(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().getEndNode()));
@@ -109,7 +112,7 @@ public class MessageWorker implements Runnable{
      * If a job fails, the worker and also the route has to be removed.
      * After that, an error gets sent out.
      */
-    public void onFailedPostExecutions(){
+    private void onFailedPostExecutions(){
         logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Setting worker to inactive state. Sending Error.");
         //Messenger.getInstance().removeWorker(this); //comment out. try without to make action if answer comes in later
         Messenger.getInstance().setInactive(this);

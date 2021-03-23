@@ -5,6 +5,7 @@ package de.teklic.mario.filters;
  */
 
 import de.teklic.mario.model.routex.RouteX;
+import de.teklic.mario.model.routex.TokenizedHeader;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
