@@ -78,7 +78,7 @@ public class UserInput extends Observable implements Runnable {
         String dest = "";
         String msg = "";
 
-        while(!isInteger(dest)){
+        while(!isInteger(dest) && notMe(dest)){
             logger.info("Destination Address: ");
             dest = scanner.nextLine();
         }
@@ -127,6 +127,10 @@ public class UserInput extends Observable implements Runnable {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public boolean notMe(String str){
+        return !str.equals(Address.getInstance().getAddr());
     }
 
     /**

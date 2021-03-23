@@ -88,7 +88,7 @@ public class RoutingTable {
      * @return Returns "no_next", if there was no route found for this destination.
      */
     public String getNextForDestination(String destAddr){
-        logger.info("Routes from routing table (size " + routeList.size() + "):");
+        //logger.info("Routes from routing table (size " + routeList.size() + "):");
 
         Optional<Route> routeOptional = routeList.stream()
                 .filter(r -> r.getDestination().equals(destAddr)).collect(Collectors.toList())
@@ -97,7 +97,7 @@ public class RoutingTable {
         Route route;
         if(routeOptional.isPresent()){
             route = routeOptional.get();
-            logger.info("Next route for destination with address '" + destAddr + "': " + route);
+            //logger.info("Next route for destination with address '" + destAddr + "': " + route);
             return route.getNeighbour();
         }else{
             logger.info("No next route found in routingtable.");
