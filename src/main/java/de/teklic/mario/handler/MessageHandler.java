@@ -16,6 +16,7 @@ import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
 import de.teklic.mario.util.Util;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.DEFAULT_RETRIES;
@@ -53,7 +54,11 @@ public class MessageHandler extends Handler {
     public void forMe(RouteX message) {
         RoutingTable.getInstance().add(message);
         RouteX.Message m = (RouteX.Message) message;
-        logger.info("New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource());
+        String mMessage = "New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource();
+        if(logger.getLevel().intValue() == Level.OFF.intValue()){
+            System.out.println(mMessage);
+        }
+        logger.info(mMessage);
         logger.info("Sending out acknowledge.");
 
         RouteX.Acknowledge acknowledge = new RouteX.Acknowledge();
