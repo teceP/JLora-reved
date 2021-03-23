@@ -123,6 +123,10 @@ public class UserService {
         return false;
     }
 
+    /**
+     * Enables or deactivates all terminal logger outputs.
+     * @param enable if enable is true, the Log Level of all loggers
+     */
     public void loggerState(boolean enable){
         Level lvl;
 

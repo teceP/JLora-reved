@@ -31,7 +31,7 @@ public interface Constant {
      * 8:
      * 4:
      */
-    String CONFIG = "AT+CFG=433500000,20,9,7,1,1,0,0,0,0,3000,8,4";
+    String CONFIG = "AT+CFG=433500000,5,9,7,1,1,0,0,0,0,3000,8,4";
 
     String CONFIG_HEAD = "AT+CFG=433500000,";
     String CONFIG_TAIL = ",9,7,1,1,0,0,0,0,3000,8,4";
