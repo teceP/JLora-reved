@@ -8,12 +8,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import de.teklic.mario.core.Address;
+import de.teklic.mario.core.Initializer;
+import de.teklic.mario.core.JLora;
+import de.teklic.mario.handler.*;
 import de.teklic.mario.io.input.SerialPortInput;
 import de.teklic.mario.io.input.UserInput;
 import de.teklic.mario.io.output.SerialPortOutput;
+import de.teklic.mario.messanger.MessageWorker;
+import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.routingtable.RoutingTable;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static de.teklic.mario.core.Constant.*;
+import static de.teklic.mario.util.CustomFormatter.*;
+import static de.teklic.mario.util.CustomFormatter.WHITE;
 
 /**
  * UserService-Singleton
@@ -26,13 +36,14 @@ public class UserService {
      */
     private static UserService userService;
 
-    private UserService(){}
+    private UserService() {
+    }
 
     /**
      * @return UserService singleton instance
      */
-    public static UserService getInstance(){
-        if(userService == null){
+    public static UserService getInstance() {
+        if (userService == null) {
             userService = new UserService();
         }
         return userService;
@@ -40,10 +51,11 @@ public class UserService {
 
     /**
      * Handles a message and tries to print out information for the user.
+     *
      * @param call String which must match any of the service strings.
      */
-    public void handle(String call){
-        switch(call){
+    public void handle(String call) {
+        switch (call) {
             case "table":
                 logger.info("Routing Table:");
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -51,13 +63,14 @@ public class UserService {
                 logger.info(str);
                 break;
             case "help":
-                logger.info("table, msg, help, drop, addr, colors, exit");
+                logger.info("table, msg, help, drop, addr, colors, volt:xx (xx>5 && xx<20), nolog, exit");
                 break;
             case "addr":
                 logger.info("Nodes Address: " + Address.getInstance().getAddr());
                 break;
             case "drop":
                 RoutingTable.getInstance().drop();
+                logger.info("Routing table has been droped.");
                 break;
             case "exit":
                 SerialPortInput.getInstance().exit();
@@ -65,6 +78,13 @@ public class UserService {
                 SerialPortOutput.getInstance().exit();
                 System.out.println("Closed all streams. Goodbye.");
                 System.exit(0);
+                break;
+            case "log":
+                loggerState(true);
+                logger.info("Loggeroutput was enabled.");
+            case "nolog":
+                logger.info("Loggeroutput was disabled.");
+                loggerState(false);
                 break;
             case "colors":
                 logger.info("White Bright: JLora");
@@ -79,8 +99,68 @@ public class UserService {
                 logger.info("Purple: Messenger");
                 break;
             default:
-                logger.info("Dropping user message (not assignable): " + call);
+                if (!voltage(call)) {
+                    logger.info("Dropping user message (not assignable): " + call);
+                }
                 break;
         }
+    }
+
+    public boolean voltage(String s) {
+        try {
+            if (s.length() > 5 && s.startsWith(VOLT)) {
+                String volt = s.split(":", 0)[1];
+                int i = Integer.parseInt(volt);
+                if (i > 5 && i < 20) {
+                    SerialPortOutput.getInstance().sendConfig(CONFIG_HEAD + i + CONFIG_TAIL);
+                }
+                logger.info("Set output voltage to " + i + ".");
+                return true;
+            }
+        } catch (Exception e) {
+            logger.info("Could not parse voltage info.");
+        }
+        return false;
+    }
+
+    public void loggerState(boolean enable){
+        Level lvl;
+
+        if(enable){
+            lvl = Level.ALL;
+        }else{
+            lvl = Level.OFF;
+        }
+
+        Initializer.logger.setLevel(lvl);
+
+        //JLora
+        JLora.logger.setLevel(lvl);
+
+        //Handlers
+        AcknowledgeHandler.logger.setLevel(lvl);
+        MessageHandler.logger.setLevel(lvl);
+        ReplyHandler.logger.setLevel(lvl);
+        RequestHandler.logger.setLevel(lvl);
+        ErrorHandler.logger.setLevel(lvl);
+
+        //Input
+        SerialPortInput.logger.setLevel(lvl);
+        UserInput.logger.setLevel(lvl);
+
+        //Output
+        SerialPortOutput.logger.setLevel(lvl);
+
+        //Messenger
+        Messenger.logger.setLevel(lvl);
+        MessageWorker.logger.setLevel(lvl);
+
+        //Routing Table
+        RoutingTable.logger.setLevel(lvl);
+
+        //Util
+        MessageEvaluator.logger.setLevel(lvl);
+        UserService.logger.setLevel(lvl);
+        Util.logger.setLevel(lvl);
     }
 }

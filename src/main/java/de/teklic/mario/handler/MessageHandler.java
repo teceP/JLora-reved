@@ -44,8 +44,6 @@ public class MessageHandler extends Handler {
         }
     }
 
-
-
     /**
      * An incoming Message has to be acknowledged.
      * An Acknowledge will be sent out to the source node of the Message object (the initial creator).
