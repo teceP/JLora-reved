@@ -81,7 +81,7 @@ public class UserService {
                 System.out.println("Closed all streams. Goodbye.");
                 System.exit(0);
                 break;
-            case "log":
+            case "dolog":
                 loggerState(true);
                 logger.info("Loggeroutput was enabled.");
             case "nolog":
