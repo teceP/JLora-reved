@@ -84,6 +84,7 @@ public class UserService {
             case "dolog":
                 loggerState(true);
                 logger.info("Loggeroutput was enabled.");
+                break;
             case "nolog":
                 logger.info("Loggeroutput was disabled.");
                 loggerState(false);
