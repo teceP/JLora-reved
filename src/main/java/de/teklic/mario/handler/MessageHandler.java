@@ -55,7 +55,7 @@ public class MessageHandler extends Handler {
         RoutingTable.getInstance().add(message);
         RouteX.Message m = (RouteX.Message) message;
         String mMessage = "New Message has reached me: '" + m.getPayload() + "' from node " + m.getSource();
-        if(logger.getLevel().intValue() == Level.OFF.intValue()){
+        if(logger.getLevel() != null && logger.getLevel().intValue() == Level.OFF.intValue()){
             System.out.println(mMessage);
         }
         logger.info(mMessage);
