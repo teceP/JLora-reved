@@ -31,7 +31,7 @@ public interface Constant {
      * 8:
      * 4:
      */
-    String CONFIG = "AT+CFG=433500000,7,9,7,1,1,0,0,0,0,3000,8,4";
+    String CONFIG = "AT+CFG=433500000,20,9,7,1,1,0,0,0,0,3000,8,4";
 
     /**
      * Irrelevant message types, which gets filtered out if they got received.
