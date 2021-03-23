@@ -18,6 +18,11 @@ import java.util.logging.Logger;
 import static de.teklic.mario.core.Constant.DEFAULT_TIMEOUT;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
 
+
+/**
+ * TODO better messageworker handling
+ */
+
 /**
  * A MessageWorker is responsible for a MessageJob.
  * It reruns a Job, based on the MessageJobs information.
@@ -58,7 +63,7 @@ public class MessageWorker implements Runnable{
     @Override
     public void run() {
         for(int i = 0; i < messageJob.getRetries()-1; i++){
-            logger.info("TRY " + (i+1) + ":");
+            logger.info("Try " + (i+1) + " ...");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             if(sleepAndCheck(3)){
                 return;
@@ -83,7 +88,7 @@ public class MessageWorker implements Runnable{
                 e.printStackTrace();
             }
             if(Messenger.getInstance().isJobFinished(this)){
-                logger.info("Message Job has been finished by condition.");
+                logger.info(messageJob.getRouteX().getFlag() + " Job has been finished by condition.");
                 onSuccessfulPostExecutions();
                 return true;
             }

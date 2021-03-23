@@ -102,7 +102,10 @@ public class Messenger {
             return true;
         }
 
-        logger.info("Job " + worker.getMessageJob().getRouteX().getFlag() + " to " + worker.getMessageJob().getRouteX().getEndNode() + " not finished. ID: " + worker.getId());
+        logger.info("Job " + worker.getMessageJob().getRouteX().getFlag() + " to " + worker.getMessageJob().getRouteX().getEndNode() + " not finished. " +
+                (worker.getMessageJob().getRouteX() instanceof RouteX.Message
+                        ? "Waiting for hash: " + Util.calcMd5(worker.getMessageJob().getRouteX().getSource(), ((RouteX.Message) worker.getMessageJob().getRouteX()).getPayload())
+                        : "Waiting for reply..."));
         return false;
     }
 

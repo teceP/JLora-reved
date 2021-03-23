@@ -31,6 +31,8 @@ import static de.teklic.mario.util.CustomFormatter.WHITE;
 public class UserService {
     public static final Logger logger = Logger.getLogger(UserService.class.getName());
 
+    public int voltage = 5;
+
     /**
      * Singleton instance
      */
@@ -98,6 +100,8 @@ public class UserService {
                 logger.info("Cyan: Output");
                 logger.info("Purple: Messenger");
                 break;
+            case "voltage":
+                logger.info("Current voltage level: " + voltage + ".");
             default:
                 if (!voltage(call)) {
                     logger.info("Dropping user message (not assignable): " + call);
@@ -113,6 +117,7 @@ public class UserService {
                 int i = Integer.parseInt(volt);
                 if (i > 5 && i < 20) {
                     SerialPortOutput.getInstance().sendConfig(CONFIG_HEAD + i + CONFIG_TAIL);
+                    voltage = i;
                 }
                 logger.info("Set output voltage to " + i + ".");
                 return true;
@@ -164,7 +169,7 @@ public class UserService {
 
         //Util
         MessageEvaluator.logger.setLevel(lvl);
-        UserService.logger.setLevel(lvl);
+        //UserService.logger.setLevel(lvl); -> should not be deactivated.
         Util.logger.setLevel(lvl);
     }
 }
