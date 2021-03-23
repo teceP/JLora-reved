@@ -83,8 +83,6 @@ public class Util {
      * @return MD5 Hash as String
      */
     public static String calcMd5(String sender, String payload){
-        String hash = DigestUtils.md5Hex(sender + payload);
-        logger.info("Calculated hash: " + hash);
         return DigestUtils.md5Hex(sender + payload);
     }
 

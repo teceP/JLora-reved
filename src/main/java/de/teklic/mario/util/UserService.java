@@ -31,7 +31,7 @@ import static de.teklic.mario.util.CustomFormatter.WHITE;
 public class UserService {
     public static final Logger logger = Logger.getLogger(UserService.class.getName());
 
-    public int voltage = 5;
+    private int voltage = 5;
 
     /**
      * Singleton instance
