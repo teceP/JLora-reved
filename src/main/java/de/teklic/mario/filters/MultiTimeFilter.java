@@ -61,6 +61,7 @@ public class MultiTimeFilter implements Filterable {
                 r.getSource().equals(routeX.getSource())
                         && r.getEndNode().equals(routeX.getEndNode())
                         && r.getFlag().flag == routeX.getFlag().flag)){
+            logger.info("Disposed by MultiTimeFilter.");
             return new RouteX.Disposable();
         }
 
