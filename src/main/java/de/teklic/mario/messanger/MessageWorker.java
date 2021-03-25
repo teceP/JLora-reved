@@ -67,7 +67,10 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
      */
     @Override
     public void run() {
-        for(int i = 0; i < messageJob.getRetries()-1; i++){
+        for(int i = 0; i < messageJob.getRetries(); i++){
+            if(finished){
+                return;
+            }
             logger.info("Try " + (i+1) + " ...");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             waitAndListen(3);

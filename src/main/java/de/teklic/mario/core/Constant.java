@@ -67,6 +67,7 @@ public interface Constant {
      * Logfile name's for each class
      */
     String JLR_LOG = "jlora.log";
+    String MTF_LOG = "multi_time_filter.log";
     String INIT_LOG = "initializer.log";
     String ACK_H_LOG = "acknowledge_handler.log";
     String ERR_H_LOG = "error_handler.log";

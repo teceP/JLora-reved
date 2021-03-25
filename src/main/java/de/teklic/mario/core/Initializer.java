@@ -193,6 +193,10 @@ public class Initializer {
         formatLogger(JLora.logger, WHITE_BRIGHT);
         setLoggerOutputs(JLora.logger, JLR_LOG);
 
+        //Filters
+        formatLogger(MultiTimeFilter.logger, WHITE_BRIGHT);
+        setLoggerOutputs(MultiTimeFilter.logger, MTF_LOG);
+
         //Handlers
         formatLogger(AcknowledgeHandler.logger, GREEN);
         formatLogger(MessageHandler.logger, GREEN_BRIGHT);
