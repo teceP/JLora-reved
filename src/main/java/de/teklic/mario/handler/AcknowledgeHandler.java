@@ -45,6 +45,6 @@ public class AcknowledgeHandler extends Handler {
     @Override
     public void forMe(RouteX message) {
         logger.info("RouteX Acknowledge is for me. Send to Messenger.");
-        Messenger.getInstance().jobFinished(message);
+        Messenger.getInstance().update(message);
     }
 }

@@ -9,9 +9,12 @@ import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.io.output.SerialPortOutput;
 import de.teklic.mario.routingtable.RoutingTable;
+import de.teklic.mario.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -30,7 +33,7 @@ import static de.teklic.mario.core.Constant.INITIAL_TTL;
  */
 @Getter
 @Setter
-public class MessageWorker implements Runnable{
+public class MessageWorker implements Runnable, PropertyChangeListener {
 
     public static final Logger logger = Logger.getLogger(MessageWorker.class.getName());
 
@@ -43,6 +46,8 @@ public class MessageWorker implements Runnable{
      * If this is true, the message could not be delivered to the endNode.
      */
     private boolean inactive;
+
+    private boolean finished;
 
     /**
      * A random ID recognition and matching
@@ -65,12 +70,17 @@ public class MessageWorker implements Runnable{
         for(int i = 0; i < messageJob.getRetries()-1; i++){
             logger.info("Try " + (i+1) + " ...");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
-            if(sleepAndCheck(3)){
-                return;
-            }
+            waitAndListen(3);
+            /**
+             * TODO !! ich muss HIER warten, ohne den trhread zu blockieren,
+             * damit propertychangelistener funktioniert
+             * sleepAndTry muss zu etwas wie waitAndListen
+             */
         }
-        logger.info("Message Job has been finished by retries.");
-        onFailedPostExecutions();
+        logger.info("RouteX could not be delivered.");
+        if(!finished){
+            onFailedPostExecutions();
+        }
     }
 
     /**
@@ -80,20 +90,14 @@ public class MessageWorker implements Runnable{
      * @return true if MessageWorker can stop.
      * @return false if MessageWorker should try again.
      */
-    public boolean sleepAndCheck(Integer times){
+    public void waitAndListen(Integer times){
         for(int i = 0; i < times; i++){
             try {
                 Thread.sleep(DEFAULT_TIMEOUT/3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(Messenger.getInstance().isJobFinished(this)){
-                logger.info(messageJob.getRouteX().getFlag() + " Job has been finished by condition.");
-                onSuccessfulPostExecutions();
-                return true;
-            }
         }
-        return false;
     }
 
     /**
@@ -104,6 +108,7 @@ public class MessageWorker implements Runnable{
      * For this situation, the initial RouteX.Message must and can be stored inside of a RouteX.Request object.
      */
     private void onSuccessfulPostExecutions(){
+        logger.info("onSuccessfulPostExecutions");
         if(messageJob.getRouteX() instanceof RouteX.RouteRequest){
             if(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage() != null){
                 ((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().setNextNode(RoutingTable.getInstance().getNextForDestination(((RouteX.RouteRequest) messageJob.getRouteX()).getStoredMessage().getEndNode()));
@@ -119,10 +124,55 @@ public class MessageWorker implements Runnable{
      */
     private void onFailedPostExecutions(){
         logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Setting worker to inactive state. Sending Error.");
-        //Messenger.getInstance().removeWorker(this); //comment out. try without to make action if answer comes in later
-        Messenger.getInstance().setInactive(this);
+        logger.info("onFailedPostExecutions: setting inactive. gets notified, if routeX gets received later ...");
+        this.setInactive(true);
+        this.setFinished(false);
+        //Messenger.getInstance().removePropertyChangeListener(this);
         RoutingTable.getInstance().removeRoute(messageJob.getRouteX().getEndNode());
         sendError();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // if not finished OR not finished AND inactive
+        if(!finished){
+            RouteX r = (RouteX) evt.getNewValue();
+            int flag = r.getFlag().flag;
+            if(flag == RouteFlag.ACKNOWLEDGE.flag || flag == RouteFlag.REPLY.flag){
+                if(r.getFlag().flag == RouteFlag.ACKNOWLEDGE.flag){
+                    finished = checkAckIfFinished((RouteX.Acknowledge) r);
+                }else{
+                    finished = checkReplyIfFinished((RouteX.RouteReply) r);
+                }
+            }else{
+                logger.info("PropertyChangeEvent does not contains Acknowledge or Repy.");
+            }
+
+            if(finished){
+                setInactive(true);
+                Messenger.getInstance().removePropertyChangeListener(this);
+                onSuccessfulPostExecutions();
+            }
+        }
+    }
+
+    public boolean checkAckIfFinished(RouteX.Acknowledge acknowledge){
+        String awaitedHash = Util.calcMd5((RouteX.Message) messageJob.getRouteX()).substring(0, 6);
+        if (acknowledge.getPayload().equalsIgnoreCase(awaitedHash)) {
+            logger.info("Message Job has finished by conditions!");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkReplyIfFinished(RouteX.RouteReply reply){
+        String requestedNode = messageJob.getRouteX().getEndNode();
+        if (reply.getSource().equalsIgnoreCase(requestedNode)) {
+            logger.info("Request Job has finished by conditions!");
+            return true;
+        }
+
+        return false;
     }
 
     /**

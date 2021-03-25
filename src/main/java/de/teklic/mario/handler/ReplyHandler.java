@@ -47,6 +47,6 @@ public class ReplyHandler extends Handler {
     @Override
     public void forMe(RouteX message) {
         logger.info("RouteX Reply is for me. Send to Messenger.");
-        Messenger.getInstance().jobFinished(message);
+        Messenger.getInstance().update(message);
     }
 }

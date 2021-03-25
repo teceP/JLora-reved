@@ -16,6 +16,12 @@ import java.util.Observer;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * TODO
+ * 0. Observer mit PropertyChangeListener ersetzen
+ * 1. Messenger mit PropertyChangeListener auskleiden
+ */
+
 /*
 TODO wenn kein acknowledge, dann request, dann nochmal message
  */
@@ -66,7 +72,7 @@ public class JLora implements Observer {
      * Sets if the central is allowed to hear from new events or not
      * @param listen Listen is allowed
      */
-    public void setListening(boolean listen){
+    public void setListening(boolean listen) {
         listening = listen;
     }
 
@@ -90,7 +96,7 @@ public class JLora implements Observer {
                     RouteX routeX;
                     if (arg instanceof String) {
                         routeX = MessageEvaluator.evaluate((String) arg);
-                        for(Filterable f : jLoraModel.getFilters()){
+                        for (Filterable f : jLoraModel.getFilters()) {
                             routeX = f.filter(routeX);
                         }
                     } else {
@@ -118,6 +124,7 @@ public class JLora implements Observer {
             return;
         }
 
+        /* OLD:
         if (hasMessengerRelevance(routeX) && Util.isRouteXForMe(routeX)) {
             Messenger.getInstance().update(routeX);
         } else {
@@ -127,7 +134,16 @@ public class JLora implements Observer {
                     .collect(Collectors.toList())
                     .get(0)
                     .handle(routeX);
-        }
+        }*/
+        //ob es hierüber geht oder über den handler ist obligatorisch. So ist es übersichtlicher.
+        // new:
+        jLoraModel.getHandlers()
+                .stream()
+                .filter(handler -> routeX.responsibleHandler().equalsIgnoreCase(handler.getHandlerName()))
+                .collect(Collectors.toList())
+                .get(0)
+                .handle(routeX);
+
     }
 
     /**
