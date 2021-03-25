@@ -61,7 +61,7 @@ public class Messenger {
     }
 
     public void incomingRouteX(RouteX routeX){
-        PropertyChangeEvent event = new PropertyChangeEvent(null, routeX.getFlag().name(), null, routeX);
+        PropertyChangeEvent event = new PropertyChangeEvent(this, routeX.getFlag().name(), new RouteX.Disposable(), routeX);
         changes.firePropertyChange(event);
     }
 
