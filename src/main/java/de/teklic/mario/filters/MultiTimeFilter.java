@@ -16,12 +16,6 @@ import java.util.logging.Logger;
 
 public class MultiTimeFilter implements Filterable {
 
-    /**
-     * TODO
-     * wenn übereinstimmmender hash,
-     * wenn übereinstimmender sender + empfänger
-     */
-
     public static final Logger logger = Logger.getLogger(MultiTimeFilter.class.getName());
 
     private List<RouteX> messageList;
@@ -64,13 +58,6 @@ public class MultiTimeFilter implements Filterable {
             logger.info("Disposed by MultiTimeFilter.");
             return new RouteX.Disposable();
         }
-
-        /* Useless?
-        if (messageList.stream().filter(r -> r instanceof RouteX.Acknowledge)
-                .anyMatch(r -> ((RouteX.Acknowledge) r).getPayload().equals(((RouteX.Acknowledge) routeX).getPayload()))){
-            return new RouteX.Disposable();
-        }
-         */
 
         return routeX;
     }
