@@ -70,9 +70,8 @@ public abstract class RouteX {
     @Override
     public String toString() {
         return "Source: " + this.getSource() +
-                "\nTimeToLive: " + getTimeToLive() +
-                "\nTokenizedHeader: " + getTokenizedHeader().toString() +
-                "\nFlag: " + this.getFlag().name();
+                ", TimeToLive: " + getTimeToLive() +
+                ", Flag: " + this.getFlag().name();
     }
 
     /**
@@ -100,12 +99,11 @@ public abstract class RouteX {
         @Override
         public String toString() {
             return "Source: " + this.getSource() +
-                    "\nTimeToLive: " + getTimeToLive() +
-                    "\nDestination: " + getEndNode() +
-                    "\nNextNode: " + nextNode +
-                    "\nPayload: " + payload +
-                    "\nTokenizedHeader: " + getTokenizedHeader() +
-                    "\nFlag: " + this.getFlag().name();
+                    ", TimeToLive: " + getTimeToLive() +
+                    ", Destination: " + getEndNode() +
+                    ", NextNode: " + nextNode +
+                    ", Payload: " + payload +
+                    ", Flag: " + this.getFlag().name();
         }
     }
 
@@ -130,12 +128,11 @@ public abstract class RouteX {
 
         @Override
         public String toString() {
-            return  "\nSource: " + getSource() +
-                    "\nTimeToLive: " + getTimeToLive() +
-                    "\nPayload/Hash: " + payload +
-                    "\nDestination: " + getEndNode() +
-                    "\nTokenizedHeader: " + getTokenizedHeader() +
-                    "\nFlag: " + this.getFlag().name();
+            return  ", Source: " + getSource() +
+                    ", TimeToLive: " + getTimeToLive() +
+                    ", Payload/Hash: " + payload +
+                    ", Destination: " + getEndNode() +
+                    ", Flag: " + this.getFlag().name();
         }
     }
 
@@ -163,11 +160,10 @@ public abstract class RouteX {
         @Override
         public String toString() {
             return "Source: " + this.getSource() +
-                    "\nTimeToLive: " + getTimeToLive() +
-                    "\nEndNode: " + getEndNode() +
-                    "\nHops: " + hops +
-                    "\nTokenizedHeader: " + getTokenizedHeader() +
-                    "\nFlag: " + this.getFlag().name();
+                    ", TimeToLive: " + getTimeToLive() +
+                    ", EndNode: " + getEndNode() +
+                    ", Hops: " + hops +
+                    ", Flag: " + this.getFlag().name();
         }
     }
 
@@ -194,12 +190,11 @@ public abstract class RouteX {
         @Override
         public String toString() {
             return "Source: " + this.getSource() +
-                    "\nTimeToLive: " + getTimeToLive() +
-                    "\nEndNode: " + getEndNode() +
-                    "\nNextNode: " + nextNode +
-                    "\nHops: " + hops +
-                    "\nTokenizedHeader: " + getTokenizedHeader().toString() +
-                    "\nFlag: " + this.getFlag().name();
+                    ", TimeToLive: " + getTimeToLive() +
+                    ", EndNode: " + getEndNode() +
+                    ", NextNode: " + nextNode +
+                    ", Hops: " + hops +
+                    ", Flag: " + this.getFlag().name();
         }
     }
 
@@ -224,10 +219,9 @@ public abstract class RouteX {
         @Override
         public String toString() {
             return "Source: " + this.getSource() +
-                    "\nTimeToLive: " + getTimeToLive() +
-                    "\nBrokenNode: " + getEndNode() +
-                    "\nTokenizedHeader: " + getTokenizedHeader().toString() +
-                    "\nFlag: " + this.getFlag().name();
+                    ", TimeToLive: " + getTimeToLive() +
+                    ", BrokenNode: " + getEndNode() +
+                    ", Flag: " + this.getFlag().name();
         }
     }
 

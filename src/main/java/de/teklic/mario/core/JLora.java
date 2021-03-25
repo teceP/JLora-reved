@@ -79,7 +79,7 @@ public class JLora implements PropertyChangeListener {
             Object newObject = evt.getNewValue();
             if (newObject instanceof String && newObject != null && !((String) newObject).isEmpty() || newObject instanceof RouteX.Message && newObject != null) {
                 logger.info("******************NEW PROCESS*************************");
-                logger.info("Object class: " + newObject.getClass() + ", from " + (evt.getSource() instanceof UserInput ? "UserInput" : "SerialInput"));
+                logger.info("Object class: " + newObject.getClass().getSimpleName() + ", from " + (evt.getSource() instanceof UserInput ? "UserInput" : "SerialInput"));
                 logger.info("[Received Text]: " + newObject);
 
                 if (evt.getSource() instanceof UserInput && newObject instanceof String) {
