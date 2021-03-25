@@ -4,9 +4,6 @@ package de.teklic.mario.handler;
  * @author Mario Teklic
  */
 
-import de.teklic.mario.core.JLora;
-import de.teklic.mario.handler.protocols.Communicable;
-import de.teklic.mario.handler.protocols.Handler;
 import de.teklic.mario.handler.protocols.HandlerName;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteX;

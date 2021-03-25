@@ -46,7 +46,7 @@ public interface Constant {
     /**
      * Default timeout between the MessageWorker's retries
      */
-    long DEFAULT_TIMEOUT = 5000;
+    long DEFAULT_TIMEOUT = 10000;
 
     /**
      * Default retries for a MessageWorker's flow

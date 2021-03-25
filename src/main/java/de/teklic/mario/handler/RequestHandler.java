@@ -5,7 +5,6 @@ package de.teklic.mario.handler;
  */
 
 import de.teklic.mario.core.Address;
-import de.teklic.mario.handler.protocols.Handler;
 import de.teklic.mario.handler.protocols.HandlerName;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteFlag;

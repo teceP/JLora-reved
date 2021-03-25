@@ -128,6 +128,7 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         // if not finished OR not finished AND inactive
         if(!finished){
+
             RouteX r = (RouteX) evt.getNewValue();
             int flag = r.getFlag().flag;
             if(flag == RouteFlag.ACKNOWLEDGE.flag || flag == RouteFlag.REPLY.flag){
@@ -138,6 +139,10 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
                 }
             }else{
                 logger.info("PropertyChangeEvent does not contains Acknowledge or Repy. Was: " + r.getFlag());
+            }
+
+            if(inactive && finished){
+                logger.info("Job has been finished, after MessageWorker was inactive!");
             }
 
             if(finished){

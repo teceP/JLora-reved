@@ -1,6 +1,6 @@
 package de.teklic.mario.model.other;
 
-import de.teklic.mario.handler.protocols.Handler;
+import de.teklic.mario.handler.Handler;
 import de.teklic.mario.filters.Filterable;
 import lombok.Getter;
 import lombok.Setter;

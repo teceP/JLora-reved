@@ -1,9 +1,10 @@
-package de.teklic.mario.handler.protocols;
+package de.teklic.mario.handler;
 /*
  *
  * @author Mario Teklic
  */
 
+import de.teklic.mario.handler.protocols.Communicable;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
@@ -22,7 +23,7 @@ import static de.teklic.mario.routingtable.RoutingTable.logger;
  * The handler implements the Communicable interface, which guarentees, that a specific handler
  * can work with an incoming RouteX object, even if its not for the own node.
  */
-public abstract class Handler implements Communicable{
+public abstract class Handler implements Communicable {
 
     /**
      * Represents the handler. This information is needed when the correct handler must be chosen.

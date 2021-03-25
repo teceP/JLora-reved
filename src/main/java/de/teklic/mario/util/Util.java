@@ -42,8 +42,6 @@ public class Util {
             route = new RoutingTable.Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteReply) routeX).getHops());
         }else if(routeX instanceof RouteX.RouteRequest){
             route = new RoutingTable.Route(Address.getInstance().getAddr(), routeX.getSource(), routeX.getTokenizedHeader().getOrigin(), ((RouteX.RouteRequest) routeX).getHops());
-        }else{
-            logger.info("Add Route: No route created. RouteX object was not an instance of Reply or Request. Was "+ routeX.getFlag());
         }
 
         return route;
