@@ -21,11 +21,6 @@ import java.util.logging.Logger;
 import static de.teklic.mario.core.Constant.DEFAULT_TIMEOUT;
 import static de.teklic.mario.core.Constant.INITIAL_TTL;
 
-
-/**
- * TODO better messageworker handling
- */
-
 /**
  * A MessageWorker is responsible for a MessageJob.
  * It reruns a Job, based on the MessageJobs information.
@@ -74,11 +69,6 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
             logger.info("Try " + (i+1) + " ...");
             SerialPortOutput.getInstance().send(messageJob.getRouteX());
             waitAndListen(3);
-            /**
-             * TODO !! ich muss HIER warten, ohne den trhread zu blockieren,
-             * damit propertychangelistener funktioniert
-             * sleepAndTry muss zu etwas wie waitAndListen
-             */
         }
         logger.info("RouteX could not be delivered.");
         if(!finished){
@@ -96,7 +86,7 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
     public void waitAndListen(Integer times){
         for(int i = 0; i < times; i++){
             try {
-                Thread.sleep(DEFAULT_TIMEOUT/3);
+                Thread.sleep(DEFAULT_TIMEOUT/10);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -130,7 +120,6 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
         logger.info("onFailedPostExecutions: setting inactive. gets notified, if routeX gets received later ...");
         this.setInactive(true);
         this.setFinished(false);
-        //Messenger.getInstance().removePropertyChangeListener(this);
         RoutingTable.getInstance().removeRoute(messageJob.getRouteX().getEndNode());
         sendError();
     }

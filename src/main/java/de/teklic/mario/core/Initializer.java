@@ -138,8 +138,8 @@ public class Initializer {
         SerialPortOutput.getInstance().setPrintWriter(new PrintWriter(jLoraModel.getSerialPort().getOutputStream()));
 
         //Register for update central
-        SerialPortInput.getInstance().addObserver(jLora);
-        UserInput.getInstance().addObserver(jLora);
+        SerialPortInput.getInstance().addPropertyChangeListener(jLora);
+        UserInput.getInstance().addPropertyChangeListener(jLora);
 
         logger.info("Finished initializing read and write.");
     }

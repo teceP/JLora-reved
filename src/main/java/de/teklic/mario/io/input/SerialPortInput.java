@@ -2,11 +2,15 @@ package de.teklic.mario.io.input;
 
 import de.teklic.mario.core.Constant;
 import de.teklic.mario.filters.Filterable;
+import de.teklic.mario.model.routex.RouteX;
 import lombok.Getter;
 import lombok.Setter;
 import purejavacomm.SerialPortEvent;
 import purejavacomm.SerialPortEventListener;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -16,9 +20,11 @@ import static de.teklic.mario.filters.Filterable.SHOULD_NOT;
  * SerialPortInput-Singleton
  * A input source, which deliveres new content, which the LoRa-Module received.
  */
-public class SerialPortInput extends Observable implements SerialPortEventListener, Runnable {
+public class SerialPortInput implements SerialPortEventListener, Runnable {
 
     public static final Logger logger = Logger.getLogger(SerialPortInput.class.getName());
+
+    private PropertyChangeSupport changes;
 
     /**
      * SerialPortInput from LoRa-Module
@@ -33,7 +39,7 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
     private Scanner inputScanner;
 
     private SerialPortInput(){
-
+        changes = new PropertyChangeSupport(this);
     }
 
     /**
@@ -43,10 +49,6 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
         if(eventListener == null){
             logger.info("New Event listener gets initialized.");
             eventListener = new SerialPortInput();
-        }
-
-        if(eventListener.getInputScanner() == null){
-            logger.warning("Input scanner was not set yet!");
         }
 
         return eventListener;
@@ -62,17 +64,22 @@ public class SerialPortInput extends Observable implements SerialPortEventListen
             if (inputScanner.hasNext()) {
                 String msg = inputScanner.nextLine();
                 if (!msg.equalsIgnoreCase(SHOULD_NOT) && !irrelevantMessage(msg)) {
-                    setChanged();
-                    notifyObservers(msg);
+                    changes.firePropertyChange(new PropertyChangeEvent(this, "serialInput", "", msg));
                 }
             }
         }
     }
 
-    @Override
-    public void serialEvent(SerialPortEvent serialPortEvent) {
-        //TODO remove?
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        changes.addPropertyChangeListener(l);
     }
+
+    public void removePropertyChangeListener(PropertyChangeListener l){
+        changes.removePropertyChangeListener(l);
+    }
+
+        @Override
+    public void serialEvent(SerialPortEvent serialPortEvent) {}
 
     /**
      * Filters a message for unnecessary data.

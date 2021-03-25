@@ -6,9 +6,7 @@ package de.teklic.mario.io.output;
 
 import de.teklic.mario.model.routex.RouteX;
 
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Observer;
 import java.util.Random;
 import java.util.logging.Logger;
 

@@ -7,7 +7,11 @@ import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
 import de.teklic.mario.util.UserService;
 import lombok.Setter;
+import purejavacomm.SerialPortEventListener;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Observable;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -18,9 +22,11 @@ import static de.teklic.mario.core.Constant.INITIAL_TTL;
  * UserInput-Singleton
  * Scans the standard user input from command line with System.in
  */
-public class UserInput extends Observable implements Runnable {
+public class UserInput implements Runnable {
 
     public static final Logger logger = Logger.getLogger(UserInput.class.getName());
+
+    private PropertyChangeSupport changes;
 
     /**
      * Singleton instance
@@ -38,6 +44,7 @@ public class UserInput extends Observable implements Runnable {
      */
     private UserInput(){
         this.scanner = new Scanner(System.in);
+        changes = new PropertyChangeSupport(this);
     }
 
     /**
@@ -64,10 +71,17 @@ public class UserInput extends Observable implements Runnable {
             }else{
                 RouteX.Message message = createMessage();
                 logger.info("New User Message created: " + message);
-                setChanged();
-                notifyObservers(message);
+                changes.firePropertyChange(new PropertyChangeEvent(this, "userInput", new RouteX.Disposable(), message));
             }
         }
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        changes.addPropertyChangeListener(l);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener l){
+        changes.removePropertyChangeListener(l);
     }
 
     /**
