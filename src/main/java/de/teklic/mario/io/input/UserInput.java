@@ -70,7 +70,7 @@ public class UserInput implements Runnable {
                 UserService.getInstance().handle(next);
             }else{
                 RouteX.Message message = createMessage();
-                logger.info("New User Message created: " + message);
+                logger.info("New User Message created.");
                 changes.firePropertyChange(new PropertyChangeEvent(this, "userInput", new RouteX.Disposable(), message));
             }
         }

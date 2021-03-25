@@ -131,13 +131,13 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
             RouteX r = (RouteX) evt.getNewValue();
             int flag = r.getFlag().flag;
             if(flag == RouteFlag.ACKNOWLEDGE.flag || flag == RouteFlag.REPLY.flag){
-                if(r.getFlag().flag == RouteFlag.ACKNOWLEDGE.flag){
+                if(r.getFlag().flag == RouteFlag.ACKNOWLEDGE.flag && messageJob.getRouteX().getFlag().flag == RouteFlag.MESSAGE.flag){
                     finished = checkAckIfFinished((RouteX.Acknowledge) r);
-                }else{
+                }else if(r.getFlag().flag == RouteFlag.REPLY.flag && messageJob.getRouteX().getFlag().flag == RouteFlag.REQUEST.flag){
                     finished = checkReplyIfFinished((RouteX.RouteReply) r);
                 }
             }else{
-                logger.info("PropertyChangeEvent does not contains Acknowledge or Repy.");
+                logger.info("PropertyChangeEvent does not contains Acknowledge or Repy. Was: " + r.getFlag());
             }
 
             if(finished){

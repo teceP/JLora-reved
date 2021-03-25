@@ -240,17 +240,17 @@ public class Initializer {
 
     /**
      * Formats the logger: changes the color output and takes the CustomFormatter as main handler
-     * @param logger Logger
+     * @param log Logger
      * @param color Color String in ANSI Code. There are several final String in the CustomFormatter which can be used.
      */
-    private static void formatLogger(Logger logger, String color){
-        logger.setUseParentHandlers(false);
+    private static void formatLogger(Logger log, String color){
+        log.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         CustomFormatter formatter = new CustomFormatter();
         formatter.setColor(color);
         handler.setFormatter(formatter);
-        logger.addHandler(handler);
-        logger.info(logger.getName() + " got set.");
+        log.addHandler(handler);
+        log.info(log.getName() + " got set.");
     }
 
     /**
