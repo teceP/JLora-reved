@@ -200,7 +200,7 @@ public class Initializer {
         //Handlers
         formatLogger(AcknowledgeHandler.logger, GREEN);
         formatLogger(MessageHandler.logger, GREEN_BRIGHT);
-        formatLogger(ReplyHandler.logger, YELLOW_BRIGHT);
+        formatLogger(ReplyHandler.logger, PURPLE);
         formatLogger(RequestHandler.logger, YELLOW);
         formatLogger(ErrorHandler.logger, BLUE);
         setLoggerOutputs(AcknowledgeHandler.logger, ACK_H_LOG);
@@ -220,8 +220,8 @@ public class Initializer {
         setLoggerOutputs(SerialPortOutput.logger, SER_OUT_LOG);
 
         //Messenger
-        formatLogger(Messenger.logger, PURPLE);
-        formatLogger(MessageWorker.logger, PURPLE);
+        formatLogger(Messenger.logger, YELLOW);
+        formatLogger(MessageWorker.logger, YELLOW_BRIGHT);
         setLoggerOutputs(Messenger.logger, MSG_MSNGR_LOG);
         setLoggerOutputs(MessageWorker.logger, MSG_WRKR_LOG);
 

@@ -109,8 +109,6 @@ public class UserInput implements Runnable {
         message.setNextNode(RoutingTable.getInstance().getNextForDestination(dest));
         message.setPayload(msg);
 
-        logger.info("Message was created: " + message.toString());
-
         return message;
     }
 
