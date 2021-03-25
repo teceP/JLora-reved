@@ -37,7 +37,7 @@ public class MessageHandler extends Handler {
             forMe(routeX);
         }else if(Util.isRouteXForward(routeX)){
             forward(routeX);
-        }else if(Util.isRouteXFromMe(routeX)){
+        }else if(Util.isRouteXFromMe(routeX) && routeX.getTimeToLive() == INITIAL_TTL){
             fromMe(routeX);
         }
     }
