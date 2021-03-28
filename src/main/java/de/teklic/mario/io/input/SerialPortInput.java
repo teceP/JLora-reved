@@ -1,9 +1,6 @@
 package de.teklic.mario.io.input;
 
 import de.teklic.mario.core.Constant;
-import de.teklic.mario.event.MessageListener;
-import de.teklic.mario.event.MessageParcel;
-import de.teklic.mario.event.MessageSupport;
 import de.teklic.mario.filters.Filterable;
 import de.teklic.mario.model.routex.RouteX;
 import lombok.Getter;
@@ -27,7 +24,10 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
 
     public static final Logger logger = Logger.getLogger(SerialPortInput.class.getName());
 
-    private MessageSupport messageSupport;
+    /**
+     * ProprtyChangeSupport
+     */
+    private PropertyChangeSupport changes;
 
     /**
      * SerialPortInput from LoRa-Module
@@ -42,7 +42,7 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
     private Scanner inputScanner;
 
     private SerialPortInput(){
-        messageSupport = new MessageSupport(this);
+        changes = new PropertyChangeSupport(this);
     }
 
     /**
@@ -67,7 +67,7 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
             if (inputScanner.hasNext()) {
                 String msg = inputScanner.nextLine();
                 if (!msg.equalsIgnoreCase(SHOULD_NOT) && !irrelevantMessage(msg)) {
-                    messageSupport.fireMessageParcel(new MessageParcel(msg));
+                    changes.firePropertyChange(new PropertyChangeEvent(this, "serialInput", "", msg));
                 }
             }
         }
@@ -75,18 +75,18 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
 
     /**
      * Adds an PropertyChangeListener which gets notified, when new data has arrived.
-     * @param ml The Listener
+     * @param l The Listener
      */
-    public void addMessageListener(MessageListener ml){
-        messageSupport.addListener(ml);
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        changes.addPropertyChangeListener(l);
     }
 
     /**
      * Removes a PropertyChangeListener
-     * @param ml The Listener
+     * @param l The Listener
      */
-    public void removeMessageListener(MessageListener ml){
-        messageSupport.removeListener(ml);
+    public void removePropertyChangeListener(PropertyChangeListener l){
+        changes.removePropertyChangeListener(l);
     }
 
     /**

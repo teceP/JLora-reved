@@ -5,8 +5,6 @@ package de.teklic.mario.messanger;
  */
 
 import de.teklic.mario.core.Address;
-import de.teklic.mario.event.MessageListener;
-import de.teklic.mario.event.MessageParcel;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.io.output.SerialPortOutput;
@@ -15,6 +13,8 @@ import de.teklic.mario.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -28,7 +28,7 @@ import static de.teklic.mario.core.Constant.INITIAL_TTL;
  */
 @Getter
 @Setter
-public class MessageWorker implements Runnable, MessageListener {
+public class MessageWorker implements Runnable, PropertyChangeListener {
 
     public static final Logger logger = Logger.getLogger(MessageWorker.class.getName());
 
@@ -111,10 +111,10 @@ public class MessageWorker implements Runnable, MessageListener {
         }
     }
 
-    /**
+    /*
      * If a job fails, the worker and also the route has to be removed.
      * After that, an error gets sent out.
-     **/
+     */
     private void onFailedPostExecutions(){
         logger.info("Message Job has been sent " + messageJob.getRetries() + " times. MessageWorker stops now. Setting worker to inactive state. Sending Error.");
         logger.info("onFailedPostExecutions: setting inactive. gets notified, if routeX gets received later ...");
@@ -125,10 +125,11 @@ public class MessageWorker implements Runnable, MessageListener {
     }
 
     @Override
-    public void newMessage(MessageParcel nwp) {
+    public void propertyChange(PropertyChangeEvent evt) {
         // if not finished OR not finished AND inactive
         if(!finished){
-            RouteX r = (RouteX) nwp.getNewObject();
+
+            RouteX r = (RouteX) evt.getNewValue();
             int flag = r.getFlag().flag;
             if(flag == RouteFlag.ACKNOWLEDGE.flag || flag == RouteFlag.REPLY.flag){
                 if(r.getFlag().flag == RouteFlag.ACKNOWLEDGE.flag && messageJob.getRouteX().getFlag().flag == RouteFlag.MESSAGE.flag){
@@ -146,17 +147,12 @@ public class MessageWorker implements Runnable, MessageListener {
 
             if(finished){
                 setInactive(true);
-                Messenger.getInstance().removeMessageListener(this);
+                Messenger.getInstance().removePropertyChangeListener(this);
                 onSuccessfulPostExecutions();
             }
         }
     }
 
-    /**
-     *
-     * @param acknowledge
-     * @return
-     */
     public boolean checkAckIfFinished(RouteX.Acknowledge acknowledge){
         String awaitedHash = Util.calcMd5((RouteX.Message) messageJob.getRouteX()).substring(0, 6);
         if (acknowledge.getPayload().equalsIgnoreCase(awaitedHash)) {
@@ -166,11 +162,6 @@ public class MessageWorker implements Runnable, MessageListener {
         return false;
     }
 
-    /**
-     *
-     * @param reply
-     * @return
-     */
     public boolean checkReplyIfFinished(RouteX.RouteReply reply){
         String requestedNode = messageJob.getRouteX().getEndNode();
         if (reply.getSource().equalsIgnoreCase(requestedNode)) {

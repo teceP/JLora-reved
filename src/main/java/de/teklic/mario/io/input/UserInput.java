@@ -1,9 +1,6 @@
 package de.teklic.mario.io.input;
 
 import de.teklic.mario.core.Address;
-import de.teklic.mario.event.MessageListener;
-import de.teklic.mario.event.MessageParcel;
-import de.teklic.mario.event.MessageSupport;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
@@ -26,7 +23,10 @@ public class UserInput implements Runnable {
 
     public static final Logger logger = Logger.getLogger(UserInput.class.getName());
 
-    private MessageSupport messageSupport;
+    /**
+     * ProprtyChangeSupport
+     */
+    private PropertyChangeSupport changes;
 
     /**
      * Singleton instance
@@ -44,7 +44,7 @@ public class UserInput implements Runnable {
      */
     private UserInput(){
         this.scanner = new Scanner(System.in);
-        messageSupport = new MessageSupport(this);
+        changes = new PropertyChangeSupport(this);
     }
 
     /**
@@ -71,25 +71,25 @@ public class UserInput implements Runnable {
             }else{
                 RouteX.Message message = createMessage();
                 logger.info("New User Message created.");
-                messageSupport.fireMessageParcel(new MessageParcel(message));
+                changes.firePropertyChange(new PropertyChangeEvent(this, "userInput", new RouteX.Disposable(), message));
             }
         }
     }
 
     /**
      * Adds an PropertyChangeListener which gets notified, when new data has arrived.
-     * @param ml The Listener
+     * @param l The Listener
      */
-    public void addMessageListener(MessageListener ml){
-        messageSupport.addListener(ml);
+    public void addPropertyChangeListener(PropertyChangeListener l) {
+        changes.addPropertyChangeListener(l);
     }
 
     /**
      * Removes a PropertyChangeListener
-     * @param ml The Listener
+     * @param l The Listener
      */
-    public void removeMessageListener(MessageListener ml){
-        messageSupport.removeListener(ml);
+    public void removePropertyChangeListener(PropertyChangeListener l){
+        changes.removePropertyChangeListener(l);
     }
 
     /**
