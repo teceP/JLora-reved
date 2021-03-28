@@ -1,25 +1,23 @@
 package de.teklic.mario.core;
 
+import de.teklic.mario.event.MessageListener;
+import de.teklic.mario.event.MessageParcel;
 import de.teklic.mario.filters.Filterable;
 import de.teklic.mario.io.input.UserInput;
-import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.model.other.JLoraModel;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.util.MessageEvaluator;
 import de.teklic.mario.util.UserService;
-import de.teklic.mario.util.Util;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * The central/main entrance point for this software.
  */
-public class JLora implements PropertyChangeListener {
+public class JLora implements MessageListener {
     public static final Logger logger = Logger.getLogger(JLora.class.getName());
 
     /**
@@ -64,15 +62,15 @@ public class JLora implements PropertyChangeListener {
      * distributed to the correct handler.
      */
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void newMessage(MessageParcel nwp) {
         if (listening) {
-            Object newObject = evt.getNewValue();
+            Object newObject = nwp.getNewObject();
             if (newObject instanceof String && newObject != null && !((String) newObject).isEmpty() || newObject instanceof RouteX.Message && newObject != null) {
                 logger.info("******************NEW PROCESS*************************");
-                logger.info("Object class: " + newObject.getClass().getSimpleName() + ", from " + (evt.getSource() instanceof UserInput ? "UserInput" : "SerialInput"));
+                logger.info("Object class: " + newObject.getClass().getSimpleName() + ", from " + (nwp.getSource() instanceof UserInput ? "UserInput" : "SerialInput"));
                 logger.info("[Received Text]: " + newObject);
 
-                if (evt.getSource() instanceof UserInput && newObject instanceof String) {
+                if (nwp.getSource() instanceof UserInput && newObject instanceof String) {
                     UserService.getInstance().handle((String) newObject);
                 } else {
                     RouteX routeX;

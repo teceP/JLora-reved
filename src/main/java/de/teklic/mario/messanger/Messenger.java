@@ -4,20 +4,20 @@ package de.teklic.mario.messanger;
  * @author Mario Teklic
  */
 
+import de.teklic.mario.event.MessageListener;
+import de.teklic.mario.event.MessageParcel;
+import de.teklic.mario.event.MessageSupport;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.io.output.SerialPortOutput;
 import de.teklic.mario.util.Util;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.logging.Logger;
 
 public class Messenger {
 
     public static final Logger logger = Logger.getLogger(Messenger.class.getName());
 
-    private PropertyChangeSupport changes;
+    private MessageSupport messageSupport;
 
     /**
      * Singleton Object
@@ -25,7 +25,7 @@ public class Messenger {
     private static Messenger messenger;
 
     private Messenger() {
-        changes = new PropertyChangeSupport(this);
+        messageSupport = new MessageSupport(this);
     }
 
     public static Messenger getInstance() {
@@ -35,17 +35,17 @@ public class Messenger {
         return messenger;
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener l) {
-        changes.addPropertyChangeListener(l);
+    public void addMessageListener(MessageListener ml){
+        messageSupport.addListener(ml);
     }
 
-    public void removePropertyChangeListener(PropertyChangeListener l){
-        changes.removePropertyChangeListener(l);
+    public void removeMessageListener(MessageListener ml){
+        messageSupport.removeListener(ml);
     }
 
     public void incomingRouteX(RouteX routeX){
-        PropertyChangeEvent event = new PropertyChangeEvent(this, routeX.getFlag().name(), new RouteX.Disposable(), routeX);
-        changes.firePropertyChange(event);
+        MessageParcel messageParcel = new MessageParcel(routeX);
+        messageSupport.fireMessageParcel(messageParcel);
     }
 
     /**
@@ -68,7 +68,7 @@ public class Messenger {
     public void sendWithWorker(RouteX routeX, int retries) {
         MessageJob job = new MessageJob(routeX, retries);
         MessageWorker worker = new MessageWorker(job);
-        addPropertyChangeListener(worker);
+        addMessageListener(worker);
         new Thread(worker).start();
     }
 
