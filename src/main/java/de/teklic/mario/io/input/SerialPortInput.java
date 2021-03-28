@@ -24,6 +24,9 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
 
     public static final Logger logger = Logger.getLogger(SerialPortInput.class.getName());
 
+    /**
+     * ProprtyChangeSupport
+     */
     private PropertyChangeSupport changes;
 
     /**
@@ -70,15 +73,28 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
         }
     }
 
+    /**
+     * Adds an PropertyChangeListener which gets notified, when new data has arrived.
+     * @param l The Listener
+     */
     public void addPropertyChangeListener(PropertyChangeListener l) {
         changes.addPropertyChangeListener(l);
     }
 
+    /**
+     * Removes a PropertyChangeListener
+     * @param l The Listener
+     */
     public void removePropertyChangeListener(PropertyChangeListener l){
         changes.removePropertyChangeListener(l);
     }
 
-        @Override
+    /**
+     * Not implemented. Also dont needs to get implemented.
+     * Data gets received by Serial.port.inputstream.
+     * @param serialPortEvent
+     */
+    @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {}
 
     /**

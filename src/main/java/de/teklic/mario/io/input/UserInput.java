@@ -1,18 +1,15 @@
 package de.teklic.mario.io.input;
 
 import de.teklic.mario.core.Address;
-import de.teklic.mario.core.JLora;
 import de.teklic.mario.model.routex.RouteFlag;
 import de.teklic.mario.model.routex.RouteX;
 import de.teklic.mario.routingtable.RoutingTable;
 import de.teklic.mario.util.UserService;
 import lombok.Setter;
-import purejavacomm.SerialPortEventListener;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Observable;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -26,6 +23,9 @@ public class UserInput implements Runnable {
 
     public static final Logger logger = Logger.getLogger(UserInput.class.getName());
 
+    /**
+     * ProprtyChangeSupport
+     */
     private PropertyChangeSupport changes;
 
     /**
@@ -76,10 +76,18 @@ public class UserInput implements Runnable {
         }
     }
 
+    /**
+     * Adds an PropertyChangeListener which gets notified, when new data has arrived.
+     * @param l The Listener
+     */
     public void addPropertyChangeListener(PropertyChangeListener l) {
         changes.addPropertyChangeListener(l);
     }
 
+    /**
+     * Removes a PropertyChangeListener
+     * @param l The Listener
+     */
     public void removePropertyChangeListener(PropertyChangeListener l){
         changes.removePropertyChangeListener(l);
     }

@@ -17,16 +17,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * TODO
- * 0. Observer mit PropertyChangeListener ersetzen
- * 1. Messenger mit PropertyChangeListener auskleiden
- */
-
-/*
-TODO wenn kein acknowledge, dann request, dann nochmal message
- */
-
-/**
  * The central/main entrance point for this software.
  */
 public class JLora implements PropertyChangeListener {

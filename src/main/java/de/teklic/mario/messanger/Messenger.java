@@ -11,9 +11,7 @@ import de.teklic.mario.util.Util;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class Messenger {
 
