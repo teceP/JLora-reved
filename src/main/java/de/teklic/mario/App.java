@@ -10,13 +10,6 @@ public class App {
         }
 
         JLora jLora = new JLora();
-
-       /* if(args.length == 2){
-            if(args[1].equals("nolog")){
-                jLora.setHideLoggerOutput(true);
-            }
-        }
-*/
         jLora.start(args[0]);
     }
 }

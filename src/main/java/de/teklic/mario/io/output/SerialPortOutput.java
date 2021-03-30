@@ -10,10 +10,6 @@ import java.io.PrintWriter;
 import java.util.Random;
 import java.util.logging.Logger;
 
-/**TODO
- * Make as message queue/stream
- */
-
 /**
  * SerialPortOutput-Singleton
  * Outputchannel for LoRa-Module communication

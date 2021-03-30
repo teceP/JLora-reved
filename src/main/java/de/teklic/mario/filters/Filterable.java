@@ -6,17 +6,16 @@ package de.teklic.mario.filters;
 
 import de.teklic.mario.model.routex.RouteX;
 
+/**
+ * Needs to be implemented by a applied Filter
+ */
 public interface Filterable {
     /**
-     * If this string is redirected by any filter, the message wont be forwarded to the JLora class
-     */
-    String SHOULD_NOT = "should_not";
-
-    /**
-     * A filter will be prepend before the new message will be forwarded to the JLora class
-     * @param msg Any string
-     * @return The same string if no action has be made,
-     * SHOULD_NOT final String if the String should not be forwarded because of any condition from the filter
+     * A filter will be prepend before the new message will be forwarded to the JLora class.
+     * The filter can modify the object or return another RouteX object.
+     *
+     * @param msg Any RouteX
+     * @return Modified or new RouteX
      */
     RouteX filter(RouteX msg);
 }

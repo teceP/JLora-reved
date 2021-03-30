@@ -71,7 +71,7 @@ public class MessageHandler extends Handler {
      * A Message gets sent out, if a Route to the destination node exists in the Routing table.
      * If not, a request gets sent out first. When a route was found, the Messenger sends out
      * automatically the Message object to the destination.
-     * @param message
+     * @param message The Message which was created by the user as RouteX object
      */
     public void fromMe(RouteX message){
         RouteX.Message msg = (RouteX.Message) message;

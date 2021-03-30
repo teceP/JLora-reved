@@ -14,8 +14,6 @@ import java.beans.PropertyChangeSupport;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static de.teklic.mario.filters.Filterable.SHOULD_NOT;
-
 /**
  * SerialPortInput-Singleton
  * A input source, which deliveres new content, which the LoRa-Module received.
@@ -25,7 +23,7 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
     public static final Logger logger = Logger.getLogger(SerialPortInput.class.getName());
 
     /**
-     * ProprtyChangeSupport
+     * PropertyChangeSupport, updates with new received String
      */
     private PropertyChangeSupport changes;
 
@@ -33,6 +31,11 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
      * SerialPortInput from LoRa-Module
      */
     private static SerialPortInput eventListener;
+
+    /**
+     * If this string is redirected by any filter, the message wont be forwarded to the JLora class
+     */
+    private final String SHOULD_NOT = "should_not";
 
     /**
      * Scanner for SerialPortInput
@@ -92,7 +95,7 @@ public class SerialPortInput implements SerialPortEventListener, Runnable {
     /**
      * Not implemented. Also dont needs to get implemented.
      * Data gets received by Serial.port.inputstream.
-     * @param serialPortEvent
+     * @param serialPortEvent SerialPortEvent
      */
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {}

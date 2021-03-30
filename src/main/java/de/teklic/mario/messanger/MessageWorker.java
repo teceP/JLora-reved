@@ -42,6 +42,9 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
      */
     private boolean inactive;
 
+    /**
+     * If finished is true, a response (Request -> Reply, Message -> Acknowledge) was received
+     */
     private boolean finished;
 
     /**
@@ -124,11 +127,14 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
         sendError();
     }
 
+    /**
+     * Evaluates, if the incoming RouteX was reponse for this RouteX.
+     * If so, sets finished to true.
+     * @param evt Received PropertyChangeEvent by PropertyChangeSupport
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        // if not finished OR not finished AND inactive
         if(!finished){
-
             RouteX r = (RouteX) evt.getNewValue();
             int flag = r.getFlag().flag;
             if(flag == RouteFlag.ACKNOWLEDGE.flag || flag == RouteFlag.REPLY.flag){
@@ -153,6 +159,11 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
         }
     }
 
+    /**
+     * Proofs if Message was finished by this Acknowledge
+     * @param acknowledge The incoming acknowledge
+     * @return true if matching to the outgoing message of this MessageWorker/MessageJob
+     */
     public boolean checkAckIfFinished(RouteX.Acknowledge acknowledge){
         String awaitedHash = Util.calcMd5((RouteX.Message) messageJob.getRouteX()).substring(0, 6);
         if (acknowledge.getPayload().equalsIgnoreCase(awaitedHash)) {
@@ -162,13 +173,17 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
         return false;
     }
 
+    /**
+     * Proofs if Request was finished by this Reply
+     * @param reply The incoming reply
+     * @return true if matching to the outgoing request of this MessageWorker/MessageJob
+     */
     public boolean checkReplyIfFinished(RouteX.RouteReply reply){
         String requestedNode = messageJob.getRouteX().getEndNode();
         if (reply.getSource().equalsIgnoreCase(requestedNode)) {
             logger.info("Request Job has finished by conditions!");
             return true;
         }
-
         return false;
     }
 

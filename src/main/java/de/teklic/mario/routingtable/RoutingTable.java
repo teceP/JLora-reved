@@ -83,13 +83,11 @@ public class RoutingTable {
 
     /**
      * Checks if there is a route for a given destination address.
-     * @param destAddr
+     * @param destAddr Destination address, which will be searched for a route
      * @return Returns the nearest and best routes "neighbour" variable. (Check class Route for more information).
-     * @return Returns "no_next", if there was no route found for this destination.
+     *         Returns "no_next", if there was no route found for this destination.
      */
     public String getNextForDestination(String destAddr){
-        //logger.info("Routes from routing table (size " + routeList.size() + "):");
-
         Optional<Route> routeOptional = routeList.stream()
                 .filter(r -> r.getDestination().equals(destAddr)).collect(Collectors.toList())
                 .stream().min(Comparator.comparing(Route::getHops));
@@ -119,7 +117,7 @@ public class RoutingTable {
 
     /**
      * Returns the RouteList
-     * @return
+     * @return the list of Routes
      */
     public List<Route> getRouteList() {
         return this.routeList;
@@ -170,7 +168,7 @@ public class RoutingTable {
 
     /**
      * Removes all nodes which contains this destination
-     * @param destination
+     * @param destination Removes routes for destination address
      */
     public void removeRoute(String destination){
         routeList.removeIf(r -> r.getDestination().equalsIgnoreCase(destination));
@@ -190,7 +188,7 @@ public class RoutingTable {
     /**
      * Proofs if there is any route for this destination
      * See hasRoute(String destination) for more information
-     * @param route
+     * @param route Proofs if a route for the destination of the Routes object address exists
      * @return true if has found any route
      */
     public boolean hasRoute(Route route) {
@@ -227,7 +225,7 @@ public class RoutingTable {
 
         /**
          * Checks if two Routes are same
-         * @param obj
+         * @param obj Another route
          * @return true if every variable (owner, destination, hops, neighbour) are same
          */
         @Override

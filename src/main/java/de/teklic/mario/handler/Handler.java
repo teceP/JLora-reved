@@ -34,7 +34,7 @@ public abstract class Handler implements Communicable {
     /**
      * A handler can handle incoming RouteX objects.
      * It is needed to be a specific handler-object to differentiate by specific RouteX objects.
-     * @param routeX
+     * @param routeX The RouteX object, received from the JLora class
      */
     public abstract void handle(RouteX routeX);
 

@@ -59,6 +59,7 @@ public abstract class RouteX {
 
     /**
      * Returns this object as a sendable string, which matches the protocol
+     * @return The RouteX, transformed in a sendable and readable, protocol conform String
      */
     public abstract String asSendable();
 

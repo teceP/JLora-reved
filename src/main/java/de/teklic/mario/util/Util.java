@@ -22,7 +22,7 @@ public class Util {
     /**
      * A RouteX object gets examined, eventually parsed into a Route object and
      * added to the RoutingTable
-     * @param routeX
+     * @param routeX RouteX
      * @return true if a new route was added, false if not because no Route could be created or this route already exists.
      */
     public static boolean newRoute(RouteX routeX){
@@ -65,8 +65,8 @@ public class Util {
 
     /**
      * Calculates the MD5-Hash with the own address and the payload out of an RouteX object
-     * @param message
-     * @return
+     * @param message RouteX.Message
+     * @return MD5 Hash consisting out of own address and payload from RouteX.Message
      */
     public static String calcMd5(RouteX.Message message){
         String sender = message.getSource();

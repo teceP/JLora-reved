@@ -14,12 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Drops all RouteX object which was already received in the last 10 seconds,
+ * to avoid a endless loop.
+ */
 public class MultiTimeFilter implements Filterable {
 
     public static final Logger logger = Logger.getLogger(MultiTimeFilter.class.getName());
 
+    /**
+     * Holds all RouteX objects which was received in the last 10 seconds.
+     */
     private List<RouteX> messageList;
 
+    /**
+     * Specifies, how low a message will be dropped if it arrives multiple times
+     */
     private long minTimeDiff = 10000;
 
     public MultiTimeFilter() {
@@ -58,7 +68,6 @@ public class MultiTimeFilter implements Filterable {
             logger.info("Disposed by MultiTimeFilter.");
             return new RouteX.Disposable();
         }
-
         return routeX;
     }
 }

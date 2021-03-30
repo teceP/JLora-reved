@@ -24,7 +24,7 @@ public class UserInput implements Runnable {
     public static final Logger logger = Logger.getLogger(UserInput.class.getName());
 
     /**
-     * ProprtyChangeSupport
+     * PropertyChangeSupport, updates with new user created RouteX.Message
      */
     private PropertyChangeSupport changes;
 
@@ -72,6 +72,7 @@ public class UserInput implements Runnable {
                 RouteX.Message message = createMessage();
                 logger.info("New User Message created.");
                 changes.firePropertyChange(new PropertyChangeEvent(this, "userInput", new RouteX.Disposable(), message));
+
             }
         }
     }
@@ -122,7 +123,7 @@ public class UserInput implements Runnable {
 
     /**
      * Replaces all german umlauts in a String into ASCII conform format.
-     * Example: "Hören" -> "Hoeren"
+     * Example: "Hören" ... "Hoeren"
      * @param message with umlauts
      * @return message without umlauts
      */
@@ -155,7 +156,7 @@ public class UserInput implements Runnable {
 
     /**
      * Decides if a string is a ServiceCall or "msg".
-     * @param message
+     * @param message Inserted String by user from command terminal
      * @return true if the string is not "msg".
      */
     public boolean isServiceCall(String message){

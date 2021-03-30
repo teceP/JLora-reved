@@ -41,7 +41,7 @@ public class RequestHandler extends Handler {
 
     /**
      * Sends a reply to the source node of the request.
-     * @param message
+     * @param message The incoming request, which is the base of the outgoing reply: Sourcenode of Request will be Endnode of Reply.
      */
     @Override
     public void forMe(RouteX message) {

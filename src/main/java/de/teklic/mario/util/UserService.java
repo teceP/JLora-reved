@@ -111,7 +111,12 @@ public class UserService {
         }
     }
 
-    public boolean voltage(String s) {
+    /**
+     * Sets the voltage (sender out) power
+     * @param s Voltage level must be between 5 and 20
+     * @return true if was set and no exception occured.
+     */
+    private boolean voltage(String s) {
         try {
             if (s.length() > 5 && s.startsWith(VOLT)) {
                 String volt = s.split(":", 0)[1];

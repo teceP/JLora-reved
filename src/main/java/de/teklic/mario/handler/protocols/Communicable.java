@@ -7,6 +7,10 @@ package de.teklic.mario.handler.protocols;
 
 import de.teklic.mario.model.routex.RouteX;
 
+/**
+ * Ensures, that a handler can forward RouteX objects and
+ * use objects if its for the own node.
+ */
 public interface Communicable {
 
     /**
