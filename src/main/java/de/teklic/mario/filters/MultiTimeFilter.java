@@ -5,10 +5,6 @@ package de.teklic.mario.filters;
  */
 
 import de.teklic.mario.model.routex.RouteX;
-import de.teklic.mario.model.routex.TokenizedHeader;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +56,7 @@ public class MultiTimeFilter implements Filterable {
      * @param routeX RouteX
      * @return true if any routeX object matches the incoming new routeX, a new routeX object will be returned
      */
-    public RouteX proof(RouteX routeX){
+    private RouteX proof(RouteX routeX){
         if(messageList.stream().anyMatch(r ->
                 r.getSource().equals(routeX.getSource())
                         && r.getEndNode().equals(routeX.getEndNode())

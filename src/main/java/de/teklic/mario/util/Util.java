@@ -53,7 +53,7 @@ public class Util {
      * @return true if route was added
      */
     private static boolean addRoute(RoutingTable.Route route) {
-        if (route != null && !RoutingTable.getInstance().hasRoute(route)) {
+        if (route != null && !RoutingTable.getInstance().hasRoute(route) && !route.getDestination().equals(Address.getInstance().getAddr())) {
             RoutingTable.getInstance().add(route);
             logger.info("New Route (neighbour) was added on index " + (RoutingTable.getInstance().getRouteList().size() - 1) + ": " + route);
             return true;

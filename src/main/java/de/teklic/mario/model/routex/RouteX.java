@@ -81,12 +81,15 @@ public abstract class RouteX {
      */
     @Getter
     @Setter
-    @NoArgsConstructor
     public static class Message extends RouteX {
         private String nextNode;
         private String payload;
         private int tries;
         private boolean ack;
+
+        public Message(){
+            this.setFlag(RouteFlag.MESSAGE);
+        }
 
         @Override
         public String asSendable(){
@@ -114,9 +117,12 @@ public abstract class RouteX {
      */
     @Getter
     @Setter
-    @NoArgsConstructor
     public static class Acknowledge extends RouteX {
         private String payload;
+
+        public Acknowledge(){
+            this.setFlag(RouteFlag.ACKNOWLEDGE);
+        }
 
         @Override
         public String asSendable(){
@@ -143,11 +149,14 @@ public abstract class RouteX {
      */
     @Getter
     @Setter
-    @NoArgsConstructor
     public static class RouteRequest extends RouteX {
         private int hops;
         private long date;
         private RouteX.Message storedMessage;
+
+        public RouteRequest(){
+            this.setFlag(RouteFlag.REQUEST);
+        }
 
         @Override
         public String asSendable(){
@@ -174,10 +183,13 @@ public abstract class RouteX {
      */
     @Getter
     @Setter
-    @NoArgsConstructor
     public static class RouteReply extends RouteX {
         private String nextNode;
         private int hops;
+
+        public RouteReply(){
+            this.setFlag(RouteFlag.REPLY);
+        }
 
         @Override
         public String asSendable(){
@@ -205,8 +217,11 @@ public abstract class RouteX {
      */
     @Getter
     @Setter
-    @NoArgsConstructor
     public static class RouteError extends RouteX {
+
+        public RouteError(){
+            this.setFlag(RouteFlag.ERROR);
+        }
 
         @Override
         public String asSendable(){

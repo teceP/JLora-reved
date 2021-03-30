@@ -17,13 +17,12 @@ import de.teklic.mario.io.output.SerialPortOutput;
 import de.teklic.mario.messanger.MessageWorker;
 import de.teklic.mario.messanger.Messenger;
 import de.teklic.mario.routingtable.RoutingTable;
+import lombok.Getter;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static de.teklic.mario.core.Constant.*;
-import static de.teklic.mario.util.CustomFormatter.*;
-import static de.teklic.mario.util.CustomFormatter.WHITE;
 
 /**
  * UserService-Singleton
@@ -31,6 +30,7 @@ import static de.teklic.mario.util.CustomFormatter.WHITE;
 public class UserService {
     public static final Logger logger = Logger.getLogger(UserService.class.getName());
 
+    @Getter
     private int voltage = 5;
 
     /**
@@ -120,16 +120,20 @@ public class UserService {
         try {
             if (s.length() > 5 && s.startsWith(VOLT)) {
                 String volt = s.split(":", 0)[1];
-                int i = Integer.parseInt(volt);
-                if (i > 5 && i < 20) {
+                System.out.println("vo:" + volt + ".");
+                int i = Integer.parseInt(volt.trim());
+                System.out.println("i:" + i + ".");
+
+                if (i >= 5 && i <= 20) {
                     SerialPortOutput.getInstance().sendConfig(CONFIG_HEAD + i + CONFIG_TAIL);
                     voltage = i;
+                    logger.info("Set output voltage to " + i + ".");
+                    return true;
                 }
-                logger.info("Set output voltage to " + i + ".");
-                return true;
             }
         } catch (Exception e) {
-            logger.info("Could not parse voltage info.");
+            e.printStackTrace();
+            logger.info("Could not parse voltage info: " + e.getClass().getSimpleName());
         }
         return false;
     }
