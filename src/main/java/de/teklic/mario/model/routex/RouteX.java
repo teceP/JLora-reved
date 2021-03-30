@@ -65,6 +65,7 @@ public abstract class RouteX {
 
     /**
      * A String which determines which Handler is responsible for this object
+     * @return The responsible handler name as HandlerName
      */
     public abstract String responsibleHandler();
 

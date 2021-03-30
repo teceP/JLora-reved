@@ -83,8 +83,6 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
      * Checks if cancellation condition have met.
      * Example: An acknowledge has been registered after an message was sent out.
      * @param times Retries to check for condition.
-     * @return true if MessageWorker can stop.
-     * @return false if MessageWorker should try again.
      */
     public void waitAndListen(Integer times){
         for(int i = 0; i < times; i++){
