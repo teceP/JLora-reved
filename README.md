@@ -1,2 +1,4 @@
 # JLora-reved
-Reved Version
+
+https://github.com/teceP/JLora-reved/wiki
+
