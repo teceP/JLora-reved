@@ -85,7 +85,7 @@ public class Messenger {
             if(listener != null && listener instanceof MessageWorker &&
                 ((System.currentTimeMillis() - ((MessageWorker) listener).getTimestamp())) > maxListeningTime){
                 logger.info("Remove MessageWorker due to inactive longer than 5 minutes.");
-                it.remove();
+                changes.removePropertyChangeListener(listener);
             }
         }
     }
