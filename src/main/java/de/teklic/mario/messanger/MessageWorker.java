@@ -52,9 +52,15 @@ public class MessageWorker implements Runnable, PropertyChangeListener {
      */
     private String id;
 
+    /**
+     * The time when the MessageWorker was created
+     */
+    private long timestamp;
+
     public MessageWorker(MessageJob messageJob){
         this.messageJob = messageJob;
-        id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString();
+        this.timestamp = System.currentTimeMillis();
     }
 
     /**

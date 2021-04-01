@@ -11,7 +11,10 @@ import de.teklic.mario.util.Util;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Organizes the RouteX shipment
@@ -29,6 +32,11 @@ public class Messenger {
      * Singleton Object
      */
     private static Messenger messenger;
+
+    /**
+     * Maximum listening time for MessageWorkers
+     */
+    private long maxListeningTime = 60000;
 
     private Messenger() {
         changes = new PropertyChangeSupport(this);
@@ -62,8 +70,24 @@ public class Messenger {
      * @param routeX This object will be set as the newValue variable of the outgoing PropertyChangeEvent
      */
     public void incomingRouteX(RouteX routeX){
+        cleanMessageWorkerCorpses();
         PropertyChangeEvent event = new PropertyChangeEvent(this, routeX.getFlag().name(), new RouteX.Disposable(), routeX);
         changes.firePropertyChange(event);
+    }
+
+    /**
+     * Removes all listeners (only MessageWorker instances!) which are listening for longer than 5 minutes
+     */
+    public void cleanMessageWorkerCorpses(){
+        Iterator<PropertyChangeListener> it = Arrays.asList(changes.getPropertyChangeListeners()).iterator();
+        while(it.hasNext()){
+            PropertyChangeListener listener = it.next();
+            if(listener != null && listener instanceof MessageWorker &&
+                ((System.currentTimeMillis() - ((MessageWorker) listener).getTimestamp())) > maxListeningTime){
+                logger.info("Remove MessageWorker due to inactive longer than 5 minutes.");
+                it.remove();
+            }
+        }
     }
 
     /**
